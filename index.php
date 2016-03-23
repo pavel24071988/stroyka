@@ -1,4 +1,7 @@
-<?php include('/functions/main.php') ?>
+<?php
+session_start();
+include('/functions/main.php')
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,11 +16,11 @@
 </head>
 <body>
     <div class="header">
-        <span>Логотип</span>
+        <span><a href="/">Логотип</a></span>
         <a href="/masters/">Мастера</a>
-        <a href="/orders/">Заказы</a>
+        <a href="/objects/">Заказы</a>
         <a href="/jobs/">Вакансии</a>
-        <a href="/login/">Войти</a>
+        <?php if(!empty($_SESSION['user'])) echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/">Выйти</a>'; else echo '<a href="/login/">Войти</a>'; ?>
     </div>
     
     <div class="content">
