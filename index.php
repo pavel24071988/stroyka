@@ -7,12 +7,13 @@ include('/functions/main.php')
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" href="/css/style.css" media="all" />
+	<link rel="stylesheet" href="/site/css/style.css" media="all" />
 	<link rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" media="all" />
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/jquery.fancybox-1.3.4.pack.js"></script>
 	<script type="text/javascript" src="/js/jquery.main.js"></script>
+        <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
     <div class="header">

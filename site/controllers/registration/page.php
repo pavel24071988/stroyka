@@ -1,4 +1,5 @@
-<?php
+
+    <?php
 // получаем сферы деятильности с подвидами
 $DB = Application::$DB;
 $area_of_jobs = $DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
@@ -6,7 +7,7 @@ $list_of_areas = '<ul>';
 foreach($area_of_jobs as $key => $area_of_job){
     $list_of_areas .= '<li data-area_id="'. $area_of_job['id'] .'">'. $area_of_job['name'];
     $kinds_of_jobs = $DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
-    if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul>';
+    if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul ">';
     foreach($kinds_of_jobs as $key => $kind_of_job){
         $list_of_areas .= '<li data-kind_id="'. $kind_of_job['id'] .'">'. $kind_of_job['name'] .'</li>';
     }
@@ -46,7 +47,7 @@ if(!empty($_POST)){
     }
 }
 ?>
-
+    
 <h1>Регистрация</h1>
 
 <h4>Ваши данные будут проверяться! Не указывайте недостоверную информацию!</h4>

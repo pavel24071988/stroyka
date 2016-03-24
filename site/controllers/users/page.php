@@ -7,6 +7,7 @@ $user = $DB->query('
       FROM users u
         WHERE u."id"='. $applicationURL[2])->fetchAll();
 if(!empty($_SESSION['user'])){
+    $user_from_db = $user;
     $user = $_SESSION['user'];
     if($user['id'] == $applicationURL[2]){
         $left_menu = '<div>
@@ -25,7 +26,8 @@ if(!empty($_SESSION['user'])){
             'left_menu' => $left_menu,
             'type' => $applicationURL[3],
             'check_owner' => true,
-            'user' => $user[0]
+            'user' => $user,
+            'user_from_db' => $user_from_db[0]
         ];
         
         get_my_page($common_data);

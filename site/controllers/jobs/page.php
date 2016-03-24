@@ -1,17 +1,36 @@
-<div><a href="/">Главная</a>-><a href="/masters/">Исполнители</a>-><a href="/masters/">Воронежская область</a></div>
-<h1>Вакансии и зарплаты</h1>
+<div><a href="/">Главная</a>-><a href="/orders/">Заказы</a>-><a href="/orders/">Воронежская область</a>-><a href="/orders/">Воронеж</a></div>
 <?php
 $DB = Application::$DB;
-$jobs = $DB->query('SELECT j.*, (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = j.id AND c."type"=\'job_comment\') as comment_count FROM jobs j')->fetchAll();
-foreach($jobs as $job){
+$applicationURL = Application::$URL;
+if(!empty($applicationURL[2])){
     
-    $div = '<div style="border: 1px solid black;">';
-    $div .= '<a href="/jobs/'. $object['id'] .'/">'. $job['name'] .'</a> '. $job['amount'] .' руб.<br/>';
-    $div .= $job['description'] .'<br/>';
-    $div .= date('j.m.Y H:i:s', strtotime($job['created'])) .'<br/>';
+    $job = $DB->query('
+        SELECT j.*,
+               s."name" as s_name
+          FROM jobs j
+          LEFT JOIN schedules s ON j."scheduleID" = s."id"
+            WHERE j."id"='. $applicationURL[2])->fetchAll();
     
-    $div .= '<div>'. $job['comment_count'] .' ответов</div>';
+    $common_data = [
+        'type' => 'job_page',
+        'job' => $job[0]
+    ];
     
-    $div .= '</div>';
-    echo($div);
-};
+    get_page($common_data);
+}else{
+    $jobs = $DB->query('
+        SELECT j.*,
+        (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = j.id AND c."type"=\'job_comment\') as comment_count
+          FROM jobs j')->fetchAll();
+    
+    $common_data = [
+        'type' => 'jobs',
+        'jobs' => $jobs
+    ];
+    
+    get_page($common_data);
+}
+
+function get_page($common_data){
+    require_once '/site/veiws/jobs/'. $common_data['type'] .'.php';
+}
