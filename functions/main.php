@@ -6,7 +6,7 @@ class Application
     public static $DB;
 
     public function __construct() {
-        require_once $_SERVER['DOCUMENT_ROOT'] .'/functions/db.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] .'/functions/db/db.php';
         self::$URL = explode('/', $_SERVER['QUERY_STRING']);
         self::$DB = $DB;
     }
