@@ -6,7 +6,7 @@ class Application
     public static $DB;
 
     public function __construct() {
-        require_once $_SERVER['DOCUMENT_ROOT'] .'/functions/db/db.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] .'/db/db.php';
         self::$URL = explode('/', $_SERVER['QUERY_STRING']);
         self::$DB = $DB;
     }
@@ -41,9 +41,6 @@ class Application
             $log_entrance = $DB->prepare('
               INSERT INTO logs (userid, url)
                 VALUES('. $userID .', \''. $path_to_site .'\')');
-            var_dump($log_entrance);
-            var_dump($log_entrance->execute());
-            print_r($log_entrance->errorInfo());
             $log_entrance->execute();
         }catch(Exception $ex){}
         
