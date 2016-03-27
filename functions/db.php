@@ -5,7 +5,7 @@ $db = 'stroyka';
 $username = 'postgres';
 $password = '';
 */
-
+sd
 $host='pg.sweb.ru';
 $db = 'zapchatirf_build';
 $username = 'zapchatirf_build';
