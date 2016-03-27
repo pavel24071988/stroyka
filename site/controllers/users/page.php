@@ -39,9 +39,9 @@ if(!empty($_SESSION['user'])){
         'check_owner' => false,
         'user' => $user[0]
     ];
-    require_once '/site/veiws/users/'. $common_data['type'] .'.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] .'/site/veiws/users/'. $common_data['type'] .'.php';
 }
 
 function get_my_page($common_data){
-    require_once '/site/veiws/users/'. $common_data['type'] .'.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] .'/site/veiws/users/'. $common_data['type'] .'.php';
 }
