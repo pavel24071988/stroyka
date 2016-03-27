@@ -1,9 +1,14 @@
 <?php
-
+/*
 $host='localhost';
 $db = 'stroyka';
 $username = 'postgres';
 $password = '';
+*/
+$host='localhost';
+$db = 'zapchatirf_build';
+$username = 'zapchatirf_build';
+$password = 'build2016';
 
 $connect = "pgsql:host=$host;port=5432;dbname=$db;user=$username;password=$password";
 
