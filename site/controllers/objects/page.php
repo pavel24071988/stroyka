@@ -24,5 +24,5 @@ if(!empty($applicationURL[2])){
 }
 
 function get_object_page($common_data){
-    require_once '/site/veiws/objects/'. $common_data['type'] .'.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] .'/site/veiws/objects/'. $common_data['type'] .'.php';
 }

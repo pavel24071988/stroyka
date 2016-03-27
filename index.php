@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('/functions/main.php')
+include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php')
 ?>
 <!DOCTYPE html>
 <html>

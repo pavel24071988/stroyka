@@ -32,5 +32,5 @@ if(!empty($applicationURL[2])){
 }
 
 function get_page($common_data){
-    require_once '/site/veiws/jobs/'. $common_data['type'] .'.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] .'/site/veiws/jobs/'. $common_data['type'] .'.php';
 }
