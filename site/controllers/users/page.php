@@ -10,15 +10,7 @@ if(!empty($_SESSION['user'])){
     $user_from_db = $user;
     $user = $_SESSION['user'];
     if($user['id'] == $applicationURL[2]){
-        $left_menu = '<div>
-            <div><a href="/users/'. $user['id'] .'/">Мой паспорт</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_objects/">Объекты и вакансии</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_messages/">Сообщения</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_settings/">Настройки</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_works/">Мои работы</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_insurance/">Страхование</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></div>
-        </div>';
+        $left_menu = Application::getLeftMenu();
         
         if(empty($applicationURL[3])) $applicationURL[3] = 'my';
         

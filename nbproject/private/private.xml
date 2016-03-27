@@ -2,6 +2,17 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/OpenServer/domains/stroyka/index.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/controllers/login/logout/page.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/veiws/objects/object_page.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/veiws/objects/object_update.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/controllers/objects/page.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/veiws/objects/object_delete.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/veiws/users/my_objects.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/controllers/registration/page.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/site/veiws/users/my_works.php</file>
+            <file>file:/E:/OpenServer/domains/stroyka/functions/main.php</file>
+        </group>
     </open-files>
 </project-private>

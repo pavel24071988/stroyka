@@ -1,5 +1,4 @@
-
-    <?php
+<?php
 // получаем сферы деятильности с подвидами
 $DB = Application::$DB;
 $area_of_jobs = $DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();

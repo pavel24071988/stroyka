@@ -39,6 +39,19 @@ $answers = $DB->query('
         WHERE uo."objectID"='. $object['id'])->fetchAll();
 ?>
 
+<?php
+    echo '<br/>';
+    $edit_buttons = '';
+    if(!empty($_SESSION['user'])){
+        if($_SESSION['user']['id'] === $object['createrUserID']){
+            $edit_buttons = '<div><a href="/objects/1/edit/">Редактировать</a> <a href="/objects/'. $object['id'] .'/delete/">Удалить</a></div>';
+            echo Application::getLeftMenu();
+        }
+    }
+    echo '<br/>';
+    echo $edit_buttons;
+?>
+
 <h1><?php echo $object['name']; ?></h1>
 <span>Номер объекта: <?php echo $object['id']; ?></span>
 <span>Опубликованно: <?php echo date('j.m.Y H:i:s', strtotime($object['created'])); ?></span>
@@ -71,6 +84,7 @@ $answers = $DB->query('
 </ol>
 </div>
 <?php } ?>
+<div>Рекомендации заказчику: <?php echo $object['recomendations']; ?></div>
 <hr/>
 <br/>
 <div>Ответы:</div>
