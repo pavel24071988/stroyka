@@ -7,17 +7,22 @@ echo $common_data['left_menu'];
 <div style="width: 200px; height: 300px; border: 1px solid black;">
     werwqr
 </div>
+<?php if($common_data['check_owner']){ ?>
+<br/>
 <a href="#">Загрузить фотографию</a>
 <br/>
 <a href="#">Написать сообщение</a>
 <br/>
+<a href="/users/<?php echo $user['id']; ?>/my_settings">изменить личные данные</a>
+<br/>
+<?php } ?>
 <br/>
 <div style="width: 1000px; height: 300px; border: 1px solid black;">
     <span><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></span>
+    <?php if($common_data['check_owner']){ ?>
     <br/>
     <span><?php echo $user['status']; ?></span><a href="#">поменять статус</a>
-    <br/><br/>
-    <a href="#">изменить личные данные</a>
+    <?php } ?>
     <br/><br/>
     <div><?php echo $user['age']; ?>  года</div>
     <div>Стаж работы: <?php echo $user['experience']; ?> лет</div>

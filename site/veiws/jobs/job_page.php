@@ -23,17 +23,30 @@ $answers = $DB->query('
         WHERE uj."jobID"='. $job['id'])->fetchAll();
 ?>
 
+<?php
+    echo '<br/>';
+    $edit_buttons = '';
+    if(!empty($_SESSION['user'])){
+        if($_SESSION['user']['id'] === $job['createrUserID']){
+            $edit_buttons = '<div><a href="/jobs/'. $job['id'] .'/edit/">Редактировать</a> <a href="/jobs/'. $job['id'] .'/delete/">Удалить</a></div>';
+            echo Application::getLeftMenu();
+        }
+    }
+    echo '<br/>';
+    echo $edit_buttons;
+?>
+
 <h1><?php echo $job['name']; ?></h1>
-<span>Номер объекта: <?php echo $job['id']; ?></span>
+<span>Номер вакансии: <?php echo $job['id']; ?></span>
 <span>Опубликованно: <?php echo date('j.m.Y H:i:s', strtotime($job['created'])); ?></span>
 <hr/>
 <div><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></div>
-<div><?php if($job['bargain']) echo 'По договоренности'; else echo $job['amount'];?></div>
+<div><?php if($job['bargain']) echo 'По договоренности'; else echo $job['amount']; ?></div>
 <hr/>
 <br/>
-<div><strong>Адрес</strong>: <?php echo $job['street'] .' '. $job['house'];?></div>
-<div><strong>Виды работ</strong>: <?php echo implode(', ', $kinds_of_jobs_arr);?></div>
-<div><strong>График работ</strong>: <?php echo $job['s_name'];?></div>
+<div><strong>Адрес</strong>: <?php echo $job['street'] .' '. $job['house']; ?></div>
+<div><strong>Виды работ</strong>: <?php echo implode(', ', $kinds_of_jobs_arr); ?></div>
+<div><strong>График работ</strong>: <?php echo $job['s_name']; ?></div>
 <br/>
 <br/>
 Требования:

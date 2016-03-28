@@ -10,6 +10,7 @@ if($applicationURL['2'] === 'add'){
     $main_title = 'Создать объект';
     $button_name = 'Создать';
     
+    
     // обрабатываем пост здесь
     if(!empty($_POST)){
         $rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', 'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'];
@@ -68,7 +69,7 @@ if($applicationURL['2'] === 'add'){
                     "require"=\''. $_POST['require'] .'\',
                     "street"=\''. $_POST['street'] .'\',
                     "type_of_kind"=\''. $_POST['type_of_kind'] .'\'
-                        WHERE "id"='. $common_data['object']['id']);
+                        WHERE "id"='. $applicationURL[2]);
             if($update_check->execute() === true){
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetchAll();
                 $common_data['object'] = $common_data['object'][0];
@@ -86,12 +87,12 @@ echo '<h1>'. $main_title .'</h1>';
 <?php
 $object = $common_data['object'];
 
-if(empty($object)){
-    $creater_user = [];
-    $kinds_of_jobs_arr = [];
-    $object_imgs_arr = [];
-    $object_docs_arr = [];
-}else{
+$creater_user = [];
+$kinds_of_jobs_arr = [];
+$object_imgs_arr = [];
+$object_docs_arr = [];
+
+if(!empty($object)){
     $creater_user = $DB->query('
         SELECT u.*
           FROM users u
@@ -101,7 +102,6 @@ if(empty($object)){
           FROM links_kinds_of_jobs_objects lkj
           LEFT JOIN kinds_of_jobs kj ON lkj."kindOfJobID" = kj."id"
             WHERE lkj."objectID"='. $object['id'])->fetchAll();
-    $kinds_of_jobs_arr = [];
     foreach($kinds_of_jobs as $kind_of_job){
         $kinds_of_jobs_arr[] = $kind_of_job['name'];
     }
@@ -109,7 +109,6 @@ if(empty($object)){
         SELECT *
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
-    $object_imgs_arr = [];
     foreach($object_imgs as $object_img){
         $object_imgs_arr[] = '<img src="'. $object_img['src'] .'"/>';
     }
@@ -117,17 +116,9 @@ if(empty($object)){
         SELECT *
           FROM objects_docs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
-    $object_docs_arr = [];
     foreach($object_docs as $object_doc){
         $object_docs_arr[] = '<li><a href="'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a></li>';
     }
-    $answers = $DB->query('
-        SELECT u.*,
-               uo."description" as uo_description,
-               uo."created" as uo_created
-          FROM users_objects uo
-          JOIN users u ON uo."fromUserID" = u."id"
-            WHERE uo."objectID"='. $object['id'])->fetchAll();
 }
 ?>
 
@@ -174,5 +165,3 @@ if(empty($object)){
 <div>Рекомендации заказчику: <textarea name="recomendations"><?php echo $object['recomendations']; ?></textarea></div>
 <input type="submit" value="<?php echo $button_name; ?>"/>
 </form>
-
-

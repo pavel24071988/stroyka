@@ -1,7 +1,7 @@
 <?php
 
 class Application
-{    
+{
     public static $URL;
     public static $DB;
 
@@ -37,9 +37,14 @@ class Application
         
         if(!isset($newURL[3])) $path_to_site .= 'page.php';
         else $path_to_site .= '/page.php';
+        $path_to_site_model = str_replace('controllers', 'models', $path_to_site);
         
         if(!file_exists($path_to_site)){
-            echo 'Не удалось подключить файл.';
+            echo 'Не удалось подключить контроллер.';
+            exit;
+        }
+        if(!file_exists($path_to_site_model)){
+            echo 'Не удалось подключить модель.';
             exit;
         }
         
@@ -54,6 +59,9 @@ class Application
             $log_entrance->execute();
         }catch(Exception $ex){}
         
+        // подключаем базовую модель
+        require_once $path_to_site_model;
+        // подключаем базовый контроллер
         require_once $path_to_site;
     }
     

@@ -39,7 +39,7 @@ if(!empty($_POST)){
             foreach($user[0] as $key => $attribute) $_SESSION['user'][$key] = $attribute;
             
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
-            echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user[0]['id'] .'">';
+            echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user[0]['id'] .'/">';
         }else{
             $error .= 'Регистрация не удалась. Попробуйте позже.';
         }

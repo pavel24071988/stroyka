@@ -44,7 +44,7 @@ $answers = $DB->query('
     $edit_buttons = '';
     if(!empty($_SESSION['user'])){
         if($_SESSION['user']['id'] === $object['createrUserID']){
-            $edit_buttons = '<div><a href="/objects/1/edit/">Редактировать</a> <a href="/objects/'. $object['id'] .'/delete/">Удалить</a></div>';
+            $edit_buttons = '<div><a href="/objects/'. $object['id'] .'/edit/">Редактировать</a> <a href="/objects/'. $object['id'] .'/delete/">Удалить</a></div>';
             echo Application::getLeftMenu();
         }
     }
