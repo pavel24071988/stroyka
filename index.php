@@ -1,6 +1,7 @@
 <?php
 session_start();
-include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php')
+include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
+$application = new Application;
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,10 +11,8 @@ include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php')
 	<link rel="stylesheet" href="/site/css/style.css" media="all" />
 	<link rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" media="all" />
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.fancybox-1.3.4.pack.js"></script>
-	<script type="text/javascript" src="/js/jquery.main.js"></script>
-        <script type="text/javascript" src="/js/main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script type="text/javascript" src="/site/js/main.js"></script>
 </head>
 <body>
     <div class="header">
@@ -21,14 +20,18 @@ include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php')
         <a href="/masters/">Мастера</a>
         <a href="/objects/">Заказы</a>
         <a href="/jobs/">Вакансии</a>
-        <?php if(!empty($_SESSION['user'])) echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/">Выйти</a>'; else echo '<a href="/login/">Войти</a>'; ?>
+        <?php 
+        if(!empty($_SESSION['user'])){
+            $userMessages = Application::getCountsUserMessages($_SESSION['user']['id']);
+            echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <strong>(+'. $userMessages[0]['count_new'] .')</strong> из ('. $userMessages[0]['count_all'] .') <a href="/login/logout/">Выйти</a>';
+        }else{
+            echo '<a href="/login/">Войти</a>';
+        }
+        ?>
     </div>
     
     <div class="content">
-        <?php
-            $application = new Application;
-            $application::get_content();
-        ?>
+        <?php $application::get_content(); ?>
     </div>
     
     <div class="footer">

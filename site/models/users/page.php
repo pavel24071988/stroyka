@@ -55,4 +55,59 @@ class usersModel
                 WHERE uj."fromUserID"='. $userID)->fetchAll();
         return $jobs;
     }
+    
+    public static function getIncomeMessages($userID){
+        $messages = self::$DB->query('
+            SELECT u."id",
+                   u."avatar",
+                   u."name",
+                   u."surname",
+                   m."text",
+                   m."created"
+              FROM messages m
+              JOIN users u ON m."fromUserID" = u."id"
+                WHERE m."toUserID"='. $userID .'
+                  ORDER BY m."created" DESC')->fetchAll();
+        return $messages;
+    }
+    
+    public static function getOutcomeMessages($userID){
+        $messages = self::$DB->query('
+            SELECT u."id",
+                   u."avatar",
+                   u."name",
+                   u."surname",
+                   m."text",
+                   m."created"
+              FROM messages m
+              JOIN users u ON m."toUserID" = u."id"
+                WHERE m."fromUserID"='. $userID .'
+                  ORDER BY m."created" DESC')->fetchAll();
+        return $messages;
+    }
+    
+    public static function getHistoryOfMessagesByUser($firstUser, $secondUser){
+        $messages = self::$DB->query('
+            SELECT u."avatar",
+                   u."name",
+                   u."surname",
+                   m."text",
+                   m."created"
+              FROM messages m
+              JOIN users u ON m."fromUserID" = u."id"
+                WHERE (m."fromUserID"='. $firstUser .' AND m."toUserID"='. $secondUser .') OR
+                      (m."fromUserID"='. $secondUser .' AND m."toUserID"='. $firstUser .')
+                  ORDER BY m."created" DESC')->fetchAll();
+        return $messages;
+    }
+    
+    public static function setMessage($fromUserID, $toUserID, $text){
+        $create_sql = self::$DB->prepare('
+            INSERT INTO messages ("fromUserID", "toUserID", "text")
+              VALUES(\''. $fromUserID .'\',
+                     \''. $toUserID .'\',
+                     \''. $text .'\')');
+        if($create_sql->execute() === true) return 'Сообщение отправлено.';
+        else return 'Ошибка отправки сообщения.';
+    }
 }

@@ -50,10 +50,9 @@ class Application
         
         // логируем заходы пользователей
         try{
-            $DB = Application::$DB;
             $userID = 0;
             if(!empty($_SESSION['user'])) $userID = $_SESSION['user']['id'];
-            $log_entrance = $DB->prepare('
+            $log_entrance = self::$DB->prepare('
               INSERT INTO logs (userid, url)
                 VALUES('. $userID .', \''. $path_to_site .'\')');
             $log_entrance->execute();
@@ -77,5 +76,15 @@ class Application
             <div><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></div>
         </div>';
         return $left_menu;
+    }
+    
+    public static function getCountsUserMessages($userID){
+        // новые сообщения - это не прочитанные сообщения - т.е на страницу которых мы не переходили
+        $messages = self::$DB->query('
+            SELECT
+              (SELECT COUNT(id) FROM messages WHERE "toUserID"=\''. $userID .'\') as count_all,
+              (SELECT COUNT(id) FROM messages WHERE read = \'off\' AND "toUserID"=\''. $userID .'\') as count_new
+        ')->fetchAll();
+        return $messages;
     }
 }

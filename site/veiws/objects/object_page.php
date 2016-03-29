@@ -1,6 +1,27 @@
 <?php
+
 $object = $common_data['object'];
 $DB = Application::$DB;
+$checkSubmitUser = false;
+
+if(isset($_SESSION['user'])){
+    $checkSubmitUser = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."fromUserID"='. $_SESSION['user']['id'] .' AND uo."objectID" = '. $object['id'])->fetchAll();
+    if(!empty($checkSubmitUser)) $checkSubmitUser = true;
+}
+
+// обработаем POST - например при подписывании на объект
+if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_SESSION['user'])){
+    if(isset($_POST['submitOrder'])){
+        $sql = $DB->prepare('
+            INSERT INTO users_objects ("description", "fromUserID", "objectID")
+              VALUES(\''. $_POST['description'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['objectID'] .'\')');
+        if($sql->execute() === true) $checkSubmitUser = true;
+    }elseif(isset($_POST['unsubmitOrder'])){
+        $sql = $DB->prepare('DELETE FROM users_objects WHERE "objectID"='. $_POST['objectID']);
+        if($sql->execute() === true) $checkSubmitUser = false;
+    }
+}
+
 $creater_user = $DB->query('
     SELECT u.*
       FROM users u
@@ -86,12 +107,19 @@ $answers = $DB->query('
 <?php } ?>
 <div>Рекомендации заказчику: <?php echo $object['recomendations']; ?></div>
 <hr/>
+<?php if(!empty($_SESSION['user'])){
+    if($_SESSION['user']['id'] !== $object['createrUserID']){
+        if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+        else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+    }
+}
+?>
 <br/>
 <div>Ответы:</div>
 <?php if(!empty($answers)){
     foreach($answers as $answer){
         $part = '<br/><div style="border: 2px solid #999;">';
-        $part .= '<div><img src="'. $answer['avatar'] .'"/>';
+        $part .= '<div><img width="100px" src="'. $answer['avatar'] .'"/>';
         $part .= '<span>'. $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name'] .'</span><br/>';
         $part .= '<span>'. date('j.m.Y H:i:s', strtotime($answer['uo_created'])) .'</span>';
         $part .= '<div><a href="#">+</a>6 <a href="#">-</a>1</div>';

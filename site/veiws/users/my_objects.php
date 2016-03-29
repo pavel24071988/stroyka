@@ -13,7 +13,7 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
 <?php foreach($myObjects as $myObject){
      echo '<div style="border: 1px solid black;">№'. $myObject['id'] .' "'. $myObject['name'] .'" ('. $myObject['amount'] .')
             от '. date('j.m.Y', strtotime($myObject['created'])) .'
-            | '. $myObject['responses'] .' отклика(ов) | <a href="http://stroyka/objects/'. $myObject['id'] .'/edit/">Редактировать</a> <a href="http://stroyka/objects/'. $myObject['id'] .'/edit/">Закрыть</a>
+            | '. $myObject['responses'] .' отклика(ов) | <a href="http://stroyka/objects/'. $myObject['id'] .'/edit/">Редактировать</a> <a href="http://stroyka/objects/'. $myObject['id'] .'/close/">Закрыть</a>
            </div>';
 }
 ?>
@@ -34,14 +34,14 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
 <?php foreach($myJobs as $myJob){
      echo '<div style="border: 1px solid black;">№'. $myJob['id'] .' "'. $myJob['name'] .'" ('. $myJob['amount'] .')
             от '. date('j.m.Y', strtotime($myJob['created'])) .'
-            | '. $myJob['responses'] .' отклика(ов) | <a href="http://stroyka/objects/'. $myJob['id'] .'/edit/">Редактировать</a> <a href="http://stroyka/objects/'. $myJob['id'] .'/edit/">Закрыть</a>
+            | '. $myJob['responses'] .' отклика(ов) | <a href="http://stroyka/jobs/'. $myJob['id'] .'/edit/">Редактировать</a> <a href="http://stroyka/jobs/'. $myJob['id'] .'/close/">Закрыть</a>
            </div>';
 }
 ?>
 
 <h4>Я откликнулся:</h4>
 <?php foreach($responseJobs as $responseJob){
-     echo '<div style="border: 1px solid black;">№'. $responseJob['id'] .' "'. $responseJob['name'] .'" ('. $responseJobs['amount'] .')
+     echo '<div style="border: 1px solid black;">№'. $responseJob['id'] .' "'. $responseJob['name'] .'" ('. $responseJob['amount'] .')
             от '. date('j.m.Y', strtotime($responseJob['created'])) .'
             | Ваша зявка рассмотрена заказчиком, напишите ему, чтобы договориться об условиях! | <a href="http://stroyka/objects/'. $responseJob['id'] .'/edit/">Снять заявку</a>
            </div>';
