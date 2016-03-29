@@ -22,7 +22,7 @@ $application = new Application;
         <a href="/jobs/">Вакансии</a>
         <?php 
         if(!empty($_SESSION['user'])){
-            $userMessages = Application::getCountsUserMessages($_SESSION['user']['id']);
+            $userMessages = $application::getCountsUserMessages($_SESSION['user']['id']);
             echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <strong>(+'. $userMessages[0]['count_new'] .')</strong> из ('. $userMessages[0]['count_all'] .') <a href="/login/logout/">Выйти</a>';
         }else{
             echo '<a href="/login/">Войти</a>';
