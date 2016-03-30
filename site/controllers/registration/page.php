@@ -5,11 +5,11 @@ $DB = Application::$DB;
 $area_of_jobs = $DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
 $list_of_areas = '<ul>';
 foreach($area_of_jobs as $key => $area_of_job){
-    $list_of_areas .= '<li class = "areaOfJob" data-area_id="'. $area_of_job['id'] .'">'. $area_of_job['name'];
+    $list_of_areas .= '<li data-area_id="'. $area_of_job['id'] .'">'. $area_of_job['name'];
     $kinds_of_jobs = $DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
     if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul ">';
     foreach($kinds_of_jobs as $key => $kind_of_job){
-        $list_of_areas .= '<li class="kindOfJob" data-kind_id="'. $kind_of_job['id'] .'">'. $kind_of_job['name'] .'</li>';
+        $list_of_areas .= '<li data-kind_id="'. $kind_of_job['id'] .'">'. $kind_of_job['name'] .'</li>';
     }
     if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
     $list_of_areas .= '</li>';
@@ -38,7 +38,10 @@ if(!empty($_POST)){
             $user = $DB->query('SELECT * FROM users u WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'')->fetchAll();
             unset($_SESSION['user']);
             foreach($user[0] as $key => $attribute) $_SESSION['user'][$key] = $attribute;
-            
+            $headers = "From: IKnowEnglish\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+            $theme = "Регистрация на сайте стройка завершена.";
+            $text = "Здравсвуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена.";
+            mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
             echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user[0]['id'] .'/">';
         }else{
@@ -106,13 +109,3 @@ if(!empty($_POST)){
     <input type="submit" value="Зарегистрироваться" />
     <br/><br/><br/><br/><br/><br/>
 </form>
-<script>
-   $(".areaOfJob:not(.kindOfJob)").click (function() {
-       $(this).css("list-style-image","url(../../marker2.png)");
-       var arrayOfKindOfJob = [];
-       for(var i=0; i<length(arrayOfKindOfJob);i++){arrayOfKindOfJob[i]=$(this):nth-child(i)};
-       $("arrayOfKindOfJob").slideUp(500);
-   });
-   
- 
-</script>  

@@ -124,8 +124,11 @@ $answers = $DB->query('
         $part .= '<span>'. date('j.m.Y H:i:s', strtotime($answer['uo_created'])) .'</span>';
         $part .= '<div><a href="#">+</a>6 <a href="#">-</a>1</div>';
         $part .= '<div>'. $answer['uo_description'] .'</div>';
-        $part .= '<div><a href="/messages/">Написать кандидату</a></div>';
-        $part .= '<input type="button" value="Принять" />';
+        if(!empty($_SESSION['user'])){
+            var_dump($answer);
+            if($_SESSION['user']['id'] !== $answer['id']) $part .= '<div><a href="/messages/">Написать кандидату</a></div>';
+            if($_SESSION['user']['id'] === $object['createrUserID'])$part .= '<input type="button" value="Принять" />';
+        }
         $part .= '</div><br/>';
         echo $part;
     }

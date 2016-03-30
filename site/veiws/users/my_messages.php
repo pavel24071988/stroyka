@@ -17,7 +17,18 @@ $outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);
 // распараллелим функционал диалогов и общих сообщений
 if($applicationURL[4] === 'dialogs'){
     $historyOfMessagesByUser = $usersModel->getHistoryOfMessagesByUser($_SESSION['user']['id'], $applicationURL[5]);
-    echo '<br/>';
+    if((int) $applicationURL[5] !== $_SESSION['user']['id']){
+        echo '<br/>';
+        echo '
+            <form method="POST">
+            Написать сообщение:<br/>
+            <textarea name="text"></textarea><br/>
+            <input type="submit" value="Ответить" />
+            </form>
+            <br/>
+        ';
+    }
+    echo '<br/><hr/>';
     foreach($historyOfMessagesByUser as $historyOfMessageByUser){
         echo '
             <div>
@@ -26,17 +37,6 @@ if($applicationURL[4] === 'dialogs'){
                 <div>'. $historyOfMessageByUser['text'] .'</div>
                 <div>'. date('j.m.Y H:i:s', strtotime($historyOfMessageByUser['created'])) .'</div>
             </div>
-        ';
-    }
-    if((int) $applicationURL[5] !== $_SESSION['user']['id']){
-        echo '<hr/><br/>';
-        echo '
-            <form method="POST">
-            Написать сообщение:<br/>
-            <textarea name="text"></textarea><br/>
-            <input type="submit" value="Ответить" />
-            </form>
-            <br/>
         ';
     }
 }else{

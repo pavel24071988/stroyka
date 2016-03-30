@@ -95,8 +95,10 @@ $answers = $DB->query('
         $part .= '<span>'. date('j.m.Y H:i:s', strtotime($answer['uj_created'])) .'</span>';
         $part .= '<div><a href="#">+</a>6 <a href="#">-</a>1</div>';
         $part .= '<div>'. $answer['uj_description'] .'</div>';
-        $part .= '<div><a href="/messages/">Написать кандидату</a></div>';
-        $part .= '<input type="button" value="Принять" />';
+        if(!empty($_SESSION['user'])){
+            if($_SESSION['user']['id'] !== $answer['id']) $part .= '<div><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $answer['id'] .'/">Написать кандидату</a></div>';
+            if($_SESSION['user']['id'] === $job['createrUserID'])$part .= '<input type="button" value="Принять" />';
+        }
         $part .= '</div><br/>';
         echo $part;
     }
