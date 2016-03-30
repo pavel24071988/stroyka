@@ -13,7 +13,7 @@ if(!empty($_POST['email'])){
         
         $changePassword = $DB->prepare('UPDATE users SET "password"=\''. md5($newPassword) .'\' WHERE "id"='. $checkEmail[0]['id']);
         if($changePassword->execute() === true){
-            $headers = "From: IKnowEnglish\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+            $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Восстановление пароля на сайте стройка.";
             $text = "Здравсвуйте ". $checkEmail[0]['name'] .". Восстановление пароля на сайте стройка завершено.<br /> Новый пароль ". $newPassword ."<br />Парлоль вы сможете сменить в Личном Кабинете";
             if(mail($_POST['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers)){

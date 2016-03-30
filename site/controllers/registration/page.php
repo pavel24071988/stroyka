@@ -38,7 +38,7 @@ if(!empty($_POST)){
             $user = $DB->query('SELECT * FROM users u WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'')->fetchAll();
             unset($_SESSION['user']);
             foreach($user[0] as $key => $attribute) $_SESSION['user'][$key] = $attribute;
-            $headers = "From: IKnowEnglish\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+            $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Регистрация на сайте стройка завершена.";
             $text = "Здравсвуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена.";
             mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
