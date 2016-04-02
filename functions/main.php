@@ -87,4 +87,36 @@ class Application
         ')->fetchAll();
         return $messages;
     }
+    
+    public static function getListOfAreas($type, $id){
+        // получаем сферы деятильности с подвидами
+        $area_of_jobs = self::$DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
+        // найдем все сферы деятельности по id и type, например по пользователю
+        $kinds_of_jobs_user = self::$DB->query('
+            SELECT *
+              FROM users_kinds_of_jobs ukj
+              LEFT JOIN kinds_of_jobs kj ON ukj.kind_of_job_id = kj.id
+                WHERE ukj."userID"='. $id .'
+        ')->fetchAll();
+        $kinds_of_jobs_user_arr = [];
+        foreach($kinds_of_jobs_user as $kind_of_job_user){
+            $kinds_of_jobs_user_arr[] = $kind_of_job_user['areaID']  .'_'. $kind_of_job_user['kind_of_job_id'];
+        }
+        
+        $list_of_areas = '<ul>';
+        foreach($area_of_jobs as $key => $area_of_job){
+            $list_of_areas .= '<li>'. $area_of_job['name'];
+            $kinds_of_jobs = self::$DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
+            if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul ">';
+            foreach($kinds_of_jobs as $key => $kind_of_job){
+                $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
+                $checked = in_array($identificator, $kinds_of_jobs_user_arr) ? 'checked' : '';
+                $list_of_areas .= '<li><input type="checkbox" name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" '. $checked .'>'. $kind_of_job['name'] .'</li>';
+            }
+            if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
+            $list_of_areas .= '</li>';
+        }
+        $list_of_areas .= '</ul>';
+        return $list_of_areas;
+    }
 }

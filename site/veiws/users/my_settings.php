@@ -5,6 +5,15 @@ $user = $common_data['user_from_db'];
 
 // обработка поста
 if(!empty($_POST)){
+    
+    // записываем виды сфер деятильностей пользователя
+    if(!empty($_POST['areas_for_user'])){
+        $DB->prepare('DELETE FROM users_kinds_of_jobs WHERE "userID"='. $user['id'])->execute();
+        foreach($_POST['areas_for_user'] as $kind_of_job_id){
+            $DB->prepare('INSERT INTO users_kinds_of_jobs ("userID", "kind_of_job_id") VALUES('. $user['id'] .', '. $kind_of_job_id .')')->execute();
+        }
+    }
+    
     $error = 'Что - то пошло не так.';
     if(!empty($_POST['password_data'])){
         if(empty($_POST['current_password'])){
@@ -53,21 +62,7 @@ if(!empty($_POST)){
     $_SESSION['user'] = $user;
 }
 
-
-// получаем сферы деятильности с подвидами
-$area_of_jobs = $DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
-$list_of_areas = '<ul>';
-foreach($area_of_jobs as $key => $area_of_job){
-    $list_of_areas .= '<li data-area_id="'. $area_of_job['id'] .'">'. $area_of_job['name'];
-    $kinds_of_jobs = $DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
-    if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul ">';
-    foreach($kinds_of_jobs as $key => $kind_of_job){
-        $list_of_areas .= '<li data-kind_id="'. $kind_of_job['id'] .'"><input type="checkbox" name="areas[]" value="'. $area_of_job['id'] .'_'. $kind_of_job['id'] .'">'. $kind_of_job['name'] .'</li>';
-    }
-    if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
-    $list_of_areas .= '</li>';
-}
-$list_of_areas .= '</ul>';
+$list_of_areas = Application::getListOfAreas('user', $user['id']);
 echo $common_data['left_menu'];
 ?>
 <h1>Учетные данные</h1>
