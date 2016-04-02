@@ -4,12 +4,12 @@ if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
 else echo '<h1>Страница пользователя</h1>';
 echo $common_data['left_menu'];
 ?>
-<div style="width: 200px; height: 300px; border: 1px solid black;">
-    werwqr
+<div style="width: 200px; height: 200px; border: 1px solid black;">
+    <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>' ?>
 </div>
 <?php if($common_data['check_owner']){ ?>
 <br/>
-<a href="#">Загрузить фотографию</a>
+<a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить фотографию</a>
 <br/>
 <a href="#">Написать сообщение</a>
 <br/>

@@ -2,6 +2,7 @@
 
 $object = $common_data['object'];
 $DB = Application::$DB;
+$applicationURL = Application::$URL;
 $checkSubmitUser = false;
 
 if(isset($_SESSION['user'])){
@@ -20,12 +21,28 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
         $sql = $DB->prepare('DELETE FROM users_objects WHERE "objectID"='. $_POST['objectID']);
         if($sql->execute() === true) $checkSubmitUser = false;
     }
+}elseif(isset($_POST['user_to_object']) && !empty($_SESSION['user'])){
+    $update_object = $DB->prepare('UPDATE objects SET "workerID"=\''. $_POST['user_to_object'] .'\' WHERE "id"='. $applicationURL[2]);
+    if($update_object->execute() === true){
+        $object['workerID'] = $_POST['user_to_object'];
+    }
+}elseif(isset($_POST['user_remove_object']) && !empty($_SESSION['user'])){
+    $update_object = $DB->prepare('UPDATE objects SET "workerID"=NULL WHERE "id"='. $applicationURL[2]);
+    if($update_object->execute() === true){
+        $object['workerID'] = NULL;
+    }
 }
 
 $creater_user = $DB->query('
     SELECT u.*
       FROM users u
         WHERE u."id"='. $object['createrUserID'])->fetchAll();
+$worker_user = null;
+if(!empty($object['workerID']))
+    $worker_user = $DB->query('
+        SELECT u.*
+          FROM users u
+            WHERE u."id"='. $object['workerID'])->fetchAll();
 $kinds_of_jobs = $DB->query('
     SELECT *
       FROM links_kinds_of_jobs_objects lkj
@@ -41,7 +58,7 @@ $object_imgs = $DB->query('
         WHERE oi."objectID"='. $object['id'])->fetchAll();
 $object_imgs_arr = [];
 foreach($object_imgs as $object_img){
-    $object_imgs_arr[] = '<img src="'. $object_img['src'] .'"/>';
+    $object_imgs_arr[] = '<img width="100px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
 }
 $object_docs = $DB->query('
     SELECT *
@@ -94,8 +111,7 @@ $answers = $DB->query('
 <div style="width: 400px;">Описание объекта: <?php echo $object['description'];?></div>
 <br/>
 <br/>
-<div style="width: 400px;"><?php echo implode(' ', $object_imgs_arr);?></div>
-<hr/>
+<?php echo implode(' ', $object_imgs_arr);?>
 <br/>
 <div>Приложенные файлы</div>
 <?php if(!empty($object_docs_arr)){ ?>
@@ -106,7 +122,6 @@ $answers = $DB->query('
 </div>
 <?php } ?>
 <div>Рекомендации заказчику: <?php echo $object['recomendations']; ?></div>
-<hr/>
 <?php if(!empty($_SESSION['user'])){
     if($_SESSION['user']['id'] !== $object['createrUserID']){
         if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
@@ -115,18 +130,36 @@ $answers = $DB->query('
 }
 ?>
 <br/>
+<?php
+    if(!empty($worker_user[0])){
+        echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
+        if(!empty($_SESSION['user']))
+            echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
+    }else{
+        echo 'Исполнитель не назначен.';
+    }
+?>
+<hr/>
+<br/>
 <div>Ответы:</div>
 <?php if(!empty($answers)){
     foreach($answers as $answer){
         $part = '<br/><div style="border: 2px solid #999;">';
-        $part .= '<div><img width="100px" src="'. $answer['avatar'] .'"/>';
+        $part .= '<div><img width="100px" src="/images/users/'. $answer['id'] .'/'. $answer['avatar'] .'"/>';
         $part .= '<span>'. $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name'] .'</span><br/>';
         $part .= '<span>'. date('j.m.Y H:i:s', strtotime($answer['uo_created'])) .'</span>';
         $part .= '<div><a href="#">+</a>6 <a href="#">-</a>1</div>';
         $part .= '<div>'. $answer['uo_description'] .'</div>';
         if(!empty($_SESSION['user'])){
             if($_SESSION['user']['id'] !== $answer['id']) $part .= '<div><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $answer['id'] .'/">Написать кандидату</a></div>';
-            if($_SESSION['user']['id'] === $object['createrUserID'])$part .= '<input type="button" value="Принять" />';
+            if($_SESSION['user']['id'] === $object['createrUserID']){
+                if((int)$object['workerID'] === $answer['id']){
+                    $part .= '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_remove_object"/><input type="submit" value="Отказаться" /></form>';
+                }else{
+                    if(empty($object['workerID']))
+                        $part .= '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_object"/><input type="submit" value="Принять" /></form>';
+                }
+            }
         }
         $part .= '</div><br/>';
         echo $part;

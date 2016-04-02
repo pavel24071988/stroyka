@@ -80,6 +80,16 @@ if($applicationURL['2'] === 'add'){
         }
     }
 }
+if(!empty($_FILES['object_img'])){
+    // обработаем картинку
+    if(!empty($_FILES['object_img']['tmp_name'])){
+        if(!file_exists("images/objects/". $common_data['object']['id'])) mkdir("images/objects/". $common_data['object']['id'], 0777);
+        if(copy($_FILES['object_img']['tmp_name'], "images/objects/". $common_data['object']['id'] ."/". $_FILES['object_img']['name'])){
+            $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $common_data['object']['id'] .'\', \''. $_FILES['object_img']['name'] .'\')');
+            $create_sql->execute();
+        }
+    }
+}
 
 echo '<h1>'. $main_title .'</h1>';
 ?>
@@ -110,7 +120,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img src="'. $object_img['src'] .'"/>';
+        $object_imgs_arr[] = '<img width="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
     }
     $object_docs = $DB->query('
         SELECT *
@@ -124,7 +134,7 @@ if(!empty($object)){
 
 <?php echo Application::getLeftMenu(); ?>
 <?php if(!empty($error)) echo $error; ?>
-<form method="POST" action="/objects/<?php if($applicationURL['2'] === 'add') echo 'add/'; else echo $object['id'] .'/edit/'; ?>">
+<form method="POST" enctype="multipart/form-data" action="/objects/<?php if($applicationURL['2'] === 'add') echo 'add/'; else echo $object['id'] .'/edit/'; ?>">
 <h1>Название: <input type="text" name="name" value="<?php echo $object['name']; ?>"/></h1>
 <span>Номер объекта: <?php echo $object['id']; ?></span>
 <span>Опубликованно: <?php echo date('j.m.Y H:i:s', strtotime($object['created'])); ?></span>
@@ -150,8 +160,16 @@ if(!empty($object)){
 <br/>
 <div style="width: 400px;">Описание объекта: <textarea name="description"><?php echo $object['description']; ?></textarea></div>
 <br/>
+<?php
+    if(!empty($object['object_img'])){
+        echo '<img width="200px" src="/images/objects/'. $object['id'] .'/'. $object['object_img'] .'"/>';
+    }
+?>
+<p>Загрузите файл с картинкой</p>
+<p><input type="file" name="object_img"></p>
 <br/>
-<div style="width: 400px;"><?php echo implode(' ', $object_imgs_arr);?></div>
+<br/>
+<?php echo implode(' ', $object_imgs_arr);?>
 <hr/>
 <br/>
 <div>Приложенные файлы</div>

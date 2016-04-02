@@ -58,7 +58,7 @@ class usersModel
     
     public static function getIncomeMessages($userID){
         $messages = self::$DB->query('
-            SELECT u."id",
+            SELECT DISTINCT ON ("id") u."id",
                    u."avatar",
                    u."name",
                    u."surname",
@@ -67,13 +67,13 @@ class usersModel
               FROM messages m
               JOIN users u ON m."fromUserID" = u."id"
                 WHERE m."toUserID"='. $userID .'
-                  ORDER BY m."created" DESC')->fetchAll();
+                  ORDER BY "id", m."created" DESC')->fetchAll();
         return $messages;
     }
     
     public static function getOutcomeMessages($userID){
         $messages = self::$DB->query('
-            SELECT u."id",
+            SELECT DISTINCT ON ("id") u."id",
                    u."avatar",
                    u."name",
                    u."surname",
@@ -82,7 +82,7 @@ class usersModel
               FROM messages m
               JOIN users u ON m."toUserID" = u."id"
                 WHERE m."fromUserID"='. $userID .'
-                  ORDER BY m."created" DESC')->fetchAll();
+                  ORDER BY "id", m."created" DESC')->fetchAll();
         return $messages;
     }
     

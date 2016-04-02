@@ -20,6 +20,15 @@ if(!empty($_POST)){
             }
         }
     }elseif(!empty($_POST['personal_data'])){
+        // обработаем картинку
+        $avatar_update_str = '';
+        if(!empty($_FILES['avatar']['tmp_name'])){
+            if(!file_exists("images/users/". $user['id'])) mkdir("images/users/". $user['id'], 0777);
+            if(copy($_FILES['avatar']['tmp_name'], "images/users/". $user['id'] ."/". $_FILES['avatar']['name'])){
+                $avatar_update_str = ', "avatar"=\''. $_FILES['avatar']['name'] .'\'';
+            }
+        }
+        
         $update_check = $DB->prepare('
             UPDATE users
               SET "name"=\''. $_POST['name'] .'\',
@@ -27,6 +36,7 @@ if(!empty($_POST)){
                   "second_name"=\''. $_POST['second_name'] .'\',
                   "experience"=\''. $_POST['experience'] .'\',
                   "work_city"=\''. $_POST['work_city'] .'\'
+                  '. $avatar_update_str .'
                 WHERE "id"='. $user['id']);
         if($update_check->execute() === true){
             $error = 'Данные отредактированы.';
@@ -40,6 +50,7 @@ if(!empty($_POST)){
           FROM users u
             WHERE u."id"='. $user['id'])->fetchAll();
     $user = $user[0];
+    $_SESSION['user'] = $user;
 }
 
 
@@ -80,7 +91,14 @@ echo $common_data['left_menu'];
 <input type="submit"  name="password_data" value="Изменить пароль">
 </form>
 <h1>Личные данные</h1>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
+<?php
+    if(!empty($user['avatar'])){
+        echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>';
+    }
+?>
+<p>Загрузите файл с картинкой</p>
+<p><input type="file" name="avatar"></p>
 Фамилия:
 <input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
 <br/>

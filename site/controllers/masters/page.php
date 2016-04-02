@@ -23,13 +23,13 @@ foreach($users as $user){
     
     $img_div = '<div>';
     foreach($objects_images as $image){
-        $img_div .= '<img src="'. $image['src'] .'" />';
+        $img_div .= '<img width="100px" src="/images/objects/'. $image['objectID'] .'/'. $image['src'] .'" />';
     }
     $img_div .= '</div>';
     
     $div = '<div style="border: 1px solid black;">';
     $div .= '<a href="/users/'. $user['id'] .'/">'. $user['name'] .' '. $user['surname'] .'</a><br/>';
-    $div .= '<img width=100px src="'. $user['avatar'] .'" /><br/>';
+    $div .= '<img width=100px src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'" /><br/>';
     $div .= $user['work_city'] .' '. implode(', ', $profession_arr) .'<br/>';
     $div .= 'На сайте: '. floor((strtotime("now") - strtotime($user['created'])) / (60*60*24)) .' дней(я)<br/>';
     $div .= 'Стаж работы: '. $user['experience'] .'<br/>';
