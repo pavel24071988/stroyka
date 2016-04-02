@@ -18,7 +18,7 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
               VALUES(\''. $_POST['description'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['jobID'] .'\')');
         if($sql->execute() === true) $checkSubmitUser = true;
     }elseif(isset($_POST['unsubmitOrder'])){
-        $sql = $DB->prepare('DELETE FROM users_jobs WHERE "jobID"='. $_POST['jobID']);
+        $sql = $DB->prepare('DELETE FROM users_jobs WHERE "jobID"='. $_POST['jobID'] .' AND "fromUserID="'. $_SESSION['user']['id']);
         if($sql->execute() === true) $checkSubmitUser = false;
     }
 }elseif(isset($_POST['user_to_job']) && !empty($_SESSION['user'])){
