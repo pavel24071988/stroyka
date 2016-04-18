@@ -66,14 +66,20 @@ class Application
     
     public static function getLeftMenu(){
         $user = $_SESSION['user'];
-        $left_menu = '<div>
-            <div><a href="/users/'. $user['id'] .'/">Мой паспорт</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_objects/">Объекты и вакансии</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_messages/">Сообщения</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_settings/">Настройки</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_works/">Мои работы</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_insurance/">Страхование</a></div>
-            <div><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></div>
+        $userMessages = self::getCountsUserMessages($_SESSION['user']['id']);
+        if((int) $userMessages[0]['count_new'] > 0) $msgStr = '<li><a href="/users/'. $user['id'] .'/my_messages/" class="active">Сообщения |'. $userMessages[0]['count_new'] .'|</a></li>';
+        else $msgStr = '<li><a href="/users/'. $user['id'] .'/my_messages/">Сообщения</a></li>';
+        $left_menu = '
+        <div class="my-page-navbar">
+            <ul class="my-page-navbar-links">
+                <li><a href="/users/'. $user['id'] .'/"">Мой паспорт</a></li>
+                <li><a href="/users/'. $user['id'] .'/my_objects/">Объекты и вакансии</a></li>
+                '. $msgStr .'
+                <li><a href="/users/'. $user['id'] .'/my_settings/">Настройки</a></li>
+                <li><a href="/users/'. $user['id'] .'/my_works/">Мои работы</a></li>
+                <li><a href="/users/'. $user['id'] .'/my_insurance/">Страхование</a></li>
+                <li><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></li>
+            </ul>
         </div>';
         return $left_menu;
     }
@@ -103,20 +109,32 @@ class Application
             $kinds_of_jobs_user_arr[] = $kind_of_job_user['areaID']  .'_'. $kind_of_job_user['kind_of_job_id'];
         }
         
-        $list_of_areas = '<ul>';
+        $list_of_areas = '';
         foreach($area_of_jobs as $key => $area_of_job){
-            $list_of_areas .= '<li>'. $area_of_job['name'];
+            $list_of_areas .= '<li><div class="searcher-categories-item"><label><input type=\'checkbox\'> '. $area_of_job['name'] .'</label></div>';
             $kinds_of_jobs = self::$DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
-            if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul ">';
+            if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul class="searcher-sub-categories">';
             foreach($kinds_of_jobs as $key => $kind_of_job){
                 $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
-                $checked = in_array($identificator, $kinds_of_jobs_user_arr) ? 'checked' : '';
-                $list_of_areas .= '<li><input type="checkbox" name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" '. $checked .'>'. $kind_of_job['name'] .'</li>';
+                $liclass = in_array($identificator, $kinds_of_jobs_user_arr) ? ' active' : '';
+                $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label><input type=\'checkbox\' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
             }
             if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
             $list_of_areas .= '</li>';
         }
-        $list_of_areas .= '</ul>';
         return $list_of_areas;
+        
+        /*
+        <li>
+            <div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div>
+            <ul class="searcher-sub-categories">
+                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
+                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
+                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
+            </ul>
+        </li>
+        <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
+        <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
+         */
     }
 }

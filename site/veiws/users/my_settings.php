@@ -15,7 +15,7 @@ if(!empty($_POST)){
     }
     
     $error = 'Что - то пошло не так.';
-    if(!empty($_POST['password_data'])){
+    if(isset($_POST['password_data'])){
         if(empty($_POST['current_password'])){
             $error = 'Заполните поле текущий пароль.';
         }elseif(md5($_POST['current_password']) !== $user['password']){
@@ -28,7 +28,7 @@ if(!empty($_POST)){
                 $error = 'Пароль изменен.';
             }
         }
-    }elseif(!empty($_POST['personal_data'])){
+    }elseif(isset($_POST['personal_data'])){
         // обработаем картинку
         $avatar_update_str = '';
         if(!empty($_FILES['avatar']['tmp_name'])){
@@ -63,56 +63,77 @@ if(!empty($_POST)){
 }
 
 $list_of_areas = Application::getListOfAreas('user', $user['id']);
-echo $common_data['left_menu'];
+
 ?>
-<h1>Учетные данные</h1>
-<?php if(!empty($error)) echo '<div style="color: red;">'. $error .'</div><br/>'; ?>
-<div>Ваш логин: <strong><?php echo $user['email']; ?></strong></div>
-<div>Ваша почта: <strong><?php echo $user['email']; ?></strong></div>
-<br/>
-<form method="POST">
-<strong>Изменить пароль:</strong>
-<br/>
-Введите текущий пароль:
-<input type="password" name="current_password" />
-<br/>
-Введите новый пароль:
-<input type="password" name="new_password" />
-<br/>
-Подтверждение:
-<input type="password" name="repeat_new_password" />
-<br/>
-<br/>
-<input type="submit"  name="password_data" value="Изменить пароль">
-</form>
-<h1>Личные данные</h1>
-<form method="POST" enctype="multipart/form-data">
-<?php
-    if(!empty($user['avatar'])){
-        echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>';
-    }
-?>
-<p>Загрузите файл с картинкой</p>
-<p><input type="file" name="avatar"></p>
-Фамилия:
-<input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
-<br/>
-Имя:
-<input type="text" value='<?php echo $user['name']; ?>' name="name" />
-<br/>
-Отчество:
-<input type="text" value='<?php echo $user['second_name']; ?>' name="second_name" />
-<br/>
-<br/>
-Стаж работы:
-<input type="text" value='<?php echo $user['experience']; ?>' name="experience" />
-<br/>
-Место работы:
-<input type="text" value='<?php echo $user['work_city']; ?>' name="work_city" />
-<br/>
-Специализации:
-<?php echo $list_of_areas; ?>
-<br/>
-<br/>
-<input type="submit" name="personal_data" value="Сохранить">
-</form>
+
+
+
+<div class="content">
+    <div class="my-page-content clearfix">
+        <?php echo $common_data['left_menu']; ?>
+        <div class="my-page-wrapper">
+            <div class="my-page-breadcrumb">
+                <ul>
+                    <li>
+                        <a href="#">Настройки</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="my-page-wrapper-content">
+                <div class="my-page-wrapper-headline">Учетные данные</div>
+                <div class="personal-main-data">
+                    <?php if(!empty($error)) echo '<div style="color: red;">'. $error .'</div><br/>'; ?>
+                    <p>Ваш логин: <span><?php echo $user['email']; ?></span></p>
+                    <p>Ваша почта: <span><?php echo $user['email']; ?></span></p>
+                </div>
+                <form class="personal-data-form" method="POST">
+                    <fieldset>
+                        <div class="personal-data-form-headline">Изменить пароль:</div>
+                        <div class="personal-data-row clearfix">
+                            <label>Введите текущий пароль:</label><input type="password" name="current_password"/>
+                        </div>
+                        <div class="personal-data-row clearfix">
+                            <label>Введите новый пароль:</label><input type="password" name="new_password"/>
+                        </div>
+                        <div class="personal-data-row clearfix">
+                            <label>Подтверждение:</label><input type="password" name="repeat_new_password"/>
+                        </div>
+                        <button class="personal-data-form-submit" type="submit" name="password_data">Изменить пароль</button>
+                    </fieldset>
+                </form>
+                <form class="personal-data-form pers-data" method="POST" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="personal-data-form-headline">Личные данные:</div>
+                        <div class="personal-data-row clearfix">
+                            <div class="personal-data-row-cell">
+                                <label>Фамилия:</label><input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
+                            </div>
+                            <div class="personal-data-row-cell">
+                                <label>Стаж работы:</label><input type="text" value='<?php echo $user['experience']; ?>' name="experience" />
+                            </div>
+                        </div>
+                        <div class="personal-data-row clearfix">
+                            <div class="personal-data-row-cell">
+                                <label>Имя:</label><input type="text" value='<?php echo $user['name']; ?>' name="name" />
+                            </div>
+                            <div class="personal-data-row-cell">
+                                <label>Место работы:</label><input type="text" value='<?php echo $user['work_city']; ?>' name="work_city" />
+                            </div>
+                        </div>
+                        <div class="personal-data-row clearfix">
+                            <div class="personal-data-row-cell">
+                                <label>Отчество:</label><input type="text" value='<?php echo $user['second_name']; ?>' name="second_name" />
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="personal-data-form-headline">Специализация:</div>
+                        <ul class="searcher-categories">
+                        <?php echo $list_of_areas; ?>
+                        </ul>
+                        <button class="personal-data-form-submit" type="submit" name="personal_data">Сохранить</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

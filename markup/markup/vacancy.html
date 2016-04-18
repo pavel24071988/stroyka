@@ -1,19 +1,13 @@
-<?php
-session_start();
-include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
-$application = new Application;
-?>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>na_objekte | index</title>
+	<title>na_objekte | vacancy</title>
 
-	<link rel="stylesheet" href="/site/css/style.css" media="all" />
+	<link rel="stylesheet" href="css/style.css" media="all" />
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script type="text/javascript" src="/site/js/jquery.main.js"></script>
-	<script type="text/javascript" src="/site/js/main.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.main.js"></script>
 
 </head>
 <body>
@@ -24,33 +18,53 @@ $application = new Application;
             <a href="#" class="logotype"></a>
             <ul class="navigation clearfix">
                 <li>
-                    <a href="/masters/">Мастера</a>
+                    <a href="#">Мастера</a>
                 </li>
                 <li>
-                    <a href="/objects/">Заказы</a>
+                    <a href="#">Заказы</a>
                 </li>
                 <li>
-                    <a href="/jobs/">Вакансии</a>
+                    <a href="#">Вакансии</a>
                 </li>
             </ul>
-            <?php
-            if(!empty($_SESSION['user'])){
-                $userMessages = $application::getCountsUserMessages($_SESSION['user']['id']);
-                echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/" class="login">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/" class="login">Выйти</a>';
-            }else{
-                echo '<a href="/login/" class="login">Авторизация</a>';
-            }
-            ?>
-            <?php 
-            if(!empty($_SESSION['user'])){
-                echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <strong>(+'. $userMessages[0]['count_new'] .')</strong> из ('. $userMessages[0]['count_all'] .') <a href="/login/logout/">Выйти</a>';
-            }else{
-                echo '<a href="/login/">Войти</a>';
-            }
-            ?>
+            <a href="#" class="login">Авторизация</a>
         </div>
     </div>
-    <?php $application::get_content(); ?>
+
+    <div class="content">
+        <div class="breadcrumb">
+            <ul class="clearfix">
+                <li>
+                    <a href="#">Главная</a>
+                </li>
+                <li>
+                    <a href="#">Вакансии</a>
+                </li>
+                <li>
+                    <a href="#">Инженер-проектировщик</a>
+                </li>
+            </ul>
+        </div>
+        <div class="product-holder">
+            <div class="product-title">Инженер-проектировщик</div>
+            <div class="product-meta">
+                <p>Опубликовано: Сегодня, 18:32</p>
+                <p>Город: Воронеж</p>
+                <p>Сфера деятельности: строительство</p>
+                <p>График работы: полный день</p>
+                <p>Требуемый опыт работы: Более 3 лет</p>
+                <p>Работодатель: ООО «Луч»</p>
+                <p>тел. +8 987 456 45 45</p>
+            </div>
+            <div class="product-sub-meta">
+                <div class="product-sub-meta-item">Требования:<br>Инженер-проектировщик сетей 10/0,4кВ</div>
+                <div class="product-sub-meta-item">Обязанности:<br>Разработка проектной документации для сетей 10/0,4кВ, ТП, КТП. Свободное владение ПК, знание Office, AUTOCAD и др. Знание требований нормативных документов и федеральных законов по профилю. Опыт в прохождении госэкспертиз и согласований технических решений с заинтересованными организациями.</div>
+                <div class="product-sub-meta-item">Условия:<br>5/7, оформление по ТК, график работы: пн-чт 08.30-17.30, пт 08.30-16.00</div>
+            </div>
+        </div>
+        <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+    </div>
+
     <div class="footer">
         <div class="inner-wrapper clearfix">
             <div class="footer-left-column">
