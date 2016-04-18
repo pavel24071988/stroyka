@@ -21,7 +21,7 @@ $application = new Application;
 <div class="wrapper">
     <div class="header">
         <div class="inner-wrapper clearfix">
-            <a href="#" class="logotype"></a>
+            <a href="/" class="logotype"></a>
             <ul class="navigation clearfix">
                 <li>
                     <a href="/masters/">Мастера</a>
