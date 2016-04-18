@@ -41,13 +41,6 @@ $application = new Application;
                 echo '<a href="/login/" class="login">Авторизация</a>';
             }
             ?>
-            <?php 
-            if(!empty($_SESSION['user'])){
-                echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/">'. $_SESSION['user']['name'] .'</a> <strong>(+'. $userMessages[0]['count_new'] .')</strong> из ('. $userMessages[0]['count_all'] .') <a href="/login/logout/">Выйти</a>';
-            }else{
-                echo '<a href="/login/">Войти</a>';
-            }
-            ?>
         </div>
     </div>
     <?php $application::get_content(); ?>
