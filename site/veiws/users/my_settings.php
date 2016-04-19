@@ -102,8 +102,11 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                     </fieldset>
                 </form>
                 <form class="personal-data-form pers-data" method="POST" enctype="multipart/form-data">
+                    
                     <fieldset>
                         <div class="personal-data-form-headline">Личные данные:</div>
+                        <p>Фотография</p>
+                        <input type="file" name="avatar" />
                         <div class="personal-data-row clearfix">
                             <div class="personal-data-row-cell">
                                 <label>Фамилия:</label><input type="text" value='<?php echo $user['surname']; ?>' name="surname" />

@@ -1,4 +1,3 @@
-<div><a href="/">Главная</a>-><a href="/orders/">Заказы</a>-><a href="/orders/">Воронежская область</a>-><a href="/orders/">Воронеж</a></div>
 <?php
 $DB = Application::$DB;
 $applicationURL = Application::$URL;
@@ -31,7 +30,13 @@ if(!empty($applicationURL[2])){
     ];
     get_page($common_data);
 }else{
-    $objects = $DB->query('SELECT o.*, (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count FROM objects o')->fetchAll();
+    $objects = $DB->query('
+        SELECT o.*,
+               (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
+               c.name as city_name
+            FROM objects o
+            LEFT JOIN cities c ON o."cityID" = c.id
+    ')->fetchAll();
     
     $common_data = [
         'type' => 'objects',

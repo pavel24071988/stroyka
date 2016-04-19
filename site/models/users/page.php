@@ -101,6 +101,10 @@ class usersModel
         return $messages;
     }
     
+    public static function getUser($userID){
+        return self::$DB->query('SELECT * FROM users WHERE id='. $userID)->fetchAll();
+    }
+    
     public static function setMessage($fromUserID, $toUserID, $text){
         $create_sql = self::$DB->prepare('
             INSERT INTO messages ("fromUserID", "toUserID", "text")

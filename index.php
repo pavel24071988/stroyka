@@ -10,8 +10,10 @@ $application = new Application;
 	<title>na_objekte | index</title>
 
 	<link rel="stylesheet" href="/site/css/style.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="css/jquery.fancybox-1.3.4.css" media="screen" />
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+        <script type="text/javascript" src="/site/js/jquery.fancybox-1.3.4.pack.js"></script>
         <script type="text/javascript" src="/site/js/jquery.main.js"></script>
 	<script type="text/javascript" src="/site/js/main.js"></script>
 

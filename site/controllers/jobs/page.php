@@ -1,4 +1,3 @@
-<div><a href="/">Главная</a>-><a href="/orders/">Заказы</a>-><a href="/orders/">Воронежская область</a>-><a href="/orders/">Воронеж</a></div>
 <?php
 $DB = Application::$DB;
 $applicationURL = Application::$URL;

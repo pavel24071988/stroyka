@@ -62,6 +62,7 @@ $answers = $DB->query('
 ?>
 
 <?php
+    /*
     echo '<br/>';
     $edit_buttons = '';
     if(!empty($_SESSION['user'])){
@@ -72,49 +73,59 @@ $answers = $DB->query('
     }
     echo '<br/>';
     echo $edit_buttons;
+    */
 ?>
 
-<h1><?php echo $job['name']; ?></h1>
-<span>Номер вакансии: <?php echo $job['id']; ?></span>
-<span>Опубликованно: <?php echo date('j.m.Y H:i:s', strtotime($job['created'])); ?></span>
-<hr/>
-<div><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></div>
-<div><?php if($job['bargain']) echo 'По договоренности'; else echo $job['amount']; ?></div>
-<hr/>
-<br/>
-<div><strong>Адрес</strong>: <?php echo $job['street'] .' '. $job['house']; ?></div>
-<div><strong>Виды работ</strong>: <?php echo implode(', ', $kinds_of_jobs_arr); ?></div>
-<div><strong>График работ</strong>: <?php echo $job['s_name']; ?></div>
-<br/>
-<br/>
-Требования:
-<div><?php echo $job['require'];?></div>
-Обязанности:
-<div><?php echo $job['description'];?></div>
-Условия:
-<div><?php echo $job['conditions'];?></div>
-<br/>
-<?php if(!empty($_SESSION['user']) && empty($job['workerID'])){
+<div class="content">
+    <div class="breadcrumb">
+        <ul class="clearfix">
+            <li>
+                <a href="/">Главная</a>
+            </li>
+            <li>
+                <a href="/jobs">Вакансии</a>
+            </li>
+            <li>
+                <a href=""><?php echo $job['name']; ?></a>
+            </li>
+        </ul>
+    </div>
+    <div class="product-holder">
+        <div class="product-title"><?php echo $job['name']; ?></div>
+        <div class="product-meta">
+            <p>Опубликовано: <?php echo date('j.m.Y H:i:s', strtotime($job['created'])); ?></p>
+            <p>Город: <?php echo $job['street'] .' '. $job['house']; ?></p>
+            <p>Сфера деятельности: <?php echo implode(', ', $kinds_of_jobs_arr); ?></p>
+            <p>График работы: <?php echo $job['s_name']; ?></p>
+            <p>Требуемый опыт работы: <?php echo $job['require'];?></p>
+            <p>Работодатель: <?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></p>
+            <p>тел. +8 987 456 45 45</p>
+        </div>
+        <div class="product-sub-meta">
+            <div class="product-sub-meta-item">Требования:<br><?php echo $job['require'];?></div>
+            <div class="product-sub-meta-item">Обязанности:<br><?php echo $job['description'];?></div>
+            <div class="product-sub-meta-item">Условия:<br><?php echo $job['conditions'];?></div>
+        </div>
+    </div>
+    <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+</div>
+<?php
+/* if(!empty($_SESSION['user']) && empty($job['workerID'])){
     if($_SESSION['user']['id'] !== $job['createrUserID']){
         if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
         else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
     }
-}
+}*/
 ?>
-<br/>
-<?php
-    if(!empty($worker_user[0])){
+<?php /*if(!empty($worker_user[0])){
         echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
         if(!empty($_SESSION['user']))
             echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
     }else{
         echo 'Исполнитель не назначен.';
-    }
+    }*/
 ?>
-<hr/>
-<br/>
-<div>Ответы:</div>
-<?php if(!empty($answers)){
+<?php /*if(!empty($answers)){
     foreach($answers as $answer){
         $part = '<br/><div style="border: 2px solid #999;">';
         $part .= '<div><img width="100px" src="/images/users/'. $answer['id'] .'/'. $answer['avatar'] .'"/>';
@@ -136,4 +147,4 @@ $answers = $DB->query('
         $part .= '</div><br/>';
         echo $part;
     }
-} ?>
+}*/ ?>

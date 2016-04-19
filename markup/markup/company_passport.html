@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>na_objekte | company_passport</title>
+
+	<link rel="stylesheet" href="css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.fancybox-1.3.4.css" media="screen" />
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.fancybox-1.3.4.pack.js"></script>
+	<script type="text/javascript" src="js/jquery.main.js"></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header">
+        <div class="inner-wrapper clearfix">
+            <a href="#" class="logotype"></a>
+            <ul class="navigation clearfix">
+                <li>
+                    <a href="#">Мастера</a>
+                </li>
+                <li>
+                    <a href="#">Заказы</a>
+                </li>
+                <li>
+                    <a href="#">Вакансии</a>
+                </li>
+            </ul>
+            <a href="#" class="login">Авторизация</a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="my-page-content clearfix">
+            <div class="my-page-navbar">
+                <ul class="my-page-navbar-links">
+                    <li>
+                        <a href="#">Мой паспорт</a>
+                    </li>
+                    <li>
+                        <a href="#">Объекты и вакансии</a>
+                    </li>
+                    <li>
+                        <a href="#" class="active">Сообщения |14|</a>
+                    </li>
+                    <li>
+                        <a href="#">Настройки</a>
+                    </li>
+                    <li>
+                        <a href="#">Мои работы</a>
+                    </li>
+                    <li>
+                        <a href="#">Страхование</a>
+                    </li>
+                    <li>
+                        <a href="#">Юридические услуги</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="my-page-wrapper">
+                <div class="my-page-breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="#">Паспорт организации</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="my-page-wrapper-content clearfix">
+
+                    <div class="company-passport-left">
+                        <div class="company-passport-avatar">
+                            <img src="images/img1.jpg">
+                        </div>
+                        <a href="#" class="tipical-button">Сделать фото</a>
+                        <div class="file_upload">
+                            <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                            <input type="file">
+                        </div>
+                        <a href="#" class="tipical-button">Написать сообщение</a>
+                    </div>
+                    <div class="company-passport-right">
+                        <div class="company-passport-title">ООО «Альянс»</div>
+                        <div class="company-passport-content">
+                            <p><b>Руководитель:</b> Иванов Сергей Борисович</p>
+                            <p><b>Виды деятельности:</b> кровля, монтажные работы</p>
+                            <br>
+                            <p><b>Стаж работы:</b> 6 лет</p>
+                            <p><b>Место работы:</b> г. Воронеж</p>
+                            <br>
+                            <p>Наличие СРО и сертификатов</p>
+                            <br>
+                            <p><span style="color: #054157;">Контактная информация:</span><br>
+                            г. Воронеж, ул. Артамонова, оф. 12<br>
+                            +7 (473) 2-232-322</p>
+                        </div>
+                        <div class="company-passport-map">
+                            !!сюда вставить карту!!
+                        </div>
+
+
+                        <!-- Понятия не имею на какую кнопку должны вызываться эти окна. Поэтому тупо добавил эти ссылки -->
+                        <!-- Удалить к хуям отсюда-->
+                        <br><br><br><br>
+                        <a href="#write-message" class="modal_on">Написать быстрое сообщение</a>
+                        <br>
+                        <a href="#conditions" class="modal_on">Условия использования ресурса</a>
+                        <br>
+                        <a href="#user-login" class="modal_on">Авторизация</a>
+                        <br>
+                        <a href="#cancel-application" class="modal_on">Отмена заявки</a>
+                        <br><br><br><br>
+                        <!-- Удалить к хуям до сюда-->
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="inner-wrapper clearfix">
+            <div class="footer-left-column">
+                <div class="footer-left-column-copyright">Copyright © 2016,  All Rights Reserved</div>
+                <ul class="footer-social-list clearfix">
+                    <li class="footer-social-list-item">
+                        <a href="#" class="social-list-item-link vk"></a>
+                    </li>
+                    <li class="footer-social-list-item">
+                        <a href="#" class="social-list-item-link fb"></a>
+                    </li>
+                    <li class="footer-social-list-item">
+                        <a href="#" class="social-list-item-link tw"></a>
+                    </li>
+                    <li class="footer-social-list-item">
+                        <a href="#" class="social-list-item-link od"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-right-column clearfix">
+                <div class="footer-links-column">
+                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#">Вход</a>
+                        </li>
+                        <li>
+                            <a href="#">Регистрация</a>
+                        </li>
+                        <li>
+                            <a href="#">Восстановление пароля</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-links-column">
+                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#">Вход</a>
+                        </li>
+                        <li>
+                            <a href="#">Регистрация</a>
+                        </li>
+                        <li>
+                            <a href="#">Восстановление пароля</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-links-column">
+                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#">Вход</a>
+                        </li>
+                        <li>
+                            <a href="#">Регистрация</a>
+                        </li>
+                        <li>
+                            <a href="#">Восстановление пароля</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="write-message" style="width: 684px;">
+        <div class="modal-title">Написать быстрое сообщение</div>
+        <form class="modal-write-message-form">
+            <fieldset>
+                <textarea class="tipical-textarea"></textarea>
+                <div class="write-message-form-bottom clearfix">
+                    <button class="tipical-button" type="submit">Отправить</button>
+                    <a href="#" class="goto">Перейти к диалогу</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="conditions" style="width: 684px; max-height: 500px; overflow-y: auto;">
+        <div class="modal-title">Условия использования ресурса</div>
+        <p>1.При регистрации на данном сайте Пользователь соглашается с настоящими Условиями и принимает на себя указанные в них права и обязанности, связанные с использованием сайта.</p>
+        <br>
+        <p>2.Информация, поступившая к владельцам портала "МирСтроек.Ру" через настоящий сайт, считается собственностью владельцев портала "МирСтроек.Ру". Владельцы портала "МирСтроек.Ру" не несут никаких обязательств по обеспечению конфиденциальности в отношении этой информации, если не имеется договоренности об обратном или соответствующих требований действующего законодательства.</p>
+        <br>
+        <p>3.Информация, содержащаяся на данном сайте, не может быть воспроизведена или использована для публикаций без гиперссылки на сайт http://www.mirstroek.ru.</p>
+        <br>
+        <p>4.Ни при каких обстоятельствах владельцы портала "МирСтроек.Ру" не несут ответственности за ущерб, убытки или расходы, возникшие в связи с настоящим сайтом, его использованием или невозможностью использования.</p>
+        <br>
+        <p>5.Владельцы портала "МирСтроек.Ру" оставляют за собой право на изменение информации на данном сайте без предупреждения.</p>
+        <p>2.Информация, поступившая к владельцам портала "МирСтроек.Ру" через настоящий сайт, считается собственностью владельцев портала "МирСтроек.Ру". Владельцы портала "МирСтроек.Ру" не несут никаких обязательств по обеспечению конфиденциальности в отношении этой информации, если не имеется договоренности об обратном или соответствующих требований действующего законодательства.</p>
+        <br>
+        <p>3.Информация, содержащаяся на данном сайте, не может быть воспроизведена или использована для публикаций без гиперссылки на сайт http://www.mirstroek.ru.</p>
+        <br>
+        <p>4.Ни при каких обстоятельствах владельцы портала "МирСтроек.Ру" не несут ответственности за ущерб, убытки или расходы, возникшие в связи с настоящим сайтом, его использованием или невозможностью использования.</p>
+        <br>
+        <p>5.Владельцы портала "МирСтроек.Ру" оставляют за собой право на изменение информации на данном сайте без предупреждения.</p>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="user-login" style="width: 390px;">
+        <div class="modal-title">Авторизация</div>
+        <form class="authorization-form">
+            <fieldset>
+                <input type="text" placeholder="Имя пользователя">
+                <input type="password" placeholder="Пароль">
+                <div class="authorization-links clearfix">
+                    <div class="authorization-links-part">
+                        <a href="#" class="authorization-link-forgot">Забыли пароль?</a>
+                        <a href="#" class="authorization-link-reg">Зарегистрироваться</a>
+                    </div>
+                    <button type="submit">Войти</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="cancel-application" style="width: 490px;">
+        <br>
+        <div class="cancel-headline">Вы уверены, что хотите отменить свою заявку?</div>
+        <div class="cancel-subheadline">(Заявка автоматически будет отправлена в архив)</div>
+        <div class="cancel-application-buttons clearfix">
+            <a href="#" class="tipical-button">Да</a>
+            <a href="#" class="tipical-button">Нет</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

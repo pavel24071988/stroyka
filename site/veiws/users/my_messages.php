@@ -1,6 +1,4 @@
 <?php
-echo '<h1>Мои сообщения</h1>';
-echo $common_data['left_menu'];
 $usersModel = new usersModel;
 $applicationURL = Application::$URL;
 $error_write = '';
@@ -17,65 +15,116 @@ $outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);
 // распараллелим функционал диалогов и общих сообщений
 if($applicationURL[4] === 'dialogs'){
     $historyOfMessagesByUser = $usersModel->getHistoryOfMessagesByUser($_SESSION['user']['id'], $applicationURL[5]);
-    if((int) $applicationURL[5] !== $_SESSION['user']['id']){
-        echo '<br/>';
-        echo '
-            <form method="POST">
-            Написать сообщение:<br/>
-            <textarea name="text"></textarea><br/>
-            <input type="submit" value="Ответить" />
-            </form>
-            <br/>
-        ';
-    }
-    echo '<br/><hr/>';
-    foreach($historyOfMessagesByUser as $historyOfMessageByUser){
-        echo '
-            <div>
-                <img width="100px" src="'. $historyOfMessageByUser['avatar'] .'" />
-                <div style="color: blue;">'. $historyOfMessageByUser['name'] .' '. $historyOfMessageByUser['surname'] .'</div>
-                <div>'. $historyOfMessageByUser['text'] .'</div>
-                <div>'. date('j.m.Y H:i:s', strtotime($historyOfMessageByUser['created'])) .'</div>
-            </div>
-        ';
-    }
-}else{
+    $opponent = $usersModel->getUser($applicationURL[5]);
 ?>
+    <div class="content">
 
-<br/>
-Полученные:
-<?php
-foreach($incomeMessages as $incomeMessage){
-    echo '
-        <div>
-            <img width="100px" src="'. $incomeMessage['avatar'] .'" />
-            <div style="color: blue;">'. $incomeMessage['name'] .' '. $incomeMessage['surname'] .'</div>
-            <div>'. $incomeMessage['text'] .'</div>
-            <div>'. date('j.m.Y H:i:s', strtotime($incomeMessage['created'])) .'</div>
-            <a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $incomeMessage['id'] .'">Перейти к диалогу</a>
-            <br/><br/>
+        <div class="my-page-content clearfix">
+            <?php if($common_data['check_owner']) echo Application::getLeftMenu(); ?>
+            <div class="my-page-wrapper">
+                <div class="my-page-breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="#">Диалоги</a>
+                        </li>
+                        <li>
+                            <a href="#"><?php echo $opponent[0]['name'] .' '. $opponent[0]['surname']; ?></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="dialogs-holder">
+                    <a href="#" class="show-old-dialogs">Просмотреть старые сообщения</a>
+                    <?php foreach($historyOfMessagesByUser as $historyOfMessageByUser){ ?>
+                    <div class="speech-item clearfix">
+                        <div class="speech-item-avatar">
+                            <a href="#">
+                                <img src="<?php echo $historyOfMessageByUser['avatar']; ?>" />
+                            </a>
+                        </div>
+                        <div class="speech-item-content">
+                            <div class="speech-item-top clearfix">
+                                <a href="#" class="speech-item-name"><?php echo $historyOfMessageByUser['name'] .' '. $historyOfMessageByUser['surname']; ?></a>
+                                <div class="speech-item-date"><?php echo date('j.m.Y H:i:s', strtotime($historyOfMessageByUser['created'])); ?></div>
+                            </div>
+                            <?php echo $historyOfMessageByUser['text']; ?>
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <?php if((int) $applicationURL[5] !== $_SESSION['user']['id']){ ?>
+                    <form class="speech-write-form clearfix" method="POST">
+                        <fieldset>
+                            <div class="speech-write-form-title">Написать сообщение</div>
+                            <textarea name="text"></textarea>
+                            <button type="submit">Отправить</button>
+                        </fieldset>
+                    </form>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
-    ';
-}
-?>
-<hr/>
-Отправленные:
-<?php
-if(!empty($error_write)){
-    echo '<div style="color: red;">'. $error_write .'</div>';
-}
-foreach($outcomeMessages as $outcomeMessage){
-    echo '
-        <div>
-            <img width="100px" src="'. $outcomeMessage['avatar'] .'" />
-            <div style="color: blue;">'. $outcomeMessage['name'] .' '. $outcomeMessage['surname'] .'</div>
-            <div>'. $outcomeMessage['text'] .'</div>
-            <div>'. date('j.m.Y H:i:s', strtotime($outcomeMessage['created'])) .'</div>
-            <a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $outcomeMessage['id'] .'">Перейти к диалогу</a>
-            <br/><br/>
+
+    </div>
+    
+<?php }else{ ?>
+<div class="content">
+    <div class="my-page-content clearfix">
+        <?php if($common_data['check_owner']) echo Application::getLeftMenu(); ?>
+        <div class="my-page-wrapper">
+            <div class="my-page-breadcrumb">
+                <ul>
+                    <li>
+                        <a href="#">Сообщения</a>
+                    </li>
+                </ul>
+            </div>
+            <?php foreach($incomeMessages as $message){ ?>
+            <div class="dialogs-holder">
+                <div class="dialog-item clearfix">
+                    <div class="dialog-item-avatar">
+                        <a href="#">
+                            <img src="<?php echo $message['avatar']; ?>">
+                        </a>
+                    </div>
+                    <div class="dialog-item-content">
+                        <div class="dialog-item-name">
+                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
+                        </div>
+                        <div class="dialog-item-text">
+                            <?php echo $message['text']; ?>
+                        </div>
+                        <div class="dialog-item-time">
+                            <?php echo date('j.m.Y H:i:s', strtotime($message['created'])); ?>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="load-old-dialogs">Загрузить старые диалоги</a>
+            </div>
+            <?php }; ?>
+            <?php foreach($outcomeMessages as $message){ ?>
+            <div class="dialogs-holder">
+                <div class="dialog-item clearfix">
+                    <div class="dialog-item-avatar">
+                        <a href="#">
+                            <img src="<?php echo $message['avatar']; ?>">
+                        </a>
+                    </div>
+                    <div class="dialog-item-content">
+                        <div class="dialog-item-name">
+                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
+                        </div>
+                        <div class="dialog-item-text">
+                            <?php echo $message['text']; ?>
+                        </div>
+                        <div class="dialog-item-time">
+                            <?php echo date('j.m.Y H:i:s', strtotime($message['created'])); ?>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="load-old-dialogs">Загрузить старые диалоги</a>
+            </div>
+            <?php }; ?>
         </div>
-    ';
-}
-?>
-<hr/>
-<?php } ?>
+    </div>
+</div>
+<?php }; ?>
