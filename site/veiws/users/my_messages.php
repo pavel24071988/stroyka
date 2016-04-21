@@ -78,8 +78,8 @@ if($applicationURL[4] === 'dialogs'){
                     </li>
                 </ul>
             </div>
-            <?php foreach($incomeMessages as $message){ ?>
             <div class="dialogs-holder">
+                <?php foreach($incomeMessages as $message){ ?>
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
                         <a href="#">
@@ -98,11 +98,8 @@ if($applicationURL[4] === 'dialogs'){
                         </div>
                     </div>
                 </div>
-                <a href="#" class="load-old-dialogs">Загрузить старые диалоги</a>
-            </div>
-            <?php }; ?>
-            <?php foreach($outcomeMessages as $message){ ?>
-            <div class="dialogs-holder">
+                <?php }; ?>
+                <?php foreach($outcomeMessages as $message){ ?>
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
                         <a href="#">
@@ -121,9 +118,9 @@ if($applicationURL[4] === 'dialogs'){
                         </div>
                     </div>
                 </div>
+                <?php }; ?>
                 <a href="#" class="load-old-dialogs">Загрузить старые диалоги</a>
             </div>
-            <?php }; ?>
         </div>
     </div>
 </div>

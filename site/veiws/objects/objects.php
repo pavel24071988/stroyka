@@ -1,3 +1,39 @@
+<?php
+// начинаем выстраивать функционал поиска
+if(isset($_GET['search']) && $_GET['search'] === 'true'){
+    $dopSQL = [];
+    if(!empty($_GET['cityID'])) $dopSQL[] = 'c."id"='. $_GET['cityID'];
+    if(!empty($_GET['areaID'])) $dopSQL[] = 'o."areaID"='. $_GET['areaID'];
+    $sql = 'SELECT o.*,
+               (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
+               c.name as city_name
+            FROM objects o
+            LEFT JOIN cities c ON o."cityID" = c.id';
+    if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
+    
+    $objects = Application::$DB->query($sql)->fetchAll();
+    $common_data['objects'] = $objects;
+    
+    if(!empty($_GET['cityID'])) $city = Application::$DB->query('SELECT * FROM cities WHERE id='. $_GET['cityID'])->fetch();
+    if(!empty($_GET['areaID'])) $area = Application::$DB->query('SELECT * FROM areas WHERE id='. $_GET['areaID'])->fetch();
+}
+
+$cities = Application::$DB->query('SELECT * FROM cities')->fetchAll();
+$areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
+
+$cities_options = '';
+$areas_options = '';
+
+foreach($cities as $general_city){
+    if(!empty($city) && $city['id'] !== $general_city['id']) continue;
+    $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+}
+foreach($areas as $general_area){
+    if(!empty($area) && $area['id'] !== $general_area['id']) continue;
+    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+}
+
+?>
 <div class="content">
         <div class="breadcrumb">
             <ul class="clearfix">
@@ -7,9 +43,7 @@
                 <li>
                     <a href="#">Заказы</a>
                 </li>
-                <li>
-                    <a href="#">Воронежская область</a>
-                </li>
+                <?php if(!empty($area)) echo '<li><a href="#"> '. $area['name'] .'</a></li>'; ?>
             </ul>
         </div>
         
@@ -45,20 +79,14 @@
                         <fieldset>
                             <div class="column-searcher-selects">
                                 <div class="column-searcher-select-label">Регион</div>
-                                <select>
-                                    <option>Воронежская обл.</option>
-                                    <option>Московская обл.</option>
-                                    <option>Ленинградская обл.</option>
-                                    <option>Мурманская обл.</option>
-                                    <option>Липецкая обл.</option>
+                                <select name="areaID">
+                                    <?php if(!empty($area)) echo '<option value="'. $area['id'] .'">'. $area['name'] .'</option>'; ?>
+                                    <?php echo $areas_options; ?>
                                 </select>
                                 <div class="column-searcher-select-label">Мой город</div>
-                                <select>
-                                    <option>Воронежск</option>
-                                    <option>Московск</option>
-                                    <option>Ленинградск</option>
-                                    <option>Мурманск</option>
-                                    <option>Липецк</option>
+                                <select name="cityID">
+                                    <?php if(!empty($city)) echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>'; ?>
+                                    <?php echo $cities_options; ?>
                                 </select>
                             </div>
                             <div class="column-searcher-categories">

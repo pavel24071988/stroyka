@@ -7,7 +7,8 @@ class Application
 
     public function __construct() {
         require_once $_SERVER['DOCUMENT_ROOT'] .'/db/db.php';
-        self::$URL = explode('/', $_SERVER['QUERY_STRING']);
+        self::$URL = explode('/', $_SERVER['REQUEST_URI']);
+        self::$URL[count(self::$URL)-1] = '';
         self::$DB = $DB;
     }
 

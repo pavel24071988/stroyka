@@ -70,7 +70,7 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
 
 <div class="content">
     <div class="my-page-content clearfix">
-        <?php echo $common_data['left_menu']; ?>
+        <?php if($common_data['check_owner']) echo Application::getLeftMenu(); ?>
         <div class="my-page-wrapper">
             <div class="my-page-breadcrumb">
                 <ul>

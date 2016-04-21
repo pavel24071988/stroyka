@@ -79,7 +79,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <input type="file">
                     </div>
                     <?php } ?>
-                    <a href="#" class="tipical-button">Написать сообщение</a>
+                    <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
                 </div>
                 <div class="company-passport-right">
                     <div class="company-passport-title"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></div>

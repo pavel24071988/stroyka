@@ -1,6 +1,6 @@
 <?php
 echo '<h1>Объекты и вакансии</h1>';
-echo $common_data['left_menu'];
+echo Application::getLeftMenu();
 $usersModel = new usersModel;
 $myObjects = $usersModel->getMyOwnerObjects($_SESSION['user']['id']);
 $responseObjects = $usersModel->getMyResponseObjects($_SESSION['user']['id']);

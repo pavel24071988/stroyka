@@ -75,7 +75,98 @@ $answers = $DB->query('
     echo $edit_buttons;
     */
 ?>
-
+<?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] === $job['createrUserID']){ ?>
+<div class="content">
+    <div class="my-page-content clearfix">
+        <?php echo Application::getLeftMenu(); ?>
+        <div class="my-page-wrapper">
+            <div class="my-page-breadcrumb">
+                <ul>
+                    <li>
+                        <a href="/jobs/">Объекты и вакансии</a>
+                    </li>
+                    <li>
+                        <a href="#"><?php echo $job['name']; ?></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="product-holder">
+                <div class="product-title"><?php echo $job['name']; ?></div>
+                <div class="product-holder-control">
+                    <a href="<?php echo '/jobs/'. $job['id'] .'/edit/'; ?>">Редактировать</a>
+                    <a href="<?php echo '/jobs/'. $job['id'] .'/close/'; ?>">Закрыть</a>
+                </div>
+                <div class="product-meta">
+                    <p>Номер вакансии: <b><?php echo $job['id']; ?></b></p>
+                    <div class="product-customer clearfix">
+                        <div class="product-customer-left">
+                            <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                        </div>
+                        <div class="product-customer-right">
+                            Бюджет: <?php echo $job['amount']; ?> руб.
+                        </div>
+                    </div>
+                    <p><b>Город:</b> Воронеж</p>
+                    <p><b>Сфера деятельности:</b> <?php echo implode(', ', $kinds_of_jobs_arr); ?></p>
+                    <p><b>График работы:</b> <?php echo $job['s_name']; ?></p>
+                </div>
+                <div class="product-sub-meta">
+                    <div class="product-sub-meta-item">Требования:<br>
+                    <?php echo $job['require'];?>
+                    </div>
+                    <div class="product-sub-meta-item">Обязанности:<br>
+                    <?php echo $job['description'];?>
+                    </div>
+                    <div class="product-sub-meta-item">Условия:<br>
+                    <?php echo $job['conditions'];?>
+                    </div>
+                    <div class="product-theme">
+                        <div class="product-theme-headline">
+                            <span>Ответы</span>
+                        </div>
+                        <?php if(!empty($answers)){
+                            foreach($answers as $answer){
+                        ?>
+                        <div class="feedback-item">
+                            <div class="feedback-item-body clearfix">
+                                <div class="feedback-item-avatar">
+                                    <a href="<?php echo '/users/'. $answer['id'] .'/'; ?>">
+                                        <img src="<?php echo '/images/users/'. $answer['id'] .'/'. $answer['avatar']; ?>">
+                                    </a>
+                                </div>
+                                <div class="feedback-item-content clearfix">
+                                    <div class="feedback-item-content-left">
+                                        <div class="feedback-name">
+                                            <a href="<?php echo '/users/'. $answer['id'] .'/'; ?>"><span><?php echo $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name']; ?></span><br>Частный мастер</a>
+                                        </div>
+                                        <div class="feedback-text">
+                                        <?php echo $answer['uj_description']; ?>
+                                        </div>
+                                        <?php if($_SESSION['user']['id'] !== $answer['id']) echo '<a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $answer['id'] .'/" class="feedback-candidate">Написать кандидату</a>'; ?>
+                                    </div>
+                                    <div class="feedback-item-content-right">
+                                        <div class="feedback-item-date"><?php echo date('j.m.Y H:i:s', strtotime($answer['uj_created'])); ?></div>
+                                        <div class="feedback-likes clearfix">
+                                            <span class="like"><?php echo 10; ?></span>
+                                            <span class="like dislike"><?php echo 0; ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feedback-item-reply">
+                                <a href="#" class="feedback-item-reply-button">Принять</a>
+                            </div>
+                        </div>
+                        <?php
+                            }
+                        } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php }else{ ?>
 <div class="content">
     <div class="breadcrumb">
         <ul class="clearfix">
@@ -109,6 +200,7 @@ $answers = $DB->query('
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
 </div>
+<?php } ?>
 <?php
 /* if(!empty($_SESSION['user']) && empty($job['workerID'])){
     if($_SESSION['user']['id'] !== $job['createrUserID']){
@@ -125,26 +217,3 @@ $answers = $DB->query('
         echo 'Исполнитель не назначен.';
     }*/
 ?>
-<?php /*if(!empty($answers)){
-    foreach($answers as $answer){
-        $part = '<br/><div style="border: 2px solid #999;">';
-        $part .= '<div><img width="100px" src="/images/users/'. $answer['id'] .'/'. $answer['avatar'] .'"/>';
-        $part .= '<span>'. $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name'] .'</span><br/>';
-        $part .= '<span>'. date('j.m.Y H:i:s', strtotime($answer['uj_created'])) .'</span>';
-        $part .= '<div><a href="#">+</a>6 <a href="#">-</a>1</div>';
-        $part .= '<div>'. $answer['uj_description'] .'</div>';
-        if(!empty($_SESSION['user'])){
-            if($_SESSION['user']['id'] !== $answer['id']) $part .= '<div><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $answer['id'] .'/">Написать кандидату</a></div>';
-            if($_SESSION['user']['id'] === $job['createrUserID']){
-                if((int)$job['workerID'] === $answer['id']){
-                    $part .= '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_remove_job"/><input type="submit" value="Отказаться" /></form>';
-                }else{
-                    if(empty($job['workerID']))
-                        $part .= '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_job"/><input type="submit" value="Принять" /></form>';
-                }
-            }
-        }
-        $part .= '</div><br/>';
-        echo $part;
-    }
-}*/ ?>
