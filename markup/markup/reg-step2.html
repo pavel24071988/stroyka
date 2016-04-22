@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>na_objekte | vacancy</title>
+	<title>na_objekte | reg-step2</title>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="css/jquery.fancybox-1.3.4.css" media="screen" />
@@ -36,37 +36,64 @@
     </div>
 
     <div class="content">
-        <div class="breadcrumb">
-            <ul class="clearfix">
-                <li>
-                    <a href="#">Главная</a>
-                </li>
-                <li>
-                    <a href="#">Вакансии</a>
-                </li>
-                <li>
-                    <a href="#">Инженер-проектировщик</a>
-                </li>
-            </ul>
-        </div>
-        <div class="product-holder">
-            <div class="product-title">Инженер-проектировщик</div>
-            <div class="product-meta">
-                <p>Опубликовано: Сегодня, 18:32</p>
-                <p>Город: Воронеж</p>
-                <p>Сфера деятельности: строительство</p>
-                <p>График работы: полный день</p>
-                <p>Требуемый опыт работы: Более 3 лет</p>
-                <p>Работодатель: ООО «Луч»</p>
-                <p>тел. +8 987 456 45 45</p>
+        <div class="simple-headline">Регистрация</div>
+
+        <div class="registration-holder">
+            <div class="registration-breadcrumb clearfix">
+                <a href="#" class="registration-breadcrumb-step">1</a>
+                <div class="registration-breadcrumb-break">шаг</div>
+                <a href="#" class="registration-breadcrumb-step active">2</a>
             </div>
-            <div class="product-sub-meta">
-                <div class="product-sub-meta-item">Требования:<br>Инженер-проектировщик сетей 10/0,4кВ</div>
-                <div class="product-sub-meta-item">Обязанности:<br>Разработка проектной документации для сетей 10/0,4кВ, ТП, КТП. Свободное владение ПК, знание Office, AUTOCAD и др. Знание требований нормативных документов и федеральных законов по профилю. Опыт в прохождении госэкспертиз и согласований технических решений с заинтересованными организациями.</div>
-                <div class="product-sub-meta-item">Условия:<br>5/7, оформление по ТК, график работы: пн-чт 08.30-17.30, пт 08.30-16.00</div>
-            </div>
+            <form class="registration-form">
+                <fieldset>
+                    <div class="registration-form-columns clearfix">
+                        <div class="main-place">
+                            <p class="main-place-title">Основное место работы (город или область)</p>
+                            <input type="text">
+                        </div>
+                        <div class="main-place">
+                            <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
+                            <ul class="searcher-categories registr-type">
+                                <li>
+                                    <div class="searcher-categories-item">
+                                        <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                    </div>
+                                    <ul class="searcher-sub-categories">
+                                        <li>
+                                            <div class="searcher-categories-item">
+                                                <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="searcher-categories-item">
+                                                <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="searcher-categories-item">
+                                                <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="searcher-categories-item">
+                                        <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="searcher-categories-item">
+                                        <label><input type='checkbox'> Мелкие бытовые услуги</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <label class="agree"><input type="checkbox"> Я согласен с <a href="#">пользовательским соглашением</a></label>
+                    </div>
+                    <button class="tipical-button forward">Далее</button>
+                </fieldset>
+            </form>
         </div>
-        <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
     </div>
 
     <div class="footer">

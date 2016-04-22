@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>na_objekte | edit_vacancy</title>
+	<title>na_objekte | make_order</title>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="css/jquery.fancybox-1.3.4.css" media="screen" />
@@ -70,22 +70,19 @@
                             <a href="#">Объекты и вакансии</a>
                         </li>
                         <li>
-                            <a href="#">Вакансия «Инженер-технолог» (редактирование)</a>
+                            <a href="#">Выставить объект</a>
                         </li>
                     </ul>
                 </div>
                 <div class="my-page-wrapper-content">
-                    <div class="my-page-wrapper-headline">
-                        <span class="edit-process">Редактирование:</span><br>Инженер-технолог
-                        <a href="#" class="close-edit">(Закрыть)</a>
-                    </div>
+                    <div class="my-page-wrapper-headline">Формирование объекта</div>
                     <form class="personal-data-form">
                         <fieldset>
                             <div class="personal-data-form-headline red">Обязательные параметры выделены красным</div>
                             <div class="personal-data-form-text">
                                 Лемма охватывает интеграл от функции, обращающейся в бесконечность вдоль линии. Векторное поле решительно уравновешивает Наибольший Общий Делитель (НОД). Дивергенция векторного поля переворачивает криволинейный интеграл. Бином Ньютона переворачивает эмпирический график функции многих переменных, при этом, вместо 13 можно взять любую другую константу.
                             </div>
-                            <div class="personal-data-form-headline red">Место работы</div>
+                            <div class="personal-data-form-headline red">Адрес стройплощадки:</div>
                             <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="personal-data-row clearfix">
                                 <label class="red">область:</label>
@@ -116,7 +113,7 @@
                                 <label>дом:</label><input type="text">
                             </div>
                             <br>
-                            <div class="personal-data-form-headline red">Зарпата</div>
+                            <div class="personal-data-form-headline red">Бюджет проекта</div>
                             <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="personal-data-row clearfix">
                                 <input type="text"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
@@ -125,23 +122,11 @@
                                 <label class="spec"><input type="checkbox"> по договоренности</label>
                             </div>
                             <br>
-                            <div class="personal-data-form-headline red">График работы</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
-                            <div class="personal-data-row clearfix">
-                                <select>
-                                    <option>Полный день</option>
-                                    <option>Полный день</option>
-                                    <option>Полный день</option>
-                                    <option>Полный день</option>
-                                    <option>Полный день</option>
-                                </select>
-                            </div>
-                            <br>
-                            <div class="personal-data-form-headline red">Описание вакансии</div>
+                            <div class="personal-data-form-headline red">Описание объекта</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <textarea class="personal-form-textarea"></textarea>
                             <br>
-                            <div class="personal-data-form-headline red">Зарпата</div>
+                            <div class="personal-data-form-headline red">Сфера деятельности</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <ul class="searcher-categories">
                                 <li>
@@ -177,11 +162,69 @@
                                     </div>
                                 </li>
                             </ul>
+                            <br>
+                            <div class="personal-data-form-headline">Сроки выполнения:</div>
+                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-data-row clearfix">
+                                <div class="personal-data-row-cell calendar-cell clearfix">
+                                    <label>с:</label><input id="from" type="text"><span class="calendar"></span>
+                                </div>
+                                <div class="personal-data-row-cell calendar-cell clearfix">
+                                    <label>до:</label><input id="to" type="text"><span class="calendar"></span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="personal-data-form-headline">Требуемые рабочие:</div>
+                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="worker-row clearfix">
+                                <div class="worker-row-cell">
+                                    Маляр (1 чел.)
+                                </div>
+                                <a href="#" class="worker-row-control minus"></a>
+                            </div>
+                            <div class="worker-row clearfix">
+                                <div class="worker-row-cell clearfix">
+                                    <select>
+                                        <option>Маляр</option>
+                                        <option>Каменщик</option>
+                                        <option>Плотнег</option>
+                                        <option>Токарь</option>
+                                        <option>Сис. админ</option>
+                                    </select>
+                                    <input type="text">
+                                    <span>чел.</span>
+                                </div>
+                                <a href="#" class="worker-row-control plus"></a>
+                            </div>
+                            <br>
+                            <div class="personal-data-form-headline">Контактная информация:</div>
+                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-data-row clearfix">
+                                <label>телефон:</label><input type="text">
+                            </div>
+                            <div class="personal-data-row clearfix">
+                                <label>почта:</label><input type="text">
+                            </div>
+                            <br>
+                            <div class="personal-data-form-headline">Прикрепить изображение:</div>
+                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="file_upload">
+                                <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
+                                <input type="file">
+                            </div>
+                            <br>
+                            <div class="personal-data-form-headline">Прикрепить документы:</div>
+                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="file_upload">
+                                <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
+                                <input type="file">
+                            </div>
+                            <br><br>
                             <div class="personal-form-recomendation">
                                 <div class="personal-form-recomendation-headline">Рекомендации</div>
                                 Критерий сходимости Коши, исключая очевидный случай, стабилизирует предел функции, откуда следует доказываемое равенство. По сути, связное множество поразительно. Огибающая, как следует из вышесказанного, притягивает натуральный логарифм, при этом, вместо 13 можно взять любую другую константу.
                             </div>
-                            <button class="personal-data-form-submit" style="width: 100%;" type="submit">Отредактировать</button>
+                            <button class="personal-data-form-submit" style="width: 100%;" type="submit">ВЫСТАВИТЬ ОБЪЕКТ</button>
                         </fieldset>
                     </form>
                 </div>
