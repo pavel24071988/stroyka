@@ -98,16 +98,22 @@ class Application
     public static function getListOfAreas($type, $id){
         // получаем сферы деятильности с подвидами
         $area_of_jobs = self::$DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
-        // найдем все сферы деятельности по id и type, например по пользователю
-        $kinds_of_jobs_user = self::$DB->query('
-            SELECT *
-              FROM users_kinds_of_jobs ukj
-              LEFT JOIN kinds_of_jobs kj ON ukj.kind_of_job_id = kj.id
-                WHERE ukj."userID"='. $id .'
-        ')->fetchAll();
-        $kinds_of_jobs_user_arr = [];
-        foreach($kinds_of_jobs_user as $kind_of_job_user){
-            $kinds_of_jobs_user_arr[] = $kind_of_job_user['areaID']  .'_'. $kind_of_job_user['kind_of_job_id'];
+        if($type === 'user'){
+            // найдем все сферы деятельности по id и type, например по пользователю
+            $kinds_of_jobs_user = self::$DB->query('
+                SELECT *
+                  FROM users_kinds_of_jobs ukj
+                  LEFT JOIN kinds_of_jobs kj ON ukj.kind_of_job_id = kj.id
+                    WHERE ukj."userID"='. $id .'
+            ')->fetchAll();
+            $kinds_of_jobs_user_arr = [];
+            foreach($kinds_of_jobs_user as $kind_of_job_user){
+                $kinds_of_jobs_user_arr[] = $kind_of_job_user['areaID']  .'_'. $kind_of_job_user['kind_of_job_id'];
+            }
+        }elseif($type === 'object'){
+            $kinds_of_jobs_user_arr = [];
+        }elseif($type === 'job'){
+            $kinds_of_jobs_user_arr = [];
         }
         
         $list_of_areas = '';

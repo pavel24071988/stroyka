@@ -6,7 +6,7 @@ $(document).ready(function() {
 	$('.wrapper').css('min-height', Hwrap-Hheader);
 	//
 	var Hleft = $('.column-left').height();
-	$('.column-searcher-holder').css('height', Hleft-30);
+	$('.column-searcher-holder').css('min-height', Hleft-30);
 	//
 	var Hright = $('.my-page-wrapper').height();
 	$('.my-page-navbar').css('height', Hright-10);
@@ -22,4 +22,29 @@ $(document).ready(function() {
 		}
 		return false;
 	});
+	//
+	$(function() {
+        $( "#from" ).datepicker({
+          defaultDate: "+1w",
+          changeMonth: false,
+          numberOfMonths: 1,
+          onClose: function( selectedDate ) {
+            $( "#to" ).datepicker( "option", "minDate", selectedDate );
+          }
+        });
+        $( "#to" ).datepicker({
+          defaultDate: "+1w",
+          changeMonth: false,
+          numberOfMonths: 1,
+          onClose: function( selectedDate ) {
+            $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+          }
+        });
+    });
+    //
+    $('.star-master').on('click', function(){
+    	var $this = $( this );
+    	if ( $this.hasClass('active') ) {$this.removeClass('active');}
+    	else {$this.addClass('active');}
+    });
 });

@@ -46,40 +46,7 @@
                             </div>
                             <div class="column-searcher-categories">
                                 <div class="column-searcher-categories-headline">Виды работ</div>
-                                <ul class="searcher-categories">
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                        <ul class="searcher-sub-categories">
-                                            <li>
-                                                <div class="searcher-categories-item">
-                                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="searcher-categories-item">
-                                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="searcher-categories-item">
-                                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null); ?></ul>
                                 <button type="submit">показать</button>
                             </div>
                         </fieldset>

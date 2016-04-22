@@ -108,7 +108,7 @@ if($applicationURL[4] === 'dialogs'){
                     </div>
                     <div class="dialog-item-content">
                         <div class="dialog-item-name">
-                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
+                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>/"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
                         </div>
                         <div class="dialog-item-text">
                             <?php echo $message['text']; ?>
