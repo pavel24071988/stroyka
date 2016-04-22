@@ -260,12 +260,10 @@ if(!empty($object)){
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <textarea class="personal-form-textarea" name="description"><?php echo $object['description']; ?></textarea>
                             <br>
-                            <?php if($applicationURL['2'] === 'add'){ ?>
                             <div class="personal-data-form-headline red">Сфера деятельности</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <ul class="searcher-categories"><?php echo Application::getListOfAreas('object', null); ?></ul>
                             <br>
-                            <?php } ?>
                             <div class="personal-data-form-headline">Сроки выполнения:</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="personal-data-row clearfix">

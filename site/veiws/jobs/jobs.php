@@ -1,3 +1,36 @@
+<?php
+$DB = Application::$DB;
+
+// начинаем выстраивать функционал поиска
+if(isset($_GET['search']) && $_GET['search'] === 'true'){    
+    if(!empty($_GET['cityID'])) $city = Application::$DB->query('SELECT * FROM cities WHERE id='. $_GET['cityID'])->fetch();
+    if(!empty($_GET['areaID'])) $area = Application::$DB->query('SELECT * FROM areas WHERE id='. $_GET['areaID'])->fetch();
+}
+
+$cities = Application::$DB->query('SELECT * FROM cities')->fetchAll();
+$areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
+
+$cities_options = '';
+$areas_options = '';
+
+foreach($cities as $general_city){
+    if(!empty($city) && $city['id'] === $general_city['id']) continue;
+    $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+}
+foreach($areas as $general_area){
+    if(!empty($area) && $area['id'] === $general_area['id']) continue;
+    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+}
+
+$sql = 'SELECT j.*, (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = j.id AND c."type"=\'job_comment\') as comment_count FROM jobs j';
+$dopSQL = [];
+if(!empty($_GET['cityID'])) $dopSQL[] = 'j."cityID"='. $_GET['cityID'];
+if(!empty($_GET['areaID'])) $dopSQL[] = 'j."areaID"='. $_GET['areaID'];
+if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
+
+$jobs = Application::$DB->query($sql)->fetchAll();
+?>
+
 <div class="content">
         <div class="breadcrumb">
             <ul class="clearfix">
@@ -11,7 +44,7 @@
         </div>
         <div class="columns-holder clearfix">
             <div class="column-left">
-                <?php foreach($common_data['jobs'] as $job){ ?>
+                <?php foreach($jobs as $job){ ?>
                 <div class="column-product-item">
                     <div class="column-product-item-top clearfix">
                         <a href="<?php echo '/jobs/'. $job['id'] .'/'; ?>" class="column-product-title"><?php echo $job['name']; ?></a>
@@ -28,25 +61,22 @@
                         <fieldset>
                             <div class="column-searcher-selects">
                                 <div class="column-searcher-select-label">Регион</div>
-                                <select>
-                                    <option>Воронежская обл.</option>
-                                    <option>Московская обл.</option>
-                                    <option>Ленинградская обл.</option>
-                                    <option>Мурманская обл.</option>
-                                    <option>Липецкая обл.</option>
+                                <select name="areaID">
+                                    <?php if(!empty($area)) echo '<option value="'. $area['id'] .'">'. $area['name'] .'</option>'; ?>
+                                    <?php echo $areas_options; ?>
                                 </select>
                                 <div class="column-searcher-select-label">Мой город</div>
-                                <select>
-                                    <option>Воронежск</option>
-                                    <option>Московск</option>
-                                    <option>Ленинградск</option>
-                                    <option>Мурманск</option>
-                                    <option>Липецк</option>
+                                <select name="cityID">
+                                    <?php if(!empty($city)) echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>'; ?>
+                                    <?php echo $cities_options; ?>
                                 </select>
                             </div>
                             <div class="column-searcher-categories">
                                 <div class="column-searcher-categories-headline">Виды работ</div>
-                                <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null); ?></ul>
+                                <ul class="searcher-categories">
+                                    <?php echo Application::getListOfAreas('user', null); ?>
+                                </ul>
+                                <input type="hidden" name="search" value="true" />
                                 <button type="submit">показать</button>
                             </div>
                         </fieldset>

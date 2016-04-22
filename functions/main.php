@@ -98,7 +98,8 @@ class Application
     public static function getListOfAreas($type, $id){
         // получаем сферы деятильности с подвидами
         $area_of_jobs = self::$DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
-        if($type === 'user'){
+        $kinds_of_jobs_user_arr = [];
+        if($type === 'user' && !is_null($id)){
             // найдем все сферы деятельности по id и type, например по пользователю
             $kinds_of_jobs_user = self::$DB->query('
                 SELECT *
@@ -110,10 +111,6 @@ class Application
             foreach($kinds_of_jobs_user as $kind_of_job_user){
                 $kinds_of_jobs_user_arr[] = $kind_of_job_user['areaID']  .'_'. $kind_of_job_user['kind_of_job_id'];
             }
-        }elseif($type === 'object'){
-            $kinds_of_jobs_user_arr = [];
-        }elseif($type === 'job'){
-            $kinds_of_jobs_user_arr = [];
         }
         
         $list_of_areas = '';

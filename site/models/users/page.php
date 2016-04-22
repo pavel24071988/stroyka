@@ -88,7 +88,8 @@ class usersModel
     
     public static function getHistoryOfMessagesByUser($firstUser, $secondUser){
         $messages = self::$DB->query('
-            SELECT u."avatar",
+            SELECT u."id",
+                   u."avatar",
                    u."name",
                    u."surname",
                    m."text",

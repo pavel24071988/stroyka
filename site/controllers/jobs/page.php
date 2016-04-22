@@ -34,17 +34,8 @@ if(!empty($applicationURL[2])){
         'job' => $job
     ];
     get_page($common_data);
-}else{
-    $jobs = $DB->query('
-        SELECT j.*,
-        (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = j.id AND c."type"=\'job_comment\') as comment_count
-          FROM jobs j')->fetchAll();
-    
-    $common_data = [
-        'type' => 'jobs',
-        'jobs' => $jobs
-    ];
-    
+}else{    
+    $common_data = ['type' => 'jobs'];
     get_page($common_data);
 }
 

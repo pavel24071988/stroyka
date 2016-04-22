@@ -39,7 +39,7 @@ if($applicationURL[4] === 'dialogs'){
                     <div class="speech-item clearfix">
                         <div class="speech-item-avatar">
                             <a href="#">
-                                <img src="<?php echo $historyOfMessageByUser['avatar']; ?>" />
+                                <img src="<?php echo '/images/users/'. $historyOfMessageByUser['id'] .'/'. $historyOfMessageByUser['avatar']; ?>" />
                             </a>
                         </div>
                         <div class="speech-item-content">

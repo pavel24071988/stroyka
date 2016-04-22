@@ -25,11 +25,11 @@ $cities_options = '';
 $areas_options = '';
 
 foreach($cities as $general_city){
-    if(!empty($city) && $city['id'] !== $general_city['id']) continue;
+    if(!empty($city) && $city['id'] === $general_city['id']) continue;
     $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
 }
 foreach($areas as $general_area){
-    if(!empty($area) && $area['id'] !== $general_area['id']) continue;
+    if(!empty($area) && $area['id'] === $general_area['id']) continue;
     $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
 }
 
@@ -125,6 +125,7 @@ foreach($areas as $general_area){
                                         </div>
                                     </li>
                                 </ul>
+                                <input type="hidden" name="search" value="true" />
                                 <button type="submit">показать</button>
                             </div>
                         </fieldset>

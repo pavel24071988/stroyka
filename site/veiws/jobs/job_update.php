@@ -213,42 +213,9 @@ if(!empty($job)){
                         <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                         <textarea class="personal-form-textarea" name="description"><?php echo $job['description']; ?></textarea>
                         <br>
-                        <div class="personal-data-form-headline red">Зарпата</div>
+                        <div class="personal-data-form-headline red">Сфера деятельности</div>
                         <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
-                        <ul class="searcher-categories">
-                            <li>
-                                <div class="searcher-categories-item">
-                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                </div>
-                                <ul class="searcher-sub-categories">
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="searcher-categories-item">
-                                            <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <div class="searcher-categories-item">
-                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="searcher-categories-item">
-                                    <label><input type='checkbox'> Мелкие бытовые услуги</label>
-                                </div>
-                            </li>
-                        </ul>
+                        <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null); ?></ul>
                         <div class="personal-form-recomendation">
                             <div class="personal-form-recomendation-headline">Рекомендации</div><textarea name="recomendations" class="personal-form-textarea"><?php echo $job['recomendations']; ?></textarea></div>
                         <button class="personal-data-form-submit" style="width: 100%;" type="submit">Добавить вакансию</button>
