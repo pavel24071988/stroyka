@@ -32,7 +32,8 @@ $sql = '
       LEFT JOIN areas a ON u."areaID" = a."id"
 ';
 $dopSQL = [];
-if(!empty($_GET['cityID'])) $dopSQL[] = 'u."work_city"=\''. $city['name'] .'\'';
+if(!empty($_GET['cityID'])) $dopSQL[] = 'u."cityID"=\''. $_GET['cityID'] .'\'';
+if(!empty($_GET['areaID'])) $dopSQL[] = 'u."areaID"=\''. $_GET['areaID'] .'\'';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
 $users = Application::$DB->query($sql)->fetchAll();
