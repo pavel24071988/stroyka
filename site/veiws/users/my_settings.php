@@ -44,7 +44,7 @@ if(!empty($_POST)){
                   "surname"=\''. $_POST['surname'] .'\',
                   "second_name"=\''. $_POST['second_name'] .'\',
                   "experience"=\''. $_POST['experience'] .'\',
-                  "work_city"=\''. $_POST['work_city'] .'\'
+                  "cityID"=\''. $_POST['cityID'] .'\'
                   '. $avatar_update_str .'
                 WHERE "id"='. $user['id']);
         if($update_check->execute() === true){
@@ -120,7 +120,7 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                                 <label>Имя:</label><input type="text" value='<?php echo $user['name']; ?>' name="name" />
                             </div>
                             <div class="personal-data-row-cell">
-                                <label>Место работы:</label><input type="text" value='<?php echo $user['work_city']; ?>' name="work_city" />
+                                <label>Место работы:</label><input type="text" value='<?php echo $user['cityID']; ?>' name="cityID" />
                             </div>
                         </div>
                         <div class="personal-data-row clearfix">

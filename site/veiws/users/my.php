@@ -2,7 +2,7 @@
 $user = $common_data['user'];
 $DB = Application::$DB;
 
-if(!empty($_POST['changeStatus'])){
+if(isset($_POST['changeStatus'])){
     if($_POST['changeStatus'] === '1') $newValue = '0';
     else $newValue = '1';
     $DB->prepare('UPDATE users SET "status"='. $newValue .' WHERE "id"='. $user['id'])->execute();
@@ -17,6 +17,17 @@ $professions = $DB->query('
 $professions_str = [];
 foreach($professions as $profession){
     $professions_str[] = $profession['name'];
+}
+
+$objects_images = $DB->query('
+    SELECT *
+        FROM objects o
+        LEFT JOIN objects_imgs oi ON o."id" = oi."objectID"
+          WHERE o."createrUserID"='. $user['id'])->fetchAll();
+
+$imgs = [];
+foreach($objects_images as $image){
+    $imgs[] = '<img width="100px" src="/images/objects/'. $image['objectID'] .'/'. $image['src'] .'" />';
 }
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
@@ -54,6 +65,7 @@ else echo '<h1>Страница пользователя</h1>';*/
     <div>Специализации: <?php //echo implode(', ', $professions_str); ?></div>
 </div>
 -->
+<?php if($user['type_of_registration'] === '0'){ ?>
 <div class="content">
     <div class="my-page-content clearfix">
         <?php if($common_data['check_owner']) echo Application::getLeftMenu(); ?>
@@ -70,7 +82,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 
                 <div class="company-passport-left">
                     <div class="company-passport-avatar">
-                        <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>' ?>
+                        <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
                     </div>
                     <?php if($common_data['check_owner']){ ?>
                     <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Сделать фото</a>
@@ -121,3 +133,224 @@ else echo '<h1>Страница пользователя</h1>';*/
         </div>
     </div>
 </div>
+<?php }else{ ?>
+<!--Страница пользователя-->
+<?php if(!$common_data['check_owner']){ ?>
+<div class="content">
+    <div class="breadcrumb">
+        <ul class="clearfix">
+            <li>
+                <a href="#">Главная</a>
+            </li>
+            <li>
+                <a href="#">Исполнители</a>
+            </li>
+            <li>
+                <a href="#"><?php echo $user['city_name']; ?></a>
+            </li>
+            <li>
+                <a href="#"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></a>
+            </li>
+        </ul>
+    </div>
+    <div class="columns-holder clearfix">
+        <div class="column-product-item">
+            <div class="specialist-holder clearfix">
+                <a href="#" class="specialist-avatar">
+                    <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
+                </a>
+                <div class="specialist-meta">
+                    <a href="#" class="specialist-name">
+                        <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
+                        <span class="valid">(проверено)</span>
+                        <span class="views"><b>Просмотров:</b> <?php echo ''; ?>2480</span>
+                    </a>
+                    <p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b></p>
+                    <br>
+                    <div class="specialist-personal">
+                        <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                        <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                        <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
+                        <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                        <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                        <p><b>Виды деятельности:</b></p>
+                        <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
+                    </div>
+                </div>
+                <span class="star-master active"></span>
+                <span class="last-time">Был 5 часов 11 минут назад</span>
+            </div>
+            <div class="product-sub-headline">О себе</div>
+            <?php echo $user['description']; ?>
+            <br>
+            <div class="product-sub-headline">Фото работ</div>
+            <?php echo implode(' ', $imgs); ?>
+            <div class="product-sub-headline">Цены на услуги</div>
+            <?php echo $user['price_description']; ?>
+            <!--
+            <div class="product-sub-headline">Отзывы</div>
+            <div class="specialist-feedback">
+                <div class="specialist-feedback-headline">По заказу <a href="#">Требуется ремонт спальни</a></div>
+                <p><b>Что понравилось</b><br>
+                Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                <br>
+                <p><b>Что не понравилось</b><br>
+                Все понравилось.</p>
+                <br>
+                <p><b>Общие выводы</b><br>
+                Быстро, качественно, в срок и не дорого.</p>
+                <a href="#" class="feedback-author">Виталий, декабрь 2015</a>
+            </div>
+            <div class="specialist-feedback">
+                <div class="specialist-feedback-headline">По заказу <a href="#">Требуется ремонт спальни</a></div>
+                <p><b>Что понравилось</b><br>
+                Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                <br>
+                <p><b>Что не понравилось</b><br>
+                Все понравилось.</p>
+                <br>
+                <p><b>Общие выводы</b><br>
+                Быстро, качественно, в срок и не дорого.</p>
+                <a href="#" class="feedback-author">Виталий, декабрь 2015</a>
+            </div>
+            <div class="show-more-holder">
+                <a href="#" class="show-more">Смотреть ещё отзывы</a>
+            </div>
+            -->
+        </div>  
+    </div>
+</div>
+<?php }else{ ?>
+<!-- Своя страница -->
+<div class="content">
+    <div class="my-page-content clearfix">
+        <?php echo Application::getLeftMenu(); ?>
+        <div class="my-page-wrapper">
+            <div class="my-page-breadcrumb">
+                <ul>
+                    <li>
+                        <a href="#">Мой паспорт</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="my-page-wrapper-content">
+                <div class="passport-main-holder clearfix">
+                    <div class="passport-main-left">
+                        <a href="#" class="passport-avatar">
+                            <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
+                        </a>
+                        <a href="#" class="tipical-button">Сделать фото</a>
+                        <div class="file_upload">
+                            <button type="button" class="tipical-button"><a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить с компьютера</a></button>
+                            <input type="file">
+                        </div>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
+                    </div>
+                    <div class="passport-main-right">
+                        <div class="specialist-holder clearfix">
+                            <div class="specialist-meta">
+                                <a href="#" class="specialist-name">
+                                    <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
+                                    <span class="valid">(проверено)</span>
+                                </a>
+                                <form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form>
+                                <br>
+                                <div class="specialist-personal">
+                                    <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                                    <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                                    <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
+                                    <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                                    <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                                    <p><b>Виды деятельности:</b></p>
+                                    <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
+                                </div>
+                            </div>
+                            <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a>
+                        </div>
+                        <div class="specialist-meta-block">
+                            <div class="specialist-block-title">
+                                <span>Избранное портфолио</span>
+                                <a href="#" class="tipical-button">Добавить</a>
+                            </div>
+                            123
+                        </div>
+                        <div class="specialist-meta-block">
+                            <div class="specialist-block-title">
+                                <span>О себе</span>
+                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Редактировать</a>
+                            </div>
+                            <?php echo $user['description']; ?>
+                        </div>
+                        <div class="specialist-meta-block">
+                            <div class="specialist-block-title">
+                                <span>Услуги и цены</span>
+                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Добавить</a>
+                            </div>
+                            <?php echo $user['price_description']; ?>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="specialist-meta-block">
+                    <div class="specialist-block-title">
+                        <span>Оставьте отзыв</span>
+                    </div>
+                    <p><b>Внимание!</b><br>
+                    Этот мастер работал на вашем объекте <a href="#">«Отделка квартиры»</a>. Вы можете оставить отзыв.</p>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Что понравилось?</div>
+                        <textarea class="tipical-textarea"></textarea>
+                    </div>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Что не понравилось?</div>
+                        <textarea class="tipical-textarea"></textarea>
+                    </div>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Выводы</div>
+                        <textarea class="tipical-textarea"></textarea>
+                    </div>
+                    <div class="feedback-evaluation clearfix">
+                        <span>Оценка:</span>
+                        <a href="#" class="tipical-button good">Хорошо</a>
+                        <a href="#" class="tipical-button bad">Плохо</a>
+                    </div>
+                </div>
+                <div class="specialist-meta-block">
+                    <div class="specialist-block-title">
+                        <span>Отзывы</span>
+                    </div>
+                    <div class="feedback-counter clearfix">
+                        <a href="#">10 положительных</a>
+                        <span>|</span>
+                        <a href="#">0 отрицательных</a>
+                    </div>
+                    <div class="feedback-passport-item">
+                        <p><b>Что понравилось</b><br>
+                        Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                        <br>
+                        <p><b>Что не понравилось</b><br>
+                        Все понравилось.</p>
+                        <br>
+                        <p><b>Общие выводы</b><br>
+                        Быстро, качественно, в срок и не дорого.</p>
+                    </div>
+                    <div class="feedback-passport-item">
+                        <p><b>Что понравилось</b><br>
+                        Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                        <br>
+                        <p><b>Что не понравилось</b><br>
+                        Все понравилось.</p>
+                        <br>
+                        <p><b>Общие выводы</b><br>
+                        Быстро, качественно, в срок и не дорого.</p>
+                        <br>
+                        <p><b>Фотографии</b></p>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<?php } ?>

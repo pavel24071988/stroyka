@@ -3,11 +3,14 @@ $DB = Application::$DB;
 $applicationURL = Application::$URL;
 $user = $DB->query('
     SELECT u.*,
-           (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count
+           (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
+           c."name" as city_name,
+           a."name" as area_name
       FROM users u
-        WHERE u."id"='. $applicationURL[2])->fetchAll();
+      LEFT JOIN cities c ON u."cityID" = c."id"
+      LEFT JOIN areas a ON u."areaID" = a."id"
+        WHERE u."id"='. $applicationURL[2])->fetch();
 $type = 'my';
-$user = $user[0];
 $check_owner = false;
 if(!empty($_SESSION['user'])){
     if($_SESSION['user']['id'] == $applicationURL[2]){

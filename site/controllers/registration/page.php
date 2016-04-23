@@ -2,6 +2,7 @@
  <?php
 // получаем сферы деятильности с подвидами
 $DB = Application::$DB;
+/*
 $area_of_jobs = $DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
 $list_of_areas = '<ul>';
 foreach($area_of_jobs as $key => $area_of_job){
@@ -15,7 +16,7 @@ foreach($area_of_jobs as $key => $area_of_job){
     $list_of_areas .= '</li>';
 }
 $list_of_areas .= '</ul>';
-
+*/
 // регистрируем пользователя
 $error = '';
 if(!empty($_POST)){
@@ -30,27 +31,36 @@ if(!empty($_POST)){
     elseif($_POST['password'] !== $_POST['repeat_password']) $error .= 'Поля пароль и повторите пароль не совпадают<br/>';
     
     // начинаем регистрировать
-    if(empty($error)){        
+    if(empty($error)){
         $registration_check = $DB->prepare('
-            INSERT INTO users (name, surname, second_name, email, work_city, type_of_registration, type_of_kind, password, age)
-              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $_POST['work_city'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['age'] .'\')');
+            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, age)
+              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['age'] .'\')');
         if($registration_check->execute() === true){
-            $user = $DB->query('SELECT * FROM users u WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'')->fetchAll();
+            $user = $DB->query('
+                SELECT u.*,
+                       (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
+                       c."name" as city_name,
+                       a."name" as area_name
+                  FROM users u
+                  LEFT JOIN cities c ON u."cityID" = c."id"
+                  LEFT JOIN areas a ON u."areaID" = a."id"
+                    WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'
+            ')->fetch();
             unset($_SESSION['user']);
-            foreach($user[0] as $key => $attribute) $_SESSION['user'][$key] = $attribute;
+            foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
             $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Регистрация на сайте стройка завершена.";
             $text = "Здравсвуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена.";
             mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
-            echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user[0]['id'] .'/">';
+            echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user['id'] .'/">';
         }else{
             $error .= 'Регистрация не удалась. Попробуйте позже.';
         }
     }
 }
 ?>
-    
+<!--
 <h1>Регистрация</h1>
 
 <h4>Ваши данные будут проверяться! Не указывайте недостоверную информацию!</h4>
@@ -109,3 +119,113 @@ if(!empty($_POST)){
     <input type="submit" value="Зарегистрироваться" />
     <br/><br/><br/><br/><br/><br/>
 </form>
+-->
+<div class="content">
+    <div class="simple-headline">Регистрация</div>
+    <div class="registration-holder">
+        <div class="registration-breadcrumb clearfix">
+            <a href="#" class="registration-breadcrumb-step active">1</a>
+            <div class="registration-breadcrumb-break">шаг</div>
+            <a href="#" class="registration-breadcrumb-step">2</a>
+        </div>
+        <form action="/registration/" method="POST" enctype="form-data">
+            <div style="color: red;"><?php echo $error; ?></div>
+            <fieldset>
+                <div class="registration-form-headline">Ваши данные будут проверяться! Не указывайте недостоверную информацию!</div>
+                <div class="registration-form-columns clearfix">
+                    <div class="registration-form-column1">
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <select name="type_of_registration">
+                                    <option value="1">Физическое лицо</option>
+                                    <option value="2">Юридическое лицо</option>
+                                </select>    
+                            </div>
+                            <div class="registration-form-row-cell">
+                                <select name="type_of_kind">
+                                    <option value="1">Частный мастер</option>
+                                    <option value="2">Бригада</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                            </div>
+                            <div class="registration-form-row-cell">
+                                <label style="line-height: 35px;"><input type="checkbox"> Без отчества</label>
+                            </div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" placeholder="Возраст" name="age" value="<?php if(!empty($_POST['age'])) echo $_POST['age']; ?>" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="password" name="password" placeholder="Пароль" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="password" name="repeat_password" placeholder="Повторите пароль" />
+                            </div>
+                            <div class="registration-form-row-cell"></div>
+                        </div>
+                    </div>
+                    <div class="registration-form-column2 clearfix">
+                        <a href="#" class="user-avatar"></a>
+                        <div class="user-avatar-content">
+                            <p><b>Фотография</b></p>
+                            <p>- На фотографии должно быть видно лицо</p>
+                            <p>- На фотографии должен быть владелец анкеты</p>
+                            <a href="#" class="tipical-button">Сделать фото</a>
+                            <div class="file_upload">
+                                <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                                <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="tipical-button forward">Далее</button>
+            </fieldset>
+            <fieldset>
+                <div class="registration-form-columns clearfix">
+                    <input type="hidden" name="areaID" value="1" />
+                    <div class="main-place">
+                        <p class="main-place-title">Основное место работы (город или область)</p>
+                        <input type="text" name="cityID" value="<?php if(!empty($_POST['cityID'])) echo $_POST['cityID']; ?>" />
+                    </div>
+                    <div class="main-place">
+                        <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
+                        <ul class="searcher-categories registr-type">
+                            <?php echo Application::getListOfAreas('user', null); ?>
+                        </ul>
+                    </div>
+                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>
+                </div>
+                <input type="submit" value="Зарегистрироваться" />
+            </fieldset>
+        </form>
+    </div>
+</div>

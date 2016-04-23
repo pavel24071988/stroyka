@@ -22,7 +22,15 @@ foreach($areas as $general_area){
     $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
 }
 
-$sql = 'SELECT u.*, (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count FROM users u';
+$sql = '
+    SELECT u.*,
+    (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
+    c."name" as city_name,
+    a."name" as area_name
+      FROM users u
+      LEFT JOIN cities c ON u."cityID" = c."id"
+      LEFT JOIN areas a ON u."areaID" = a."id"
+';
 $dopSQL = [];
 if(!empty($_GET['cityID'])) $dopSQL[] = 'u."work_city"=\''. $city['name'] .'\'';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
@@ -120,7 +128,7 @@ foreach($users as $user){
                             <?php echo $user['name'] .' '. $user['surname']; ?>
                             <span class="valid">(проверено)</span>
                         </a>
-                        <p><b>Место работы:</b> <?php echo $user['work_city']; ?></p>
+                        <p><b>Место работы:</b> <?php echo $user['city_name']; ?></p>
                         <p><b>На сайте:</b> <?php echo floor((strtotime("now") - strtotime($user['created'])) / (60*60*24)) .' дней(я)'; ?></p>
                         <p><b>Стаж работы:</b> <?php echo $user['experience']; ?></p>
                         <br>

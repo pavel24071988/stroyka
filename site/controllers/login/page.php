@@ -6,12 +6,21 @@ if(!empty($_POST)){
     if(empty($_POST['email']) || empty($_POST['password'])){
         $error = 'Не все обязательные поля заполнены.';
     }else{
-        $user = $DB->query('SELECT * FROM users u WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'')->fetchAll();
-        if(empty($user[0])){
+        $user = $DB->query('
+            SELECT u.*,
+                   (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
+                   c."name" as city_name,
+                   a."name" as area_name
+              FROM users u
+              LEFT JOIN cities c ON u."cityID" = c."id"
+              LEFT JOIN areas a ON u."areaID" = a."id"
+                WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'
+        ')->fetch();
+        if(empty($user)){
             $error = 'Данного пользователя не существует.';
         }else{
             unset($_SESSION['user']);
-            foreach($user[0] as $key => $attribute) $_SESSION['user'][$key] = $attribute;
+            foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
             echo '<meta http-equiv="refresh" content="1;URL=/">';
         }
         

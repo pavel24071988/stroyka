@@ -40,7 +40,7 @@ $application = new Application;
             <?php
             if(!empty($_SESSION['user'])){
                 $userMessages = $application::getCountsUserMessages($_SESSION['user']['id']);
-                echo 'Привуэт <a href="/users/'. $_SESSION['user']['id'] .'/" class="login">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/" class="login">Выйти</a>';
+                echo '<a href="/users/'. $_SESSION['user']['id'] .'/" class="login">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/" class="login">Выйти</a>';
             }else{
                 echo '<a href="/login/" class="login">Авторизация</a>';
             }
