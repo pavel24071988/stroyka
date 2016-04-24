@@ -207,7 +207,9 @@ $answers = $DB->query('
             <p>График работы: <?php echo $job['s_name']; ?></p>
             <p>Требуемый опыт работы: <?php echo $job['require'];?></p>
             <p>Работодатель: <?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></p>
+            <?php if(!empty($_SESSION['user'])){ ?>
             <p>тел. +8 987 456 45 45</p>
+            <?php } ?>
         </div>
         <div class="product-sub-meta">
             <div class="product-sub-meta-item">Требования:<br><?php echo $job['require'];?></div>

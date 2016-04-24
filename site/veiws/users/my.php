@@ -110,9 +110,11 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <br>
                         <p>Наличие СРО и сертификатов</p>
                         <br>
+                        <?php if(!empty($_SESSION['user'])){ ?>
                         <p><span style="color: #054157;">Контактная информация:</span><br>
                         г. Воронеж, ул. Артамонова, оф. 12<br>
                         +7 (473) 2-232-322</p>
+                        <?php } ?>
                     </div>
                     <div class="company-passport-map">
                         !!сюда вставить карту!!
@@ -178,7 +180,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
                         <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                         <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                        <?php if(!empty($_SESSION['user'])){ ?>
                         <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                        <?php } ?>
                         <p><b>Виды деятельности:</b></p>
                         <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                     </div>
@@ -317,7 +321,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                                    <?php if(!empty($_SESSION['user'])){ ?>
                                     <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                                    <?php } ?>
                                     <p><b>Виды деятельности:</b></p>
                                     <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                                 </div>

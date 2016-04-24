@@ -164,8 +164,10 @@ $answers = $DB->query('
                             Бюджет: <?php echo $object['amount']; ?> руб.
                         </div>
                     </div>
+                    <?php if(!empty($_SESSION['user'])){ ?>
                     <p class="product-meta-title place">Адрес: <?php echo $object['street'] .' '. $object['house'];?></p>
                     <p class="product-meta-title phone">Тел. +8 987 456 45 45</p>
+                    <?php } ?>
                 </div>
                 <div class="product-sub-meta">
                     <p>Описание объекта заказчиком.</p>
@@ -265,8 +267,10 @@ $answers = $DB->query('
                     Бюджет: <?php echo $object['amount']; ?> руб.
                 </div>
             </div>
+            <?php if(!empty($_SESSION['user'])){ ?>
             <p class="product-meta-title place">Адрес: <?php echo $object['street'] .' '. $object['house'];?></p>
             <p class="product-meta-title phone">Тел. +8 987 456 45 45</p>
+            <?php } ?>
         </div>
         <div class="product-sub-meta">
             <p>Описание объекта закачиком.</p>
