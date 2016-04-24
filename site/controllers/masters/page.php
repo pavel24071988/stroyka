@@ -23,17 +23,23 @@ foreach($areas as $general_area){
 }
 
 $sql = '
-    SELECT u.*,
-    (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
-    c."name" as city_name,
-    a."name" as area_name
-      FROM users u
-      LEFT JOIN cities c ON u."cityID" = c."id"
-      LEFT JOIN areas a ON u."areaID" = a."id"
+    SELECT r.*
+      FROM (SELECT u.*,
+                   (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
+                   (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\' AND c."positive_negative"=\'on\') as plus_comment_count,
+                   c."name" as city_name,
+                   a."name" as area_name
+              FROM users u
+              LEFT JOIN cities c ON u."cityID" = c."id"
+              LEFT JOIN areas a ON u."areaID" = a."id"
+            ) as r
 ';
 $dopSQL = [];
-if(!empty($_GET['cityID'])) $dopSQL[] = 'u."cityID"=\''. $_GET['cityID'] .'\'';
-if(!empty($_GET['areaID'])) $dopSQL[] = 'u."areaID"=\''. $_GET['areaID'] .'\'';
+if(!empty($_GET['cityID'])) $dopSQL[] = 'r."cityID"=\''. $_GET['cityID'] .'\'';
+if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
+if(!empty($_GET['not_busy'])) $dopSQL[] = 'r."status"=\'0\'';
+if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
+if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
 $users = Application::$DB->query($sql)->fetchAll();
@@ -134,7 +140,7 @@ foreach($users as $user){
                         <p><b>Виды деятельности:</b></p>
                         <?php echo '<p>'. implode('</p><p>', $profession_arr) .'</p>'; ?>
                         <br>
-                        <a href="#" class="specialist-feedbacks"><?php echo $user['comment_count']; ?> отзывов</a>
+                        <a href="/users/<?php echo $user['id']; ?>/" class="specialist-feedbacks"><?php echo $user['comment_count']; ?> отзывов</a>
                     </div>
                     <span class="star-master active"></span>
                 </div>
@@ -167,9 +173,9 @@ foreach($users as $user){
                                 <?php echo Application::getListOfAreas('job', null); ?>
                             </ul>
                             <div class="specialists-advantages">
-                                <p><label><input type="checkbox"> Не занят</label></p>
-                                <p><label><input type="checkbox"> С отзывами</label></p>
-                                <p><label><input type="checkbox"> Только с положительными отзывами</label></p>
+                                <p><label><input type="checkbox" <?php if(!empty($_GET['not_busy'])) echo 'checked'; ?> name="not_busy"> Не занят</label></p>
+                                <p><label><input type="checkbox" <?php if(!empty($_GET['comments'])) echo 'checked'; ?> name="comments"> С отзывами</label></p>
+                                <p><label><input type="checkbox" <?php if(!empty($_GET['plus_comments'])) echo 'checked'; ?> name="plus_comments"> Только с положительными отзывами</label></p>
                             </div>
                             <input type="hidden" name="search" value="true" />
                             <button type="submit">показать</button>

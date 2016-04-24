@@ -69,7 +69,9 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <div class="objects-tabel clearfix">
                             <div class="objects-tabel-row">
                                 <div class="objects-tabel-cell exposed-name">
+                                    <a href="<?php echo '/objects/'. $myObject['id'] .'/'; ?>">
                                     <?php echo '№'. $myObject['id'] .' '. $myObject['name'] .' ('. $myObject['amount'] .' руб) от '. date('j.m.Y', strtotime($myObject['created'])); ?>
+                                    </a>
                                 </div>
                                 <div class="objects-tabel-cell exposed-small cntr">
                                     <?php echo $myObject['responses']; ?> откликов<br><a href="/objects/<?php echo $myObject['id']; ?>/"><b>(10 новых)</b></a>
@@ -90,7 +92,9 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <div class="objects-tabel clearfix">
                             <div class="objects-tabel-row">
                                 <div class="objects-tabel-cell feedback-name">
+                                    <a href="<?php echo '/objects/'. $responseObject['id'] .'/'; ?>">
                                     <?php echo '№'. $responseObject['id'] .' "'. $responseObject['name'] .'" ('. $responseObject['amount'] .' руб) от '. date('j.m.Y', strtotime($responseObject['created'])); ?>
+                                    </a>
                                     <div class="edit-snippet">Последняя правка 24.12.2015 (17:55)</div>
                                 </div>
                                 <div class="objects-tabel-cell feedback-mid">
@@ -112,7 +116,9 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                     <div class="objects-tabel clearfix">
                         <div class="objects-tabel-row">
                             <div class="objects-tabel-cell exposed-name">
+                                <a href="<?php echo '/jobs/'. $myJob['id'] .'/'; ?>">
                                 <?php echo '№'. $myJob['id'] .' "'. $myJob['name'] .'" ('. $myJob['amount'] .' руб) от '. date('j.m.Y', strtotime($myJob['created'])); ?>
+                                </a>
                             </div>
                             <div class="objects-tabel-cell exposed-small cntr">
                                 <?php echo $myJob['responses']; ?> откликов
@@ -133,7 +139,9 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                     <div class="objects-tabel clearfix">
                         <div class="objects-tabel-row">
                             <div class="objects-tabel-cell feedback-name">
+                                <a href="<?php echo '/jobs/'. $responseJob['id'] .'/'; ?>">
                                 <?php echo '№'. $responseJob['id'] .' "'. $responseJob['name'] .'" ('. $responseJob['amount'] .' руб) от '. date('j.m.Y', strtotime($responseJob['created'])); ?>
+                                </a>
                             </div>
                             <div class="objects-tabel-cell feedback-mid">
                                 <div class="feedback-info ok">

@@ -7,6 +7,12 @@ if(isset($_POST['changeStatus'])){
     else $newValue = '1';
     $DB->prepare('UPDATE users SET "status"='. $newValue .' WHERE "id"='. $user['id'])->execute();
     $user['status'] = $newValue;
+}elseif(isset($_POST['positive_negative'])){
+    $sql = $DB->prepare('
+        INSERT INTO comments ("ownerUserID", "typeID", type, positive_description, negative_description, conclusion, positive_negative)
+          VALUES(\''. $_POST['ownerUserID'] .'\', \''. $_POST['typeID'] .'\', \''. $_POST['type'] .'\', \''. $_POST['positive_description'] .'\', \''. $_POST['negative_description'] .'\', \''. $_POST['conclusion'] .'\', \''. $_POST['positive_negative'] .'\')
+    ');
+    $sql->execute();
 }
 
 $professions = $DB->query('
@@ -187,6 +193,37 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo implode(' ', $imgs); ?>
             <div class="product-sub-headline">Цены на услуги</div>
             <?php echo $user['price_description']; ?>
+            <?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $user['id']){ ?>
+            <form method="POST">
+                <input type="hidden" name="ownerUserID" value="<?php echo $_SESSION['user']['id']; ?>" />
+                <input type="hidden" name="typeID" value="<?php echo $user['id']; ?>" />
+                <input type="hidden" name="type" value="user_comment" />
+                <div class="specialist-meta-block">
+                    <div class="specialist-block-title">
+                        <span>Оставьте отзыв</span>
+                    </div>
+                    <p><b>Внимание!</b><br>
+                    Этот мастер работал на вашем объекте <a href="#">«Отделка квартиры»</a>. Вы можете оставить отзыв.</p>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Что понравилось?</div>
+                        <textarea class="tipical-textarea" name="positive_description"></textarea>
+                    </div>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Что не понравилось?</div>
+                        <textarea class="tipical-textarea" name="negative_description"></textarea>
+                    </div>
+                    <div class="feedback-field">
+                        <div class="feedback-field-headline">Выводы</div>
+                        <textarea class="tipical-textarea" name="conclusion"></textarea>
+                    </div>
+                    <div class="feedback-evaluation clearfix">
+                        <span>Оценка:</span>
+                        <a href="#" class="tipical-button good"><input type="submit" value="on" name="positive_negative" /></a>
+                        <a href="#" class="tipical-button bad"><input type="submit" value="off" name="positive_negative" /></a>
+                    </div>
+                </div>
+            </form>
+            <?php } ?>
             <div class="product-sub-headline">Отзывы</div>
             <?php
             $comments = $DB->query('
@@ -207,6 +244,15 @@ else echo '<h1>Страница пользователя</h1>';*/
                   LEFT JOIN comments c ON o.id = c."typeID"
                   LEFT JOIN users u ON u.id = c."ownerUserID"
                     WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\'
+                UNION ALL
+                SELECT c.*,
+                       u.name as type_name,
+                       \'users\' as href_name,
+                       u_new.name as user_name
+                  FROM users u
+                  LEFT JOIN comments c ON u.id = c."typeID"
+                  LEFT JOIN users u_new ON u_new.id = c."ownerUserID"
+                    WHERE u."id" = '. $user['id'] .' AND c.type = \'user_comment\'
             ')->fetchAll();
             foreach($comments as $comment){
             ?>
@@ -283,7 +329,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <span>Избранное портфолио</span>
                                 <a href="#" class="tipical-button">Добавить</a>
                             </div>
-                            123
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
@@ -302,30 +347,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                     </div>
                 </div>
                 <!--
-                <div class="specialist-meta-block">
-                    <div class="specialist-block-title">
-                        <span>Оставьте отзыв</span>
-                    </div>
-                    <p><b>Внимание!</b><br>
-                    Этот мастер работал на вашем объекте <a href="#">«Отделка квартиры»</a>. Вы можете оставить отзыв.</p>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Что понравилось?</div>
-                        <textarea class="tipical-textarea"></textarea>
-                    </div>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Что не понравилось?</div>
-                        <textarea class="tipical-textarea"></textarea>
-                    </div>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Выводы</div>
-                        <textarea class="tipical-textarea"></textarea>
-                    </div>
-                    <div class="feedback-evaluation clearfix">
-                        <span>Оценка:</span>
-                        <a href="#" class="tipical-button good">Хорошо</a>
-                        <a href="#" class="tipical-button bad">Плохо</a>
-                    </div>
-                </div>
                 <div class="specialist-meta-block">
                     <div class="specialist-block-title">
                         <span>Отзывы</span>

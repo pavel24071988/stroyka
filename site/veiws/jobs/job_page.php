@@ -154,7 +154,15 @@ $answers = $DB->query('
                                 </div>
                             </div>
                             <div class="feedback-item-reply">
-                                <a href="#" class="feedback-item-reply-button">Принять</a>
+                                <?php
+                                    if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $answer['id']){
+                                        if(!(empty($job['workerID']))){
+                                            if((int) $job['workerID'] === $answer['id']) echo '<a href="#" class="feedback-item-reply-button"><form method="POST"><input type="submit" name="user_remove_job" value="Отклонить"/></form></a>';
+                                        }else{
+                                            echo '<a href="#" class="feedback-item-reply-button"><form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_job"><input type="submit" value="Принять"/></form></a>';
+                                        }
+                                    }
+                                ?>
                             </div>
                         </div>
                         <?php
@@ -183,6 +191,15 @@ $answers = $DB->query('
     </div>
     <div class="product-holder">
         <div class="product-title"><?php echo $job['name']; ?></div>
+        <?php
+            if(!empty($worker_user[0])){
+                echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
+                if(!empty($_SESSION['user']))
+                    echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
+            }else{
+                echo 'Исполнитель не назначен.';
+            }
+        ?>
         <div class="product-meta">
             <p>Опубликовано: <?php echo date('j.m.Y H:i:s', strtotime($job['created'])); ?></p>
             <p>Город: <?php echo $job['street'] .' '. $job['house']; ?></p>
@@ -197,6 +214,14 @@ $answers = $DB->query('
             <div class="product-sub-meta-item">Обязанности:<br><?php echo $job['description'];?></div>
             <div class="product-sub-meta-item">Условия:<br><?php echo $job['conditions'];?></div>
         </div>
+        <?php
+            if(!empty($_SESSION['user']) && empty($job['workerID'])){
+                if($_SESSION['user']['id'] !== $job['createrUserID']){
+                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                    else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                }
+            }
+        ?>
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
 </div>

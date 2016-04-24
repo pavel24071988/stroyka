@@ -193,14 +193,16 @@ $answers = $DB->query('
                         <div class="feedback-item">
                             <div class="feedback-item-body clearfix">
                                 <div class="feedback-item-avatar">
-                                    <a href="#">
+                                    <a href="<?php echo '/users/'. $answer['id'] .'/'; ?>">
                                         <img src="<?php echo '/images/users/'. $answer['id'] .'/'. $answer['avatar']; ?>" />
                                     </a>
                                 </div>
                                 <div class="feedback-item-content clearfix">
                                     <div class="feedback-item-content-left">
                                         <div class="feedback-name">
-                                            <a href="#"><span><?php echo $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name']; ?></span><br>Бригада. 20 человек</a>
+                                            <a href="<?php echo '/users/'. $answer['id'] .'/'; ?>">
+                                                <span><?php echo $answer['surname'] .' '. $answer['name'] .' '. $answer['second_name']; ?></span><br><!--Бригада. 20 человек-->
+                                            </a>
                                         </div>
                                         <div class="feedback-text"><?php echo $answer['uo_description']; ?></div>
                                         <?php if($_SESSION['user']['id'] !== $answer['id']) echo '<a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $answer['id'] .'/" class="feedback-candidate">Написать кандидату</a>'; ?>
@@ -241,10 +243,10 @@ $answers = $DB->query('
     <div class="breadcrumb">
         <ul class="clearfix">
             <li>
-                <a href="#">Главная</a>
+                <a href="/">Главная</a>
             </li>
             <li>
-                <a href="#">Заказы</a>
+                <a href="/orders/">Заказы</a>
             </li>
             <li>
                 <a href="#"><?php echo $object['name']; ?></a>
@@ -274,6 +276,15 @@ $answers = $DB->query('
             <div class="product-photo-holder clearfix">
                 <?php echo implode(' ', $object_imgs_arr); ?>
             </div>
+            
+            <?php 
+            if(!empty($_SESSION['user'])){
+                if($_SESSION['user']['id'] !== $object['createrUserID']){
+                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                    else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                }
+            }
+            ?>
 
         </div>
     </div>
