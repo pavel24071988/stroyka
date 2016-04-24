@@ -1763,8 +1763,272 @@ p {margin-bottom: 7px;}
 	margin-left: -10px;
 }
 .specialist-meta-block .feedback-passport-item:last-of-type {margin-bottom: 0;}
+/* my works */
+.my-works-top {
+	line-height: 23px;
+	padding-bottom: 25px;
+	border-bottom: 1px solid #cfdde9;
+	margin-bottom: 25px;
+}
+.my-works-top p {margin-bottom: 0;}
+.my-works-top b {color: #054157;}
+.add-myworks-holder {margin-bottom: 20px;}
+.add-myworks-form .add-myworks {padding-right: 10px;}
+.add-myworks .add-myworks-left {
+	float: left;
+	width: 38.5%;
+}
+.add-myworks-left .add-myworks-form-item {
+	margin-bottom: 5px;
+	color: #054157;
+	font-size: 14px;
+}
+.add-myworks-form-item > div {margin-bottom: 3px;}
+.add-myworks-form-item input {
+	width: 96%;
+	height: 31px;
+	border: 1px solid #cfdce0;
+	transition: all .3s ease-in-out;
+	font-size: 15px;
+	color: #888;
+	padding: 0 2%;
+}
+.authorization-form input:focus {border: 1px solid #82b5c8;}
+.add-myworks .add-myworks-right {
+	float: right;
+	width: 46%;
+}
+.add-myworks-right .my-works-button {
+	display: block;
+	width: 100%;
+	height: 214px;
+	line-height: 214px;
+	color: #fff;
+	text-decoration: underline;
+	cursor: pointer;
+	background: #054157;
+	text-transform: uppercase;
+	font-size: 24px;
+	text-align: center;
+	border: none;
+	outline: 0 none;
+	margin-top: 20px;
+}
+.add-myworks-form .myworks-description {
+	margin-bottom: 20px;
+	color: #054157;
+}
+.myworks-description .tipical-button {
+	width: 175px;
+	line-height: normal;
+	float: right;
+}
+.myworks-type .specialist-block-title {width: 100%;}
+.myworks-year-holder {padding-bottom: 10px;}
+.myworks-year-holder .myworks-year-title {
+	padding: 0 10px;
+	height: 21px;
+	background: #cfdde9;
+	line-height: 21px;
+	color: #054157;
+	margin-bottom: 23px;
+	margin-left: -10px;
+	width: 100%;
+}
+.myworks-year-holder .myworks-year-items {color: #054157;}
+.myworks-year-items .myworks-year-item {
+	float: left;
+	width: 31%;
+	margin-left: 3.5%;
+}
+.myworks-year-items .myworks-year-item:first-child {margin-left: 0;}
+.myworks-year-item .myworks-item-meta p {margin-bottom: 0;}
+.myworks-year-item .myworks-item-photo {
+	display: block;
+	width: 100%;
+	height: 144px;
+	margin: 10px 0;
+	background: #054157;
+}
+/* product photo */
+.product-photo-holder .product-photo-item {
+	float: left;
+	width: 49%;
+	margin-left: 2%;
+	margin-bottom: 25px;
+}
+.product-photo-holder .product-photo-item:nth-child(2n+1) {margin-left: 0;}
+.product-photo-item .product-photo {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	border: 1px solid #80a8b6;
+	height: 232px;
+	margin-bottom: 10px;
+	position: relative;
+}
+.product-photo-item .product-photo img {height: 232px;}
+.product-photo .product-photo-scope {
+	width: 100%;
+	height: 232px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	background: url(../images/scope.png) no-repeat center center rgba(167,238,244,.66);
+	opacity: 0;
+	transition: all .3s ease-in-out;
+}
+.product-photo:hover .product-photo-scope {opacity: 1;}
+.product-photo-item .product-photo-name {color: #1c2f3b;}
+.modal-works-photo {
+	max-width: 100%;
+	display: block;
+	margin-bottom: 15px;
+	border: 1px solid #b8cbdf;
+}
+.modal-photo-content p {margin-bottom: 0;}
+/* index */
+.tipical-select {
+	width: 100%;
+	border: 1px solid #b1c8da;
+	margin-bottom: 17px;
+	background: #fff;
+	outline: 0 none;
+	height: 25px;
+	color: #474848;
+}
+.search-block-left .tipical-select {margin-bottom: 10px;}
+.search-block-holder {padding-left: 15px;}
+.search-block-holder .search-block-left {
+	float: left;
+	width: 31.75%;
+}
+.search-block-holder .search-block-right {
+	float: left;
+	width: 62%;
+	margin-left: 2%;
+}
+.search-block-right .tipical-textarea {
+	width: 98%;
+	padding: 5px 1%;
+	height: 40px;
+	margin-bottom: 10px;
+	border-radius: 3px;
+}
+.search-block-right button {
+	line-height: normal;
+	float: right;
+	width: 76px;
+}
 /* page styles end */
 
 /* media query start */
 @media (max-width: 1024px) {}
 /* media query end */
+
+/* slider */
+/* jssor slider bullet navigator skin 03 css */
+/*
+.jssorb03 div           (normal)
+.jssorb03 div:hover     (normal mouseover)
+.jssorb03 .av           (active)
+.jssorb03 .av:hover     (active mouseover)
+.jssorb03 .dn           (mousedown)
+*/
+.jssorb03 {
+    position: absolute;
+}
+.jssorb03 div, .jssorb03 div:hover, .jssorb03 .av {
+    position: absolute;
+    /* size of bullet elment */
+    width: 21px;
+    height: 21px;
+    text-align: center;
+    line-height: 21px;
+    color: white;
+    font-size: 12px;
+    background: url('img/b03.png') no-repeat;
+    overflow: hidden;
+    cursor: pointer;
+}
+.jssorb03 div { background-position: -5px -4px; }
+.jssorb03 div:hover, .jssorb03 .av:hover { background-position: -35px -4px; }
+.jssorb03 .av { background-position: -65px -4px; }
+.jssorb03 .dn, .jssorb03 .dn:hover { background-position: -95px -4px; }
+
+/* jssor slider arrow navigator skin 03 css */
+/*
+.jssora03l                  (normal)
+.jssora03r                  (normal)
+.jssora03l:hover            (normal mouseover)
+.jssora03r:hover            (normal mouseover)
+.jssora03l.jssora03ldn      (mousedown)
+.jssora03r.jssora03rdn      (mousedown)
+*/
+.jssora03l, .jssora03r {
+    display: block;
+    position: absolute;
+    /* size of arrow element */
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+    background: url('../images/a03.png') no-repeat;
+    overflow: hidden;
+}
+.jssora03l { background-position: -3px -33px; }
+.jssora03r { background-position: -63px -33px; }
+.jssora03l:hover { background-position: -123px -33px; }
+.jssora03r:hover { background-position: -183px -33px; }
+.jssora03l.jssora03ldn { background-position: -243px -33px; }
+.jssora03r.jssora03rdn { background-position: -303px -33px; }
+
+/* my slider styles */
+.photo-carousel-standart {margin: 15px 0;}
+.rotator-holder {
+	position: relative;
+	margin: 0 auto;
+	top: 0px;
+	left: 0px;
+	width: 800px;
+	height: 150px;
+	overflow: hidden;
+	visibility: hidden;
+}
+.rotator-inner {
+	position: absolute; 
+	top: 0px;
+	left: 0px;
+}
+.rotator-inner-block {
+	filter: alpha(opacity=70);
+	opacity: 0.7;
+	position: absolute;
+	display: block;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+.rotator-inner-load {
+	position:absolute;
+	display:block;
+	background:url('img/loading.gif') no-repeat center center;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+}
+.rotator-content {
+	cursor: default;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 800px;
+	height: 150px;
+	overflow: hidden;
+}
+.jssorb03 {
+	border-radius: 6px;
+	background: rgba(0,0,0,.6);
+}
