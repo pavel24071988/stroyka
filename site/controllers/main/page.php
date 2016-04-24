@@ -1,7 +1,19 @@
 <?php
 // ище данные для формы поиска
-/*$DB = Application::$DB;
+$DB = Application::$DB;
+$masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->fetch();
+$jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs')->fetch();
+$companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 0')->fetch();
 
+$sql = '
+    SELECT o.*,
+           (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
+            c.name as city_name
+      FROM objects o
+      LEFT JOIN cities c ON o."cityID" = c.id';
+if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
+$objects = $DB->query($sql)->fetchAll();
+/*
 $cities = $DB->query('SELECT * FROM cities c')->fetchAll();
 $cities_str = '';
 foreach($cities as $city){
@@ -39,9 +51,9 @@ foreach($area_of_jobs as $area_of_job){
     <div class="inner-wrapper">
        <div class="tipical-headline">Строительный портал «На объекте»</div>
        <ul class="scores-block clearfix">
-           <li class="scores-block-item">Мастеров онлайн: <span>293</span></li>
-           <li class="scores-block-item">Вакансий на сайте: <span>2154</span></li>
-           <li class="scores-block-item">Компаний: <span>1045</span></li>
+           <li class="scores-block-item">Мастеров онлайн: <span><?php echo $masters_online['masters_online']; ?></span></li>
+           <li class="scores-block-item">Вакансий на сайте: <span><?php echo $jobs['jobs']; ?></span></li>
+           <li class="scores-block-item">Компаний: <span><?php echo $companies['companies']; ?></span></li>
        </ul>
        <div class="sub-header-headline">Здесь вводный текст кратко описывает суть и функционал сайта.</div>
        <p>Психологическая среда, как принято считать, все еще интересна для многих. Интересно отметить, что рейтинг разнородно отражает культурный показ баннера. Практика однозначно показывает, что создание приверженного покупателя парадоксально переворачивает креативный рейтинг. Опрос, пренебрегая деталями, отталкивает коллективный медийный канал, опираясь на опыт западных коллег.</p>
@@ -71,63 +83,37 @@ foreach($area_of_jobs as $area_of_job){
     </div>
     <div class="tipical-content-headline">Новые объекты</div>
     <div class="objects-holder">
+        <?php foreach($objects as $object){
+            $object_imgs = $DB->query('
+                SELECT *
+                  FROM objects_imgs oi
+                    WHERE oi."objectID"='. $object['id'])->fetchAll();
+            $object_imgs_arr = [];
+            foreach($object_imgs as $object_img){
+                $object_imgs_arr[] = '<img width="100px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+            }
+        ?>
         <div class="object-item clearfix">
             <div class="object-item-description">
                 <div class="object-item-headline">Строительство бани</div>
                 <div class="object-item-info">
                     <div class="snip-desription">Краткое описание.</div>
-                    Рекламная заставка усиливает обществвенный направленный маркетинг. Политическое учение Августина приводит бренд. Как отмечает Майкл Мескон, узнаваемость марки переворачивает связанный марксизм. Российская специфика формирует авторитаризм.
-                </div>
-            </div>
-            <div class="object-item-meta">
-                <div class="object-item-meta-main">
-                    <div class="object-meta-date">28 марта 2016 | 10:24</div>
-                    <div class="object-meta-place">г. Воронеж</div>
-                </div>
-                <div class="object-item-meta-price">750 000 <span>руб.</span></div>
-                <a href="#" class="answers">Ответов нет</a>
-            </div>
-        </div>
-        <div class="object-item clearfix">
-            <div class="object-item-description">
-                <div class="object-item-headline">Строительство бани</div>
-                <div class="object-item-info">
-                    <div class="snip-desription">Краткое описание.</div>
-                    Рекламная заставка усиливает обществвенный направленный маркетинг. Политическое учение Августина приводит бренд. Как отмечает Майкл Мескон, узнаваемость марки переворачивает связанный марксизм. Российская специфика формирует авторитаризм.
-                </div>
-            </div>
-            <div class="object-item-meta">
-                <div class="object-item-meta-main">
-                    <div class="object-meta-date">28 марта 2016 | 10:24</div>
-                    <div class="object-meta-place">г. Воронеж</div>
-                </div>
-                <div class="object-item-meta-price">750 000 <span>руб.</span></div>
-                <a href="#" class="answers">Ответов нет</a>
-            </div>
-        </div>
-        <div class="object-item clearfix">
-            <div class="object-item-description">
-                <div class="object-item-headline">Строительство бани</div>
-                <div class="object-item-info">
-                    <div class="snip-desription">Краткое описание.</div>
-                    Рекламная заставка усиливает обществвенный направленный маркетинг. Политическое учение Августина приводит бренд. Как отмечает Майкл Мескон, узнаваемость марки переворачивает связанный марксизм. Российская специфика формирует авторитаризм.
+                    <?php echo $object['description']; ?>
                     <div class="object-item-images clearfix">
-                        <img src="images/img1.png">
-                        <img src="images/img2.png">
-                        <img src="images/img3.png">
-                        <img src="images/img4.png">
+                        <?php echo implode(' ', $object_imgs_arr); ?>
                     </div>
                 </div>
             </div>
             <div class="object-item-meta">
                 <div class="object-item-meta-main">
-                    <div class="object-meta-date">28 марта 2016 | 10:24</div>
-                    <div class="object-meta-place">г. Воронеж</div>
+                    <div class="object-meta-date"><?php echo date('j.m.Y | H:i', strtotime($object['created'])); ?></div>
+                    <div class="object-meta-place">г. <?php echo $object['city_name']; ?></div>
                 </div>
-                <div class="object-item-meta-price">750 000 <span>руб.</span></div>
-                <a href="#" class="answers">Ответов нет</a>
+                <div class="object-item-meta-price"><?php echo $object['amount']; ?> <span>руб.</span></div>
+                <a href="<?php echo '/objects/'. $object['id'] .'/'; ?>" class="answers"><?php if(!empty($object['comment_count'])) echo $object['comment_count'] .' ответ(ов)'; else echo 'Ответов нет'; ?></a>
             </div>
         </div>
+        <?php } ?>
         <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
     </div>
 </div>

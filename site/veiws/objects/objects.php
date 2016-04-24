@@ -38,12 +38,12 @@ foreach($areas as $general_area){
         <div class="breadcrumb">
             <ul class="clearfix">
                 <li>
-                    <a href="#">Главная</a>
+                    <a href="/">Главная</a>
                 </li>
                 <li>
-                    <a href="#">Заказы</a>
+                    <a href="/objects/">Заказы</a>
                 </li>
-                <?php if(!empty($area)) echo '<li><a href="#"> '. $area['name'] .'</a></li>'; ?>
+                <?php if(!empty($area)) echo '<li><a href="#">'. $area['name'] .'</a></li>'; ?>
             </ul>
         </div>
         

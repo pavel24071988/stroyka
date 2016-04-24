@@ -187,36 +187,47 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo implode(' ', $imgs); ?>
             <div class="product-sub-headline">Цены на услуги</div>
             <?php echo $user['price_description']; ?>
-            <!--
             <div class="product-sub-headline">Отзывы</div>
+            <?php
+            $comments = $DB->query('
+                SELECT c.*,
+                       j.name as type_name,
+                       \'jobs\' as href_name,
+                       u.name as user_name
+                  FROM jobs j
+                  LEFT JOIN comments c ON j.id = c."typeID"
+                  LEFT JOIN users u ON u.id = c."ownerUserID"
+                    WHERE j."workerID" = '. $user['id'] .' AND c.type = \'job_comment\'
+                UNION ALL
+                SELECT c.*,
+                       o.name as type_name,
+                       \'objects\' as href_name,
+                       u.name as user_name
+                  FROM objects o
+                  LEFT JOIN comments c ON o.id = c."typeID"
+                  LEFT JOIN users u ON u.id = c."ownerUserID"
+                    WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\'
+            ')->fetchAll();
+            foreach($comments as $comment){
+            ?>
             <div class="specialist-feedback">
-                <div class="specialist-feedback-headline">По заказу <a href="#">Требуется ремонт спальни</a></div>
+                <div class="specialist-feedback-headline"><?php if($comment['type'] === 'object_comment') echo 'По заказу'; elseif($comment['type'] === 'job_comment') echo 'По вакансии'; ?> <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>"><?php echo $comment['type_name']; ?></a></div>
                 <p><b>Что понравилось</b><br>
-                Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                <?php echo $comment['negative_description']; ?>
+                </p>
                 <br>
                 <p><b>Что не понравилось</b><br>
-                Все понравилось.</p>
+                <?php echo $comment['positive_description']; ?>
+                </p>
                 <br>
                 <p><b>Общие выводы</b><br>
                 Быстро, качественно, в срок и не дорого.</p>
-                <a href="#" class="feedback-author">Виталий, декабрь 2015</a>
+                <a href="#" class="feedback-author"><?php echo $comment['user_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
             </div>
-            <div class="specialist-feedback">
-                <div class="specialist-feedback-headline">По заказу <a href="#">Требуется ремонт спальни</a></div>
-                <p><b>Что понравилось</b><br>
-                Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
-                <br>
-                <p><b>Что не понравилось</b><br>
-                Все понравилось.</p>
-                <br>
-                <p><b>Общие выводы</b><br>
-                Быстро, качественно, в срок и не дорого.</p>
-                <a href="#" class="feedback-author">Виталий, декабрь 2015</a>
-            </div>
+            <?php } ?>
             <div class="show-more-holder">
                 <a href="#" class="show-more">Смотреть ещё отзывы</a>
             </div>
-            -->
         </div>  
     </div>
 </div>

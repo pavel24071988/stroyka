@@ -272,7 +272,7 @@ $answers = $DB->query('
             <div class="product-sub-meta-headline">Фото работ</div>
 
             <div class="product-photo-holder clearfix">
-                <?php echo implode(' ', $object_imgs_arr);?>
+                <?php echo implode(' ', $object_imgs_arr); ?>
             </div>
 
         </div>

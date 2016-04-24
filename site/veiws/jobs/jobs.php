@@ -35,11 +35,12 @@ $jobs = Application::$DB->query($sql)->fetchAll();
         <div class="breadcrumb">
             <ul class="clearfix">
                 <li>
-                    <a href="#">Главная</a>
+                    <a href="/">Главная</a>
                 </li>
                 <li>
-                    <a href="#">Вакансии</a>
+                    <a href="/jobs/">Вакансии</a>
                 </li>
+                <?php if(!empty($area)) echo '<li><a href="#">'. $area['name'] .'</a></li>'; ?>
             </ul>
         </div>
         <div class="columns-holder clearfix">

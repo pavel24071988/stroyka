@@ -84,14 +84,12 @@ foreach($users as $user){
     <div class="breadcrumb">
         <ul class="clearfix">
             <li>
-                <a href="#">Главная</a>
+                <a href="/">Главная</a>
             </li>
             <li>
-                <a href="#">Исполнители</a>
+                <a href="/masters/">Исполнители</a>
             </li>
-            <li>
-                <a href="#">Воронежская область</a>
-            </li>
+            <?php if(!empty($area)) echo '<li><a href="#">'. $area['name'] .'</a></li>'; ?>
         </ul>
     </div>
     <div class="tipical-content-headline">Мастера</div>
