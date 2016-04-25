@@ -63,11 +63,12 @@ class usersModel
                    u."name",
                    u."surname",
                    m."text",
-                   m."created"
+                   m."created",
+                   m."read"
               FROM messages m
               JOIN users u ON m."fromUserID" = u."id"
                 WHERE m."toUserID"='. $userID .'
-                  ORDER BY "id", m."created" DESC')->fetchAll();
+                  ORDER BY "id", m."read"')->fetchAll();
         return $messages;
     }
     
@@ -78,11 +79,12 @@ class usersModel
                    u."name",
                    u."surname",
                    m."text",
-                   m."created"
+                   m."created",
+                   m."read"
               FROM messages m
               JOIN users u ON m."toUserID" = u."id"
                 WHERE m."fromUserID"='. $userID .'
-                  ORDER BY "id", m."created" DESC')->fetchAll();
+                  ORDER BY "id", m."read"')->fetchAll();
         return $messages;
     }
     
@@ -114,5 +116,10 @@ class usersModel
                      \''. $text .'\')');
         if($create_sql->execute() === true) return 'Сообщение отправлено.';
         else return 'Ошибка отправки сообщения.';
+    }
+    
+    public static function setReadableMessages($fromUserID, $toUserID){
+        $messages = self::$DB->query('SELECT * FROM messages WHERE "fromUserID"='. $toUserID .' AND "toUserID"='. $fromUserID)->fetchAll();
+        foreach($messages as $message) self::$DB->prepare('UPDATE messages SET "read"=\'on\' WHERE id='. $message['id'])->execute();
     }
 }
