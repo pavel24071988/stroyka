@@ -139,13 +139,13 @@ if(!empty($_POST)){
     <div class="simple-headline">Регистрация</div>
     <div class="registration-holder">
         <div class="registration-breadcrumb clearfix">
-            <a href="#" class="registration-breadcrumb-step active">1</a>
+            <a href="#" class="registration-breadcrumb-step active" data-id="step1">1</a>
             <div class="registration-breadcrumb-break">шаг</div>
-            <a href="#" class="registration-breadcrumb-step">2</a>
+            <a href="#" class="registration-breadcrumb-step" data-id="step2">2</a>
         </div>
-        <form action="/registration/" method="POST" enctype="form-data">
+        <form class="registration-form" action="/registration/" method="POST" enctype="form-data">
             <div style="color: red;"><?php echo $error; ?></div>
-            <fieldset>
+            <fieldset id="step1">
                 <div class="registration-form-headline">Ваши данные будут проверяться! Не указывайте недостоверную информацию!</div>
                 <div class="registration-form-columns clearfix">
                     <div class="registration-form-column1">
@@ -212,7 +212,7 @@ if(!empty($_POST)){
                 </div>
                 <button class="tipical-button forward">Далее</button>
             </fieldset>
-            <fieldset>
+            <fieldset id="step2" style="display: none;">
                 <div class="registration-form-columns clearfix">
                     <input type="hidden" name="areaID" value="1" />
                     <div class="main-place">
@@ -227,7 +227,7 @@ if(!empty($_POST)){
                     </div>
                     <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>
                 </div>
-                <input type="submit" value="Зарегистрироваться" />
+                <input class="tipical-button forward" style="width: 180px;" type="submit" value="Зарегистрироваться" />
             </fieldset>
         </form>
     </div>

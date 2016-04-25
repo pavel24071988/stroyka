@@ -121,7 +121,7 @@ class Application
             foreach($kinds_of_jobs as $key => $kind_of_job){
                 $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
                 $liclass = in_array($identificator, $kinds_of_jobs_user_arr) ? ' active' : '';
-                $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label><input type=\'checkbox\' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
+                $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label for="'. $kind_of_job['id'] .'"><input type=\'checkbox\' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" id="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
             }
             if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
             $list_of_areas .= '</li>';
