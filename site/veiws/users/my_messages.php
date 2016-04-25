@@ -16,6 +16,7 @@ $outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);
 if($applicationURL[4] === 'dialogs'){
     $historyOfMessagesByUser = $usersModel->getHistoryOfMessagesByUser($_SESSION['user']['id'], $applicationURL[5]);
     $opponent = $usersModel->getUser($applicationURL[5]);
+    $usersModel->setReadableMessages($_SESSION['user']['id'], $applicationURL[5]);
 ?>
     <div class="content">
 
@@ -88,7 +89,7 @@ if($applicationURL[4] === 'dialogs'){
                     </div>
                     <div class="dialog-item-content">
                         <div class="dialog-item-name">
-                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>/"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
+                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>/"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span><?php if($message['read'] === false){ echo '(новое)'; } ?></span>
                         </div>
                         <div class="dialog-item-text">
                             <?php echo $message['text']; ?>
@@ -108,7 +109,7 @@ if($applicationURL[4] === 'dialogs'){
                     </div>
                     <div class="dialog-item-content">
                         <div class="dialog-item-name">
-                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>/"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span>(новое)</span>
+                            <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $message['id']; ?>/"><?php echo $message['name'] .' '. $message['surname']; ?></a> <span><?php // if($message['read'] === false){ echo '(новое)'; } ?></span>
                         </div>
                         <div class="dialog-item-text">
                             <?php echo $message['text']; ?>
