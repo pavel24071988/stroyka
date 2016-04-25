@@ -1,4 +1,3 @@
-
  <?php
 // получаем сферы деятильности с подвидами
 $DB = Application::$DB;
@@ -26,15 +25,31 @@ if(!empty($_POST)){
             if(empty($row)) $error .= 'Не заполнено поле: '. $array_of_check[$key] .'<br/>';
         }
     }
+    
+    $chars="qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
+    $max=10;
+    $size=StrLen($chars)-1;
+    $newPassword=null;
+    while($max--) $newPassword.=$chars[rand(0,$size)];
+    $_POST['password'] = $newPassword;
+    $_POST['repeat_password'] = $newPassword;
+    
     if(empty($_POST['assignment'])) $error .= 'Не заполнено поле: Я согласен с пользовательским соглашением<br/>';
     if(empty($_POST['password'])) $error .= 'Не заполнено поле: Пароль<br/>';
     elseif($_POST['password'] !== $_POST['repeat_password']) $error .= 'Поля пароль и повторите пароль не совпадают<br/>';
+    
+    $city = $DB->query('SELECT * FROM cities c WHERE c.name ILIKE \''. $_POST['city'] .'\'')->fetch();
+    if(empty($city)){
+        $DB->prepare('INSERT INTO cities (name) VALUES(\''. $_POST['city'] .'\')')->execute();
+        $city = $DB->query('SELECT * FROM cities c WHERE c.name ILIKE \''. $_POST['city'] .'\'')->fetch();
+    }
+    $cityID = $city['id'];
     
     // начинаем регистрировать
     if(empty($error)){
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, age)
-              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['age'] .'\')');
+              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['age'] .'\')');
         if($registration_check->execute() === true){
             $user = $DB->query('
                 SELECT u.*,
@@ -180,18 +195,6 @@ if(!empty($_POST)){
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
-                        <div class="registration-form-row clearfix">
-                            <div class="registration-form-row-cell">
-                                <input type="password" name="password" placeholder="Пароль" />
-                            </div>
-                            <div class="registration-form-row-cell"></div>
-                        </div>
-                        <div class="registration-form-row clearfix">
-                            <div class="registration-form-row-cell">
-                                <input type="password" name="repeat_password" placeholder="Повторите пароль" />
-                            </div>
-                            <div class="registration-form-row-cell"></div>
-                        </div>
                     </div>
                     <div class="registration-form-column2 clearfix">
                         <a href="#" class="user-avatar"></a>
@@ -214,7 +217,7 @@ if(!empty($_POST)){
                     <input type="hidden" name="areaID" value="1" />
                     <div class="main-place">
                         <p class="main-place-title">Основное место работы (город или область)</p>
-                        <input type="text" name="cityID" value="<?php if(!empty($_POST['cityID'])) echo $_POST['cityID']; ?>" />
+                        <input type="text" name="city" value="<?php if(!empty($_POST['city'])) echo $_POST['city']; ?>" />
                     </div>
                     <div class="main-place">
                         <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
