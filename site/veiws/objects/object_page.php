@@ -8,6 +8,7 @@ $checkSubmitUser = false;
 if(isset($_SESSION['user'])){
     $checkSubmitUser = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."fromUserID"='. $_SESSION['user']['id'] .' AND uo."objectID" = '. $object['id'])->fetchAll();
     if(!empty($checkSubmitUser)) $checkSubmitUser = true;
+    $check_owner = ($_SESSION['user']['id'] === $object['createrUserID']) ? true : false;
 }
 
 // обработаем POST - например при подписывании на объект
@@ -133,7 +134,8 @@ $answers = $DB->query('
         echo 'Исполнитель не назначен.';
     }*/
 ?>
-<?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] === $object['createrUserID']){ ?>
+<!-- авторезированный пользователь -->
+<?php if(!empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="my-page-content clearfix">
         <?php echo Application::getLeftMenu(); ?>
@@ -150,10 +152,12 @@ $answers = $DB->query('
             </div>
             <div class="product-holder">
                 <div class="product-title"><?php echo $object['name']; ?></div>
+                <?php if($check_owner){ ?>
                 <div class="product-holder-control">
                     <a href="<?php echo '/objects/'. $object['id'] .'/edit/'; ?>">Редактировать</a>
                     <a href="<?php echo '/objects/'. $object['id'] .'/close/'; ?>">Закрыть</a>
                 </div>
+                <?php } ?>
                 <div class="product-meta">
                     <p class="product-meta-title date">Номер объекта: <?php echo $object['id']; ?></p>
                     <div class="product-customer clearfix">
@@ -237,9 +241,18 @@ $answers = $DB->query('
                     </div>
                 </div>
             </div>
+            <?php 
+            if(!empty($_SESSION['user'])){
+                if($_SESSION['user']['id'] !== $object['createrUserID']){
+                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                    else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                }
+            }
+            ?>
         </div>
     </div>
 </div>
+<!-- Не авторезированный пользователь -->
 <?php }else{ ?>
 <div class="content">
     <div class="breadcrumb">
@@ -276,20 +289,9 @@ $answers = $DB->query('
             <p>Описание объекта закачиком.</p>
             <?php echo $object['description'];?>
             <div class="product-sub-meta-headline">Фото работ</div>
-
             <div class="product-photo-holder clearfix">
                 <?php echo implode(' ', $object_imgs_arr); ?>
             </div>
-            
-            <?php 
-            if(!empty($_SESSION['user'])){
-                if($_SESSION['user']['id'] !== $object['createrUserID']){
-                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
-                    else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
-                }
-            }
-            ?>
-
         </div>
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>

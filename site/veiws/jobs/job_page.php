@@ -8,6 +8,7 @@ $checkSubmitUser = false;
 if(isset($_SESSION['user'])){
     $checkSubmitUser = $DB->query('SELECT uj.* FROM users_jobs uj WHERE uj."fromUserID"='. $_SESSION['user']['id'] .' AND uj."jobID" = '. $job['id'])->fetchAll();
     if(!empty($checkSubmitUser)) $checkSubmitUser = true;
+    $check_owner = ($_SESSION['user']['id'] === $job['createrUserID']) ? true : false;
 }
 
 // обработаем POST - например при подписывании на объект
@@ -75,7 +76,7 @@ $answers = $DB->query('
     echo $edit_buttons;
     */
 ?>
-<?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] === $job['createrUserID']){ ?>
+<?php if(!empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="my-page-content clearfix">
         <?php echo Application::getLeftMenu(); ?>
@@ -92,10 +93,12 @@ $answers = $DB->query('
             </div>
             <div class="product-holder">
                 <div class="product-title"><?php echo $job['name']; ?></div>
+                <?php if($check_owner){ ?>
                 <div class="product-holder-control">
                     <a href="<?php echo '/jobs/'. $job['id'] .'/edit/'; ?>">Редактировать</a>
                     <a href="<?php echo '/jobs/'. $job['id'] .'/close/'; ?>">Закрыть</a>
                 </div>
+                <?php } ?>
                 <div class="product-meta">
                     <p>Номер вакансии: <b><?php echo $job['id']; ?></b></p>
                     <div class="product-customer clearfix">
@@ -120,7 +123,14 @@ $answers = $DB->query('
                     <div class="product-sub-meta-item">Условия:<br>
                     <?php echo $job['conditions'];?>
                     </div>
+                    <?php
+                        if(!$check_owner){
+                            if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                            else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                        }
+                    ?>
                     <div class="product-theme">
+                        <?php if($check_owner){ ?>
                         <div class="product-theme-headline">
                             <span>Ответы</span>
                         </div>
@@ -165,6 +175,7 @@ $answers = $DB->query('
                                 ?>
                             </div>
                         </div>
+                        <?php } ?>
                         <?php
                             }
                         } ?>
@@ -216,14 +227,6 @@ $answers = $DB->query('
             <div class="product-sub-meta-item">Обязанности:<br><?php echo $job['description'];?></div>
             <div class="product-sub-meta-item">Условия:<br><?php echo $job['conditions'];?></div>
         </div>
-        <?php
-            if(!empty($_SESSION['user']) && empty($job['workerID'])){
-                if($_SESSION['user']['id'] !== $job['createrUserID']){
-                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
-                    else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
-                }
-            }
-        ?>
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
 </div>

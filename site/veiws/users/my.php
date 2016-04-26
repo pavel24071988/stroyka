@@ -143,7 +143,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 </div>
 <?php }else{ ?>
 <!--Страница пользователя-->
-<?php if(!$common_data['check_owner']){ ?>
+<?php if(empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="breadcrumb">
         <ul class="clearfix">
@@ -197,37 +197,6 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo implode(' ', $imgs); ?>
             <div class="product-sub-headline">Цены на услуги</div>
             <?php echo $user['price_description']; ?>
-            <?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $user['id']){ ?>
-            <form method="POST">
-                <input type="hidden" name="ownerUserID" value="<?php echo $_SESSION['user']['id']; ?>" />
-                <input type="hidden" name="typeID" value="<?php echo $user['id']; ?>" />
-                <input type="hidden" name="type" value="user_comment" />
-                <div class="specialist-meta-block">
-                    <div class="specialist-block-title">
-                        <span>Оставьте отзыв</span>
-                    </div>
-                    <p><b>Внимание!</b><br>
-                    Этот мастер работал на вашем объекте <a href="#">«Отделка квартиры»</a>. Вы можете оставить отзыв.</p>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Что понравилось?</div>
-                        <textarea class="tipical-textarea" name="positive_description"></textarea>
-                    </div>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Что не понравилось?</div>
-                        <textarea class="tipical-textarea" name="negative_description"></textarea>
-                    </div>
-                    <div class="feedback-field">
-                        <div class="feedback-field-headline">Выводы</div>
-                        <textarea class="tipical-textarea" name="conclusion"></textarea>
-                    </div>
-                    <div class="feedback-evaluation clearfix">
-                        <span>Оценка:</span>
-                        <a href="#" class="tipical-button good"><input type="submit" value="on" name="positive_negative" /></a>
-                        <a href="#" class="tipical-button bad"><input type="submit" value="off" name="positive_negative" /></a>
-                    </div>
-                </div>
-            </form>
-            <?php } ?>
             <div class="product-sub-headline">Отзывы</div>
             <?php
             $comments = $DB->query('
@@ -300,12 +269,14 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <a href="#" class="passport-avatar">
                             <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
                         </a>
-                        <a href="#" class="tipical-button">Сделать фото</a>
+                        <?php if($common_data['check_owner']){ ?><a href="#" class="tipical-button">Сделать фото</a><?php } ?>
+                        <?php if($common_data['check_owner']){ ?>
                         <div class="file_upload">
                             <button type="button" class="tipical-button"><a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить с компьютера</a></button>
                             <input type="file">
                         </div>
-                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
+                        <?php } ?>
+                        <?php if(!$common_data['check_owner']){ ?><a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a><?php } ?>
                     </div>
                     <div class="passport-main-right">
                         <div class="specialist-holder clearfix">
@@ -314,7 +285,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
                                     <span class="valid">(проверено)</span>
                                 </a>
-                                <form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form>
+                                <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
                                     <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
@@ -328,8 +299,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                                 </div>
                             </div>
-                            <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a>
+                            <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a><?php } ?>
                         </div>
+                        <?php if($common_data['check_owner']){ ?>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
@@ -350,9 +322,40 @@ else echo '<h1>Страница пользователя</h1>';*/
                             </div>
                             <?php echo $user['price_description']; ?>
                         </div>
+                        <?php } ?>
                     </div>
                 </div>
-                <!--
+                <?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $user['id']){ ?>
+                <form method="POST">
+                    <input type="hidden" name="ownerUserID" value="<?php echo $_SESSION['user']['id']; ?>" />
+                    <input type="hidden" name="typeID" value="<?php echo $user['id']; ?>" />
+                    <input type="hidden" name="type" value="user_comment" />
+                    <div class="specialist-meta-block">
+                        <div class="specialist-block-title">
+                            <span>Оставьте отзыв</span>
+                        </div>
+                        <p><b>Внимание!</b><br>
+                        Этот мастер работал на вашем объекте <a href="#">«Отделка квартиры»</a>. Вы можете оставить отзыв.</p>
+                        <div class="feedback-field">
+                            <div class="feedback-field-headline">Что понравилось?</div>
+                            <textarea class="tipical-textarea" name="positive_description"></textarea>
+                        </div>
+                        <div class="feedback-field">
+                            <div class="feedback-field-headline">Что не понравилось?</div>
+                            <textarea class="tipical-textarea" name="negative_description"></textarea>
+                        </div>
+                        <div class="feedback-field">
+                            <div class="feedback-field-headline">Выводы</div>
+                            <textarea class="tipical-textarea" name="conclusion"></textarea>
+                        </div>
+                        <div class="feedback-evaluation clearfix">
+                            <span>Оценка:</span>
+                            <a href="#" class="tipical-button good"><input type="submit" value="on" name="positive_negative" /></a>
+                            <a href="#" class="tipical-button bad"><input type="submit" value="off" name="positive_negative" /></a>
+                        </div>
+                    </div>
+                </form>
+                <?php } ?>
                 <div class="specialist-meta-block">
                     <div class="specialist-block-title">
                         <span>Отзывы</span>
@@ -362,30 +365,52 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <span>|</span>
                         <a href="#">0 отрицательных</a>
                     </div>
+                    <?php
+                    $comments = $DB->query('
+                        SELECT c.*,
+                               j.name as type_name,
+                               \'jobs\' as href_name,
+                               u.name as user_name
+                          FROM jobs j
+                          LEFT JOIN comments c ON j.id = c."typeID"
+                          LEFT JOIN users u ON u.id = c."ownerUserID"
+                            WHERE j."workerID" = '. $user['id'] .' AND c.type = \'job_comment\'
+                        UNION ALL
+                        SELECT c.*,
+                               o.name as type_name,
+                               \'objects\' as href_name,
+                               u.name as user_name
+                          FROM objects o
+                          LEFT JOIN comments c ON o.id = c."typeID"
+                          LEFT JOIN users u ON u.id = c."ownerUserID"
+                            WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\'
+                        UNION ALL
+                        SELECT c.*,
+                               u.name as type_name,
+                               \'users\' as href_name,
+                               u_new.name as user_name
+                          FROM users u
+                          LEFT JOIN comments c ON u.id = c."typeID"
+                          LEFT JOIN users u_new ON u_new.id = c."ownerUserID"
+                            WHERE u."id" = '. $user['id'] .' AND c.type = \'user_comment\'
+                    ')->fetchAll();
+                    foreach($comments as $comment){
+                    ?>
                     <div class="feedback-passport-item">
                         <p><b>Что понравилось</b><br>
-                        Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
+                        <?php echo $comment['positive_description']; ?>
+                        </p>
                         <br>
                         <p><b>Что не понравилось</b><br>
-                        Все понравилось.</p>
+                        <?php echo $comment['negative_description']; ?>
+                        </p>
                         <br>
                         <p><b>Общие выводы</b><br>
-                        Быстро, качественно, в срок и не дорого.</p>
+                        <?php echo $comment['conclusion']; ?>
+                        </p>
                     </div>
-                    <div class="feedback-passport-item">
-                        <p><b>Что понравилось</b><br>
-                        Мастер очень вежлив (обращался всегда на Вы), пунктуален, ремонт сделан качественно и в обозначенные сроки. В ближайшем будущем планирую так же ремонт в коридоре и в выборе мастера вопрос уже не стоит. Александр настоящий знаток своего дела!</p>
-                        <br>
-                        <p><b>Что не понравилось</b><br>
-                        Все понравилось.</p>
-                        <br>
-                        <p><b>Общие выводы</b><br>
-                        Быстро, качественно, в срок и не дорого.</p>
-                        <br>
-                        <p><b>Фотографии</b></p>
-                    </div>
+                    <?php } ?>
                 </div>
-                -->
             </div>
         </div>
     </div>
