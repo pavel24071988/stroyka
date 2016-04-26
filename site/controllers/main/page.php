@@ -5,6 +5,11 @@ $masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->f
 $jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs')->fetch();
 $companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 0')->fetch();
 
+if(isset($_GET['search'])){
+    $href = "/". $_GET['type'] .'/?search=true&cityID='. $_GET['cityID'] .'&search_str='. $_GET['search_str'] .'&areaJID='. $_GET['areaJID'];
+    echo '<meta http-equiv="refresh" content="1;URL='. $href .'">';
+}
+
 $sql = '
     SELECT o.*,
            (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
@@ -13,6 +18,13 @@ $sql = '
       LEFT JOIN cities c ON o."cityID" = c.id';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 $objects = $DB->query($sql)->fetchAll();
+$cities = $DB->query('SELECT * FROM cities')->fetchAll();
+$area_of_jobsOptions = [];
+$citiesOptions = [];
+foreach($cities as $city) $citiesOptions[] = '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+$area_of_jobs = $DB->query('SELECT * FROM area_of_jobs')->fetchAll();
+foreach($area_of_jobs as $area_of_job) $area_of_jobsOptions[] = '<option value="'. $area_of_job['id'] .'">'. $area_of_job['name'] .'</option>';
+
 /*
 $cities = $DB->query('SELECT * FROM cities c')->fetchAll();
 $cities_str = '';
@@ -75,9 +87,29 @@ foreach($area_of_jobs as $area_of_job){
 <div class="content">
     <div class="search-block">
         <div class="search-block-headline">Поиск</div>
-        <form class="search-block-form">
+        <form class="search-block-form" method="GET">
+            <input type="hidden" value="true" name="search" />
             <fieldset>
-
+                <div class="search-block-holder clearfix">
+                    <div class="search-block-left">
+                        <select class="tipical-select" name="type">
+                            <option value="masters">Мастера</option>
+                            <option value="objects">Заказы</option>
+                            <option value="jobs">Вакансии</option>
+                        </select>
+                        <select class="tipical-select" name="cityID">
+                            <option value="0">По всем городам</option>
+                            <?php echo implode('', $citiesOptions) ?>
+                        </select>
+                        <select class="tipical-select" name="areaJID">
+                            <?php echo implode('', $area_of_jobsOptions) ?>
+                        </select>
+                    </div>
+                    <div class="search-block-right">
+                        <textarea class="tipical-textarea" name="search_str"></textarea>
+                        <button class="tipical-button" type="submit">НАЙТИ</button>
+                    </div>
+                </div>
             </fieldset>
         </form>
     </div>

@@ -35,11 +35,14 @@ $sql = '
             ) as r
 ';
 $dopSQL = [];
+$busy = 'r."status"=\'0\'';
+if(!empty($_GET['busy'])) $busy ='';
 if(!empty($_GET['cityID'])) $dopSQL[] = 'r."cityID"=\''. $_GET['cityID'] .'\'';
 if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
-if(!empty($_GET['not_busy'])) $dopSQL[] = 'r."status"=\'0\'';
 if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
 if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
+if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_str'] .'%\'';
+if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
 $users = Application::$DB->query($sql)->fetchAll();
@@ -173,7 +176,7 @@ foreach($users as $user){
                                 <?php echo Application::getListOfAreas('job', null); ?>
                             </ul>
                             <div class="specialists-advantages">
-                                <p><label><input type="checkbox" <?php if(!empty($_GET['not_busy'])) echo 'checked'; ?> name="not_busy"> Не занят</label></p>
+                                <p><label><input type="checkbox" <?php if(!empty($_GET['busy'])) echo 'checked'; ?> name="busy"> С занятыми</label></p>
                                 <p><label><input type="checkbox" <?php if(!empty($_GET['comments'])) echo 'checked'; ?> name="comments"> С отзывами</label></p>
                                 <p><label><input type="checkbox" <?php if(!empty($_GET['plus_comments'])) echo 'checked'; ?> name="plus_comments"> Только с положительными отзывами</label></p>
                             </div>
@@ -185,6 +188,7 @@ foreach($users as $user){
             </div>
         </div>
     </div>
+    <!--
     <div class="pagination-holder">
         <a href="#" class="pagination-left"></a>
         <ul class="pagination-pages">
@@ -227,4 +231,5 @@ foreach($users as $user){
         </ul>
         <a href="#" class="pagination-right"></a>
     </div>
+    -->
 </div>

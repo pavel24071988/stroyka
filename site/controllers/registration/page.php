@@ -48,8 +48,8 @@ if(!empty($_POST)){
     // начинаем регистрировать
     if(empty($error)){
         $registration_check = $DB->prepare('
-            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, age)
-              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['age'] .'\')');
+            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password)
+              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\')');
         if($registration_check->execute() === true){
             $user = $DB->query('
                 SELECT u.*,
@@ -188,12 +188,6 @@ if(!empty($_POST)){
                             <div class="registration-form-row-cell">
                                 <label style="line-height: 35px;"><input type="checkbox"> Без отчества</label>
                             </div>
-                        </div>
-                        <div class="registration-form-row clearfix">
-                            <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Возраст" name="age" value="<?php if(!empty($_POST['age'])) echo $_POST['age']; ?>" />
-                            </div>
-                            <div class="registration-form-row-cell"></div>
                         </div>
                     </div>
                     <div class="registration-form-column2 clearfix">
