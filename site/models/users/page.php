@@ -100,7 +100,7 @@ class usersModel
               JOIN users u ON m."fromUserID" = u."id"
                 WHERE (m."fromUserID"='. $firstUser .' AND m."toUserID"='. $secondUser .') OR
                       (m."fromUserID"='. $secondUser .' AND m."toUserID"='. $firstUser .')
-                  ORDER BY m."created" DESC')->fetchAll();
+                  ORDER BY m."created"')->fetchAll();
         return $messages;
     }
     

@@ -84,7 +84,7 @@ if($applicationURL[4] === 'dialogs'){
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
                         <a href="#">
-                            <img src="<?php echo $message['avatar']; ?>">
+                            <img src="<?php echo '/images/users/'. $message['id'] .'/'. $message['avatar']; ?>">
                         </a>
                     </div>
                     <div class="dialog-item-content">
@@ -104,7 +104,7 @@ if($applicationURL[4] === 'dialogs'){
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
                         <a href="#">
-                            <img src="<?php echo $message['avatar']; ?>">
+                            <img src="<?php echo '/images/users/'. $message['id'] .'/'. $message['avatar']; ?>">
                         </a>
                     </div>
                     <div class="dialog-item-content">
