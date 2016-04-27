@@ -167,9 +167,9 @@ $answers = $DB->query('
                                 <?php
                                     if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $answer['id']){
                                         if(!(empty($job['workerID']))){
-                                            if((int) $job['workerID'] === $answer['id']) echo '<a href="#" class="feedback-item-reply-button"><form method="POST"><input type="submit" name="user_remove_job" value="Отклонить"/></form></a>';
+                                            if((int) $job['workerID'] === $answer['id']) echo '<form method="POST"><input class="feedback-item-reply-button" type="submit" name="user_remove_job" value="Отклонить"/></form>';
                                         }else{
-                                            echo '<a href="#" class="feedback-item-reply-button"><form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_job"><input type="submit" value="Принять"/></form></a>';
+                                            echo '<form method="POST"><input class="feedback-item-reply-button" type="hidden" value="'. $answer['id'] .'" name="user_to_job"><input type="submit" value="Принять"/></form>';
                                         }
                                     }
                                 ?>

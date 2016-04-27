@@ -244,7 +244,7 @@ $answers = $DB->query('
             <?php 
             if(!empty($_SESSION['user'])){
                 if($_SESSION['user']['id'] !== $object['createrUserID']){
-                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea class="tipical-textarea" name="description"></textarea><input class="tipical-button" style="line-height: normal;" type="submit" name="submitOrder" value="Откликнуться"/></form>';
                     else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
                 }
             }

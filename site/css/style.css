@@ -145,7 +145,7 @@ p {margin-bottom: 7px;}
 	line-height: 80px;
 }
 .navigation li a {
-	color: #ffcd00;
+	color: #fff;
 	font-size: 15px;
 	position: relative;
 	padding-left: 15px;
@@ -830,6 +830,7 @@ p {margin-bottom: 7px;}
 	border: 1px solid #afbfca;
 	display: inline-block;
 	height: 30px;
+	cursor: pointer;
 	background: #fefefe; /* Old browsers */
 	background: -moz-linear-gradient(top,  #fefefe 0%, #d5dfe4 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top,  #fefefe 0%,#d5dfe4 100%); /* Chrome10-25,Safari5.1-6 */
@@ -1744,11 +1745,10 @@ p {margin-bottom: 7px;}
 	margin-right: 15px;
 }
 .feedback-evaluation .tipical-button {
-	width: 80px;
+	width: 130px;
 	padding-left: 50px;
 	color: #000;
-	height: 34px;
-	line-height: 36px;
+	height: 36px;
 }
 .feedback-evaluation .tipical-button:hover {color: #fff;}
 .feedback-evaluation .tipical-button.good {background: url(/images/likes.png) no-repeat 20px 3px #f4f7f8;}
