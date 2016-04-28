@@ -55,7 +55,7 @@ for($i=0; $i<500; $i++){
 	for($ii=0; $ii<=$kinds; $ii++){
 		$sql = $DB->prepare('
 			INSERT INTO users_kinds_of_jobs (kind_of_job_id, "userID")
-			  VALUES('. rand(1, 6) .', '. (int) $lastInsertId .')
+			  VALUES('. rand(7, 35) .', '. (int) $lastInsertId .')
 		');
 		$sql->execute();
 	}
