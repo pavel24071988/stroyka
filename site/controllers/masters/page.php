@@ -45,6 +45,8 @@ if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_s
 if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
+$sql .= ' ORDER BY sort DESC';
+
 $users = Application::$DB->query($sql)->fetchAll();
 /*
 foreach($users as $user){

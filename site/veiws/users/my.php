@@ -17,9 +17,9 @@ if(isset($_POST['changeStatus'])){
 
 $professions = $DB->query('
     SELECT *
-      FROM users_professions up
-      JOIN professions p ON up."professionID" = p."id"
-        WHERE up."userID"='. $user['id'])->fetchAll();
+      FROM users_kinds_of_jobs ukj
+      LEFT JOIN kinds_of_jobs kj ON ukj.kind_of_job_id = kj.id
+        WHERE ukj."userID"='. $user['id'])->fetchAll();
 $professions_str = [];
 foreach($professions as $profession){
     $professions_str[] = $profession['name'];
