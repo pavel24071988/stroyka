@@ -47,8 +47,10 @@ for($i=0; $i<500; $i++){
         INSERT INTO users ("age", "areaID", "cityID", email, name, experience, status, password, second_name, surname, sort)
           VALUES('. rand(18, 105) .', '. rand(1, 4) .', '. rand(1, 13) .', \'test_'. rand(1, 6000) .'@mail.ru\', \''. $names_rand .'\', '. rand(1, 105) .', 0, \''. md5(rand(1, 100000)) .'\', \''. $second_names_rand .'\', \''. $surnames_rand .'\', '. $i .')
     ');
+	var_dump(1);
     $sql->execute();
 	$lastInsertId = $DB->lastInsertId('users_id_seq');
+	var_dump(2);
 	
 	$kinds = rand(1, 5);
 	
@@ -57,6 +59,7 @@ for($i=0; $i<500; $i++){
 			INSERT INTO users_kinds_of_jobs (kind_of_job_id, "userID")
 			  VALUES('. rand(7, 35) .', '. (int) $lastInsertId .')
 		');
+		var_dump(3);
 		$sql->execute();
 	}
 }
