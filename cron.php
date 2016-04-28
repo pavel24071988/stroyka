@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
 $application = new Application;
 $DB = Application::$DB;
-/*
+
 $kinds_of_jobs = $DB->query('SELECT * FROM kinds_of_jobs')->fetchAll();
 $users = [];
 foreach($kinds_of_jobs as $kind_of_job){
@@ -30,8 +30,8 @@ $diff = $min_sort_value - count($users_sort);
 foreach($users_sort as $key => $user){
 	$DB->prepare('UPDATE users SET "sort"='. rand($min_sort_value, $diff) .' WHERE "id"='. $key)->execute();
 }
-*/
 
+/*
 $names = ['Максим','Павел','Иван','Платон','Елисей','Денис','Сергей','Жопа','Цезарь','Марс','Марк','Энгельс','Роман','Владислав','Петюня','Жора','Жека','Кока'];
 $surnames = ['Щербаков','Демидович','Мельников','Серов','Белов','Шульц','Осипов','Павлов','Сергеев','Иванов','Деревьев','Многов','Головач'];
 $second_names = ['Андреевич','Сидорович','Сергеевич','Петрович','Владович','Чуйчич','Гуслич','Жуслич','Плохоч','Смешливович','Романович'];
@@ -63,3 +63,4 @@ for($i=0; $i<100; $i++){
 		$sql->execute();
 	}
 }
+*/
