@@ -36,10 +36,10 @@ $names = ['Максим','Павел','Иван','Платон','Елисей','
 $surnames = ['Щербаков','Демидович','Мельников','Серов','Белов','Шульц','Осипов','Павлов','Сергеев','Иванов','Деревьев','Многов','Головач'];
 $second_names = ['Андреевич','Сидорович','Сергеевич','Петрович','Владович','Чуйчич','Гуслич','Жуслич','Плохоч','Смешливович','Романович'];
 
-for($i=0; $i<500; $i++){
+for($i=0; $i<100; $i++){
     $names_rand = $names[rand(1, 17)];
-	$surnames_rand = $names[rand(1, 13)];
-	$second_names_rand = $names[rand(1, 10)];
+	$surnames_rand = $surnames[rand(1, 13)];
+	$second_names_rand = $second_names[rand(1, 10)];
 	
 	var_dump($names_rand .' '. $surnames_rand .' '. $second_names_rand);
 	
