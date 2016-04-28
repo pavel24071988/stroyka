@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
 $application = new Application;
 $DB = Application::$DB;
-
+/*
 $kinds_of_jobs = $DB->query('SELECT * FROM kinds_of_jobs')->fetchAll();
 $users = [];
 foreach($kinds_of_jobs as $kind_of_job){
@@ -13,7 +13,7 @@ foreach($kinds_of_jobs as $kind_of_job){
       FROM users u
       LEFT JOIN users_kinds_of_jobs ukj ON u.id = ukj."userID"
 	    WHERE ukj.kind_of_job_id = '. $kind_of_job['id'] .'
-          ORDER BY u.sort
+          ORDER BY u.sort DESC
 		    LIMIT 10')->fetchAll();
 	$users = array_merge($kinds_of_jobs, $users);
 }
@@ -28,17 +28,18 @@ $min_sort_value = $min_sort_value['min'] - 1;
 $diff = $min_sort_value - count($users_sort);
 
 foreach($users_sort as $key => $user){
+	var_dump($key .' '. rand($min_sort_value, $diff));
 	$DB->prepare('UPDATE users SET "sort"='. rand($min_sort_value, $diff) .' WHERE "id"='. $key)->execute();
 }
+*/
 
-/*
 $names = ['Максим','Павел','Иван','Платон','Елисей','Денис','Сергей','Жопа','Цезарь','Марс','Марк','Энгельс','Роман','Владислав','Петюня','Жора','Жека','Кока'];
 $surnames = ['Щербаков','Демидович','Мельников','Серов','Белов','Шульц','Осипов','Павлов','Сергеев','Иванов','Деревьев','Многов','Головач'];
 $second_names = ['Андреевич','Сидорович','Сергеевич','Петрович','Владович','Чуйчич','Гуслич','Жуслич','Плохоч','Смешливович','Романович'];
 
-for($i=0; $i<100; $i++){
+for($i=0; $i<300; $i++){
     $names_rand = $names[rand(1, 17)];
-	$surnames_rand = $surnames[rand(1, 13)];
+	$surnames_rand = $surnames[rand(1, 12)];
 	$second_names_rand = $second_names[rand(1, 10)];
 	
 	var_dump($names_rand .' '. $surnames_rand .' '. $second_names_rand);
@@ -63,4 +64,3 @@ for($i=0; $i<100; $i++){
 		$sql->execute();
 	}
 }
-*/
