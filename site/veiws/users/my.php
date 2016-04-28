@@ -350,8 +350,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                         </div>
                         <div class="feedback-evaluation clearfix">
                             <span>Оценка:</span>
-                            <a href="#" class="tipical-button good"><input type="submit" value="on" name="positive_negative" /></a>
-                            <a href="#" class="tipical-button bad"><input type="submit" value="off" name="positive_negative" /></a>
+                            <input class="tipical-button good" type="submit" value="Хорошо" name="positive_negative" />
+                            <input class="tipical-button bad" type="submit" value="Плохо" name="positive_negative" />
                         </div>
                     </div>
                 </form>
