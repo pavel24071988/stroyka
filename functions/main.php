@@ -95,7 +95,7 @@ class Application
         return $messages;
     }
     
-    public static function getListOfAreas($type, $id){
+    public static function getListOfAreas($type, $id, $GET = []){
         // получаем сферы деятильности с подвидами
         $area_of_jobs = self::$DB->query('SELECT * FROM area_of_jobs aj')->fetchAll();
         $kinds_of_jobs_user_arr = [];
@@ -120,25 +120,73 @@ class Application
             if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul class="searcher-sub-categories">';
             foreach($kinds_of_jobs as $key => $kind_of_job){
                 $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
+                $liclass = '';
+                $cheched = '';
+                if(!empty($GET['areas_for_job'])){
+                    $liclass = in_array((string) $kind_of_job['id'], $GET['areas_for_job']) ? ' active' : '';
+                    $cheched = in_array((string) $kind_of_job['id'], $GET['areas_for_job']) ? 'checked' : '';
+                }
+                $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label for="'. $kind_of_job['id'] .'"><input type=\'checkbox\' '. $cheched .' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" id="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
+            }
+            if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
+            $list_of_areas .= '</li>';
+        }
+        return $list_of_areas;
+    }
+    
+    public static function getListOfProfessions($type, $id){
+        // получаем сферы деятильности с подвидами
+        $professions = self::$DB->query('SELECT * FROM professions p')->fetchAll();
+
+        foreach($professions as $key => $profession){
+            $list_of_areas .= '<li><div class="searcher-categories-item"><label><input type=\'checkbox\'> '. $area_of_job['name'] .'</label></div>';
+            $kinds_of_jobs = self::$DB->query('SELECT * FROM kinds_of_jobs kj WHERE kj."areaID"='. $area_of_job['id'])->fetchAll();
+            if(!empty($kinds_of_jobs)) $list_of_areas .= '<ul class="searcher-sub-categories">';
+            foreach($kinds_of_jobs as $key => $kind_of_job){
+                $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
                 $liclass = in_array($identificator, $kinds_of_jobs_user_arr) ? ' active' : '';
                 $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label for="'. $kind_of_job['id'] .'"><input type=\'checkbox\' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" id="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
             }
             if(!empty($kinds_of_jobs)) $list_of_areas .= '</ul>';
             $list_of_areas .= '</li>';
         }
-        return $list_of_areas;
+        return $list_of_professions;
+    }
+    
+    public static function getPagePagination($type, $count, $GET){
+        $lis = '';
+        $dopUrl = [];
+        if(empty($GET['pagination'])) $GET['pagination'] = 1;
+        foreach($GET as $key => $param){
+            if($key === 'pagination') continue;
+            if($key === 'areas_for_job'){
+                foreach($param as $area) $dopUrl[] = 'areas_for_job[]='. $area;
+            }else{
+                $dopUrl[] = $key .'='. $param;
+            }
+        }
+
+        $dopUrl = implode('&', $dopUrl);
+
+        $cysles = (int) ceil($count / 10);
+        $class = '';
+        $GET['pagination'] = (int) $GET['pagination'];
+        $left = $GET['pagination'] - 8;
+        $right = $GET['pagination'] + 8;
+        if($left < 0) $right = 16;
+        if($right < 0) $left = 16;
+        for($i=1; $i<=$cysles; $i++){
+            if($i < $left || $i > $right) continue;
+            $class = $GET['pagination'] === $i ? 'active' : '';
+            $lis .= '<li><a href="/'. $type .'/?pagination='. $i .'&'. $dopUrl .'" class="'. $class .'">'. $i .'</a></li>';
+        }
         
-        /*
-        <li>
-            <div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div>
-            <ul class="searcher-sub-categories">
-                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
-                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
-                <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
-            </ul>
-        </li>
-        <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
-        <li><div class="searcher-categories-item"><label><input type='checkbox'> Мелкие бытовые услуги</label></div></li>
-         */
+        $paginationleft = '<a href="/'. $type .'/?pagination='. ($GET['pagination'] - 1) .'&'. $dopUrl .'" class="pagination-left"></a>';
+        $paginationright = '<a href="/'. $type .'/?pagination='. ($GET['pagination'] + 1) .'&'. $dopUrl .'" class="pagination-right"></a>';
+        
+        if($GET['pagination'] === 1) $paginationleft = '';
+        if($GET['pagination'] === $cysles) $paginationright = '';
+        
+        echo $paginationleft .'<ul class="pagination-pages">'. $lis .'</ul>'. $paginationright;
     }
 }

@@ -22,9 +22,20 @@ foreach($areas as $general_area){
     $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
 }
 
+$dopSQL = [];
+
+$areaSelect = '';
+$areaLeftJoin = '';
+$areaWhere = '';
+if(!empty($_GET['areas_for_job'])){
+    $areaSelect = ' ukj.kind_of_job_id,';
+    $areaLeftJoin = ' LEFT JOIN users_kinds_of_jobs ukj ON u.id = ukj."userID"';
+    $dopSQL[] = 'r.kind_of_job_id IN (\''. implode('\', \'', $_GET['areas_for_job']) .'\')';
+}
+
 $sql = '
     SELECT r.*
-      FROM (SELECT u.*,
+      FROM (SELECT u.*, '. $areaSelect .'
                    (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
                    (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\' AND c."positive_negative"=\'on\') as plus_comment_count,
                    c."name" as city_name,
@@ -32,9 +43,10 @@ $sql = '
               FROM users u
               LEFT JOIN cities c ON u."cityID" = c."id"
               LEFT JOIN areas a ON u."areaID" = a."id"
+              '. $areaLeftJoin .'
             ) as r
 ';
-$dopSQL = [];
+
 $busy = 'r."status"=\'0\'';
 if(!empty($_GET['busy'])) $busy ='';
 if(!empty($_GET['cityID'])) $dopSQL[] = 'r."cityID"=\''. $_GET['cityID'] .'\'';
@@ -46,7 +58,10 @@ if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
 $sql .= ' ORDER BY sort DESC';
-
+$allUsers = Application::$DB->query($sql)->fetchAll();
+$offset = 0;
+if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;
+$sql .= ' LIMIT 10 OFFSET '. $offset;
 $users = Application::$DB->query($sql)->fetchAll();
 /*
 foreach($users as $user){
@@ -175,7 +190,7 @@ foreach($users as $user){
                         <div class="column-searcher-categories">
                             <div class="column-searcher-categories-headline">Виды работ</div>
                             <ul class="searcher-categories specialists-searcher">
-                                <?php echo Application::getListOfAreas('job', null); ?>
+                                <?php echo Application::getListOfAreas('job', null, $_GET); ?>
                             </ul>
                             <div class="specialists-advantages">
                                 <p><label><input type="checkbox" <?php if(!empty($_GET['busy'])) echo 'checked'; ?> name="busy"> С занятыми</label></p>
@@ -190,48 +205,7 @@ foreach($users as $user){
             </div>
         </div>
     </div>
-    <!--
     <div class="pagination-holder">
-        <a href="#" class="pagination-left"></a>
-        <ul class="pagination-pages">
-            <li>
-                <a href="#">1</a>
-            </li>
-            <li>
-                <a href="#">2</a>
-            </li>
-            <li>
-                <a href="#">3</a>
-            </li>
-            <li>
-                <a href="#">4</a>
-            </li>
-            <li>
-                <a href="#" class="active">5</a>
-            </li>
-            <li>
-                <a href="#">6</a>
-            </li>
-            <li>
-                <a href="#">7</a>
-            </li>
-            <li>
-                <a href="#">8</a>
-            </li>
-             <li>
-                <a href="#">9</a>
-            </li>
-            <li>
-                <a href="#">...</a>
-            </li>
-            <li>
-                <a href="#">103</a>
-            </li>
-            <li>
-                <a href="#">104</a>
-            </li>
-        </ul>
-        <a href="#" class="pagination-right"></a>
+        <?php echo Application::getPagePagination('masters', count($allUsers), $_GET); ?>
     </div>
-    -->
 </div>
