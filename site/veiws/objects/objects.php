@@ -1,18 +1,37 @@
 <?php
 // начинаем выстраивать функционал поиска
+$allObjects = $common_data['allObjects'];
 if(isset($_GET['search']) && $_GET['search'] === 'true'){
     $dopSQL = [];
     if(!empty($_GET['cityID'])) $dopSQL[] = 'c."id"='. $_GET['cityID'];
     if(!empty($_GET['areaID'])) $dopSQL[] = 'o."areaID"='. $_GET['areaID'];
     if(!empty($_GET['search_str'])) $dopSQL[] = 'o."name" LIKE \'%'. $_GET['search_str'] .'%\'';
-    $sql = 'SELECT o.*,
+    
+    $kindSelect = '';
+    $kindLeftJoin = '';
+    if(!empty($_GET['areas_for_objects'])){
+        $kindSelect = ' lkjo."kindOfJobID",';
+        $kindLeftJoin = ' LEFT JOIN links_kinds_of_jobs_objects lkjo ON o.id = lkjo."objectID"';
+        $dopSQL[] = 'lkjo."kindOfJobID" IN (\''. implode('\', \'', $_GET['areas_for_objects']) .'\')';
+    }
+    
+    $sql = '
+        SELECT DISTINCT ON (o.id) o.id,
+               o.*,
+               '. $kindSelect .'
                (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
                c.name as city_name
             FROM objects o
-            LEFT JOIN cities c ON o."cityID" = c.id';
+            LEFT JOIN cities c ON o."cityID" = c.id
+            '. $kindLeftJoin .'';
     if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
-    
+    $sql .= ' ORDER BY o.id, o.created';
+    $allObjects = Application::$DB->query($sql)->fetchAll();
+    $offset = 0;
+    if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;
+    $sql .= ' LIMIT 10 OFFSET '. $offset;
     $objects = Application::$DB->query($sql)->fetchAll();
+
     $common_data['objects'] = $objects;
     
     if(!empty($_GET['cityID'])) $city = Application::$DB->query('SELECT * FROM cities WHERE id='. $_GET['cityID'])->fetch();
@@ -93,7 +112,7 @@ foreach($areas as $general_area){
                         <div class="column-searcher-categories">
                             <div class="column-searcher-categories-headline">Виды работ</div>
                             <ul class="searcher-categories">
-                                <?php echo Application::getListOfAreas('objects', null); ?>
+                                <?php echo Application::getListOfAreas('objects', null, $_GET); ?>
                             </ul>
                             <input type="hidden" name="search" value="true" />
                             <button type="submit">показать</button>
@@ -103,48 +122,7 @@ foreach($areas as $general_area){
             </div>
         </div>
     </div>
-    <!--
     <div class="pagination-holder">
-        <a href="#" class="pagination-left"></a>
-        <ul class="pagination-pages">
-            <li>
-                <a href="#">1</a>
-            </li>
-            <li>
-                <a href="#">2</a>
-            </li>
-            <li>
-                <a href="#">3</a>
-            </li>
-            <li>
-                <a href="#">4</a>
-            </li>
-            <li>
-                <a href="#" class="active">5</a>
-            </li>
-            <li>
-                <a href="#">6</a>
-            </li>
-            <li>
-                <a href="#">7</a>
-            </li>
-            <li>
-                <a href="#">8</a>
-            </li>
-             <li>
-                <a href="#">9</a>
-            </li>
-            <li>
-                <a href="#">...</a>
-            </li>
-            <li>
-                <a href="#">103</a>
-            </li>
-            <li>
-                <a href="#">104</a>
-            </li>
-        </ul>
-        <a href="#" class="pagination-right"></a>
+        <?php echo Application::getPagePagination('objects', count($allObjects), $_GET); ?>
     </div>
-    -->
 </div>

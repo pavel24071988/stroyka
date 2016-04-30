@@ -162,7 +162,9 @@ $answers = $DB->query('
                     <p class="product-meta-title date">Номер объекта: <?php echo $object['id']; ?></p>
                     <div class="product-customer clearfix">
                         <div class="product-customer-left">
+                            <?php if(!empty($creater_user)){ ?>
                             <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                            <?php } ?>
                         </div>
                         <div class="product-customer-right">
                             Бюджет: <?php echo $object['amount']; ?> руб.
@@ -274,7 +276,9 @@ $answers = $DB->query('
             <p class="product-meta-title date">Опубликовано: <?php echo date('j.m.Y H:i:s', strtotime($object['created'])); ?></p>
             <div class="product-customer clearfix">
                 <div class="product-customer-left">
+                    <?php if(!empty($creater_user)){ ?>
                     <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                    <?php } ?>
                 </div>
                 <div class="product-customer-right">
                     Бюджет: <?php echo $object['amount']; ?> руб.

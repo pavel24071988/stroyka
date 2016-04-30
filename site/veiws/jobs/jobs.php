@@ -1,8 +1,6 @@
 <?php
-$DB = Application::$DB;
-
 // начинаем выстраивать функционал поиска
-if(isset($_GET['search']) && $_GET['search'] === 'true'){    
+if(isset($_GET['search']) && $_GET['search'] === 'true'){
     if(!empty($_GET['cityID'])) $city = Application::$DB->query('SELECT * FROM cities WHERE id='. $_GET['cityID'])->fetch();
     if(!empty($_GET['areaID'])) $area = Application::$DB->query('SELECT * FROM areas WHERE id='. $_GET['areaID'])->fetch();
 }
@@ -22,13 +20,25 @@ foreach($areas as $general_area){
     $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
 }
 
-$sql = 'SELECT j.*, (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = j.id AND c."type"=\'job_comment\') as comment_count FROM jobs j';
+$sql = '
+    SELECT j.*,
+           (SELECT COUNT(c.id)
+              FROM comments c
+                WHERE c."typeID" = j.id AND
+                      c."type"=\'job_comment\'
+            ) as comment_count
+    FROM jobs j';
 $dopSQL = [];
 if(!empty($_GET['cityID'])) $dopSQL[] = 'j."cityID"='. $_GET['cityID'];
 if(!empty($_GET['areaID'])) $dopSQL[] = 'j."areaID"='. $_GET['areaID'];
 if(!empty($_GET['search_str'])) $dopSQL[] = 'j."name" LIKE \'%'. $_GET['search_str'] .'%\'';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
+$sql .= ' ORDER BY j.created';
+$allJobs = Application::$DB->query($sql)->fetchAll();
 
+$offset = 0;
+if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;
+$sql .= ' LIMIT 10 OFFSET '. $offset;
 $jobs = Application::$DB->query($sql)->fetchAll();
 ?>
 
@@ -76,7 +86,7 @@ $jobs = Application::$DB->query($sql)->fetchAll();
                         <div class="column-searcher-categories">
                             <div class="column-searcher-categories-headline">Виды работ</div>
                             <ul class="searcher-categories">
-                                <?php echo Application::getListOfAreas('user', null); ?>
+                                <?php echo Application::getListOfAreas('user', null, $_GET); ?>
                             </ul>
                             <input type="hidden" name="search" value="true" />
                             <button type="submit">показать</button>
@@ -86,48 +96,7 @@ $jobs = Application::$DB->query($sql)->fetchAll();
             </div>
         </div>
     </div>
-    <!--
     <div class="pagination-holder">
-        <a href="#" class="pagination-left"></a>
-        <ul class="pagination-pages">
-            <li>
-                <a href="#">1</a>
-            </li>
-            <li>
-                <a href="#">2</a>
-            </li>
-            <li>
-                <a href="#">3</a>
-            </li>
-            <li>
-                <a href="#">4</a>
-            </li>
-            <li>
-                <a href="#" class="active">5</a>
-            </li>
-            <li>
-                <a href="#">6</a>
-            </li>
-            <li>
-                <a href="#">7</a>
-            </li>
-            <li>
-                <a href="#">8</a>
-            </li>
-             <li>
-                <a href="#">9</a>
-            </li>
-            <li>
-                <a href="#">...</a>
-            </li>
-            <li>
-                <a href="#">103</a>
-            </li>
-            <li>
-                <a href="#">104</a>
-            </li>
-        </ul>
-        <a href="#" class="pagination-right"></a>
+        <?php echo Application::getPagePagination('jobs', count($allJobs), $_GET); ?>
     </div>
-    -->
 </div>

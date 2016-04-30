@@ -30,17 +30,23 @@ if(!empty($applicationURL[2])){
     ];
     get_page($common_data);
 }else{
-    $objects = $DB->query('
+    $sql = '
         SELECT o.*,
                (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
                c.name as city_name
-            FROM objects o
-            LEFT JOIN cities c ON o."cityID" = c.id
-    ')->fetchAll();
+          FROM objects o
+          LEFT JOIN cities c ON o."cityID" = c.id';
+    $allObjects = $DB->query($sql)->fetchAll();
+    $offset = 0;
+    if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;
+    $sql .= ' LIMIT 10 OFFSET '. $offset;
+    
+    $objects = $DB->query($sql)->fetchAll();
     
     $common_data = [
         'type' => 'objects',
-        'objects' => $objects
+        'objects' => $objects,
+        'allObjects' => $allObjects
     ];
     
     get_page($common_data);

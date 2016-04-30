@@ -35,6 +35,7 @@ $imgs = [];
 foreach($objects_images as $image){
     $imgs[] = '<img width="100px" src="/images/objects/'. $image['objectID'] .'/'. $image['src'] .'" />';
 }
+$countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $user['id'] .'/\'')->fetch();
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
 else echo '<h1>Страница пользователя</h1>';*/
@@ -142,7 +143,7 @@ else echo '<h1>Страница пользователя</h1>';*/
     </div>
 </div>
 <?php }else{ ?>
-<!--Страница пользователя-->
+<!--Страница неавторезированного пользователя-->
 <?php if(empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="breadcrumb">
@@ -171,7 +172,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <a href="#" class="specialist-name">
                         <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
                         <span class="valid">(проверено)</span>
-                        <span class="views"><b>Просмотров:</b> <?php echo ''; ?>2480</span>
+                        <span class="views"><b>Просмотров:</b> <?php echo $countOfViews['count']; ?></span>
                     </a>
                     <p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b></p>
                     <br>

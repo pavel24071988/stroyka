@@ -55,7 +55,7 @@ class Application
             if(!empty($_SESSION['user'])) $userID = $_SESSION['user']['id'];
             $log_entrance = self::$DB->prepare('
               INSERT INTO logs (userid, url)
-                VALUES('. $userID .', \''. $path_to_site .'\')');
+                VALUES('. $userID .', \''. implode('/', $newURL) .'\')');
             $log_entrance->execute();
         }catch(Exception $ex){}
         
@@ -122,9 +122,13 @@ class Application
                 $identificator = $area_of_job['id'] .'_'. $kind_of_job['id'];
                 $liclass = '';
                 $cheched = '';
-                if(!empty($GET['areas_for_job'])){
-                    $liclass = in_array((string) $kind_of_job['id'], $GET['areas_for_job']) ? ' active' : '';
-                    $cheched = in_array((string) $kind_of_job['id'], $GET['areas_for_job']) ? 'checked' : '';
+                if(!empty($GET['areas_for_job'])) $kinds = $GET['areas_for_job'];
+                elseif(!empty($GET['areas_for_objects'])) $kinds = $GET['areas_for_objects'];
+                elseif(!empty($GET['areas_for_user'])) $kinds = $GET['areas_for_user'];
+                
+                if(!empty($kinds)){
+                    $liclass = in_array((string) $kind_of_job['id'], $kinds) ? ' active' : '';
+                    $cheched = in_array((string) $kind_of_job['id'], $kinds) ? 'checked' : '';
                 }
                 $list_of_areas .= '<li class=\''. $liclass .'\'><div class="searcher-categories-item"><label for="'. $kind_of_job['id'] .'"><input type=\'checkbox\' '. $cheched .' name="areas_for_'. $type .'[]" value="'. $kind_of_job['id'] .'" id="'. $kind_of_job['id'] .'" />'. $kind_of_job['name'] .'</label></div></li>';
             }
@@ -161,6 +165,10 @@ class Application
             if($key === 'pagination') continue;
             if($key === 'areas_for_job'){
                 foreach($param as $area) $dopUrl[] = 'areas_for_job[]='. $area;
+            }elseif($key === 'areas_for_user'){
+                foreach($param as $area) $dopUrl[] = 'areas_for_user[]='. $area;
+            }elseif($key === 'areas_for_objects'){
+                foreach($param as $area) $dopUrl[] = 'areas_for_objects[]='. $area;
             }else{
                 $dopUrl[] = $key .'='. $param;
             }

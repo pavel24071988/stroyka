@@ -1,5 +1,4 @@
 <?php
-$DB = Application::$DB;
 $applicationURL = Application::$URL;
 if(!empty($applicationURL[2])){
     
@@ -7,7 +6,7 @@ if(!empty($applicationURL[2])){
         $type = 'job_update';
         $job = null;
     }else{
-        $job = $DB->query('
+        $job = Application::$DB->query('
             SELECT j.*,
                    s."name" as s_name
               FROM jobs j
