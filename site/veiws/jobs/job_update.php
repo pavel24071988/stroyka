@@ -13,19 +13,20 @@ $areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
 
 $cities_options = '';
 $areas_options = '';
-
-foreach($cities as $general_city){
-    if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
-    $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
-}
-foreach($areas as $general_area){
-    if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';;
-    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
-}
+$areas_for_job = [];
 
 if($applicationURL['2'] === 'add'){
     $main_title = 'Добавить вакансию';
     $button_name = 'Создать';
+    
+    foreach($cities as $general_city){
+        if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+    }
+    foreach($areas as $general_area){
+        if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';;
+        $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+    }
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
@@ -41,7 +42,7 @@ if($applicationURL['2'] === 'add'){
             $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $create_sql = $DB->prepare('
-                INSERT INTO jobs (amount, bargain, "createrUserID", conditions, description, house, name, recomendations, require, street, "scheduleID")
+                INSERT INTO jobs (amount, bargain, "createrUserID", conditions, description, house, name, recomendations, require, street, "scheduleID", "areaID", "cityID")
                   VALUES(\''. $_POST['amount'] .'\',
                          \''. $_POST['bargain'] .'\',
                          \''. $_SESSION['user']['id'] .'\',
@@ -52,8 +53,14 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['recomendations'] .'\',
                          \''. $_POST['require'] .'\',
                          \''. $_POST['street'] .'\',
-                         \''. $_POST['scheduleID'] .'\')');
+                         \''. $_POST['scheduleID'] .'\',
+                         \''. $_POST['areaID'] .'\',
+                         \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                if(!empty($_POST['areas_for_job'])){
+                    $lastInsertId = $DB->lastInsertId('jobs_id_seq');
+                    foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
+                }
                 $error = '<div style="color: red;">Вакансия создана.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
@@ -64,9 +71,28 @@ if($applicationURL['2'] === 'add'){
     $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="#" class="close-edit">(Закрыть)</a>';
     $button_name = 'Обновить';
     
+    $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
+    $kinds_of_jobs = $DB->query('SELECT * FROM links_kinds_of_jobs_jobs lkj WHERE lkj."jobID"='. $applicationURL[2])->fetchAll();
+    foreach($kinds_of_jobs as $kind_of_jobs) $areas_for_job['areas_for_job'][] = $kind_of_jobs['kindOfJobID'];
+    
+    foreach($cities as $general_city){
+        if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        elseif($common_data['job']['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+    }
+    foreach($areas as $general_area){
+        if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+        elseif($common_data['job']['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+        $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+    }
+    
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название', 'require' => 'Требования'];
+        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома',/* 'name' => 'Название', 'require' => 'Требования'*/];
+        if(empty($_POST['name'])) $_POST['name'] = '';
+        if(empty($_POST['require'])) $_POST['require'] = '';
+        if(empty($_POST['cpo'])) $_POST['cpo'] = 'off';
+        if(empty($_POST['dateTo'])) $_POST['dateTo'] = '';
         $errors = [];
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -85,11 +111,17 @@ if($applicationURL['2'] === 'add'){
                     "recomendations"=\''. $_POST['recomendations'] .'\',
                     "require"=\''. $_POST['require'] .'\',
                     "street"=\''. $_POST['street'] .'\',
-                    "scheduleID"=\''. $_POST['type_of_kind'] .'\'
+                    "scheduleID"=\''. $_POST['scheduleID'] .'\',
+                    "areaID"=\''. $_POST['areaID'] .'\',
+                    "cityID"=\''. $_POST['cityID'] .'\'
                         WHERE "id"='. $applicationURL[2]);
             if($update_check->execute() === true){
-                $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetchAll();
-                $common_data['job'] = $common_data['job'][0];
+                if(!empty($_POST['areas_for_job'])){
+                    $DB->prepare('DELETE FROM links_kinds_of_jobs_jobs WHERE "jobID"='. $applicationURL[2])->execute();
+                    foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $area_for_job .')')->execute();
+                }
+                
+                $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
                 $error = '<div style="color: red;">Вакансия отредактирована.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
@@ -163,10 +195,10 @@ if(!empty($job)){
             <div class="my-page-breadcrumb">
                 <ul>
                     <li>
-                        <a href="#">Объекты и вакансии</a>
+                        <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_objects/">Объекты и вакансии</a>
                     </li>
                     <li>
-                        <a href="#">Добавить вакансию</a>
+                        <a href=""><?php if($applicationURL['2'] === 'add') echo 'Добавить вакансию'; else echo 'Редактировать вакансию'; ?></a>
                     </li>
                 </ul>
             </div>
@@ -225,10 +257,10 @@ if(!empty($job)){
                         <br>
                         <div class="personal-data-form-headline red">Сфера деятельности</div>
                         <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
-                        <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null); ?></ul>
+                        <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null, $areas_for_job); ?></ul>
                         <div class="personal-form-recomendation">
                             <div class="personal-form-recomendation-headline">Рекомендации</div><textarea name="recomendations" class="personal-form-textarea"><?php echo $job['recomendations']; ?></textarea></div>
-                        <button class="personal-data-form-submit" style="width: 100%;" type="submit">Добавить вакансию</button>
+                        <button class="personal-data-form-submit" style="width: 100%;" type="submit"><?php if($applicationURL['2'] === 'add') echo 'Добавить вакансию'; else echo 'Редактировать вакансию'; ?></button>
                     </fieldset>
                 </form>
             </div>

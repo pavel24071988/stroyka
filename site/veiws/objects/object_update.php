@@ -13,19 +13,20 @@ $areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
 
 $cities_options = '';
 $areas_options = '';
-
-foreach($cities as $general_city){
-    if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
-    $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
-}
-foreach($areas as $general_area){
-    if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';;
-    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
-}
+$areas_for_object = [];
 
 if($applicationURL['2'] === 'add'){
     $main_title = 'Формирование объекта';
     $button_name = 'ВЫСТАВИТЬ ОБЪЕКТ';
+    
+    foreach($cities as $general_city){
+        if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+    }
+    foreach($areas as $general_area){
+        if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+        $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+    }
     
     
     // обрабатываем пост здесь
@@ -57,6 +58,10 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                if(!empty($_POST['areas_for_object'])){
+                    $lastInsertId = $DB->lastInsertId('objects_id_seq');
+                    foreach($_POST['areas_for_object'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
+                }
                 $error = '<div style="color: red;">Объект создан.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
@@ -66,6 +71,21 @@ if($applicationURL['2'] === 'add'){
 }else{
     $main_title = 'Редактирование';
     $button_name = 'ОТРЕДАКТИРОВАТЬ';
+    
+    $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
+    $kinds_of_jobs = $DB->query('SELECT * FROM links_kinds_of_jobs_objects lkj WHERE lkj."objectID"='. $applicationURL[2])->fetchAll();
+    foreach($kinds_of_jobs as $kind_of_jobs) $areas_for_object['areas_for_object'][] = $kind_of_jobs['kindOfJobID'];
+    
+    foreach($cities as $general_city){
+        if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        elseif($common_data['object']['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+        $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+    }
+    foreach($areas as $general_area){
+        if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+        elseif($common_data['object']['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+        $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+    }
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
@@ -96,8 +116,15 @@ if($applicationURL['2'] === 'add'){
                     "cityID"=\''. $_POST['cityID'] .'\'
                         WHERE "id"='. $applicationURL[2]);
             if($update_check->execute() === true){
-                $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetchAll();
-                $common_data['object'] = $common_data['object'][0];
+                if(!empty($_POST['areas_for_object'])){
+                    $DB->prepare('DELETE FROM links_kinds_of_jobs_objects WHERE "objectID"='. $applicationURL[2])->execute();
+                    foreach($_POST['areas_for_object'] as $areas_for_object){
+                        $dd = 'INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')';
+                        $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')')->execute();
+                    }
+                }
+                
+                $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
                 $error = '<div style="color: red;">Объект отредактирован.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
@@ -143,7 +170,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img width="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
     }
     $object_docs = $DB->query('
         SELECT *
@@ -215,11 +242,11 @@ if(!empty($object)){
                 <div class="my-page-breadcrumb">
                     <ul>
                         <li>
-                            <a href="#">Объекты и вакансии</a>
-                        </li>
-                        <li>
-                            <a href="#">Выставить объект</a>
-                        </li>
+                        <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_objects/">Объекты и вакансии</a>
+                    </li>
+                    <li>
+                        <a href=""><?php if($applicationURL['2'] === 'add') echo 'Добавить объект'; else echo 'Редактировать объект'; ?></a>
+                    </li>
                     </ul>
                 </div>
                 <div class="my-page-wrapper-content">
@@ -278,7 +305,7 @@ if(!empty($object)){
                             <br>
                             <div class="personal-data-form-headline red">Сфера деятельности</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
-                            <ul class="searcher-categories"><?php echo Application::getListOfAreas('object', null); ?></ul>
+                            <ul class="searcher-categories"><?php echo Application::getListOfAreas('object', null, $areas_for_object); ?></ul>
                             <br>
                             <div class="personal-data-form-headline">Сроки выполнения:</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>

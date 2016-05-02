@@ -123,7 +123,7 @@ class Application
                 $liclass = '';
                 $cheched = '';
                 if(!empty($GET['areas_for_job'])) $kinds = $GET['areas_for_job'];
-                elseif(!empty($GET['areas_for_objects'])) $kinds = $GET['areas_for_objects'];
+                elseif(!empty($GET['areas_for_object'])) $kinds = $GET['areas_for_object'];
                 elseif(!empty($GET['areas_for_user'])) $kinds = $GET['areas_for_user'];
                 
                 if(!empty($kinds)){
@@ -167,8 +167,8 @@ class Application
                 foreach($param as $area) $dopUrl[] = 'areas_for_job[]='. $area;
             }elseif($key === 'areas_for_user'){
                 foreach($param as $area) $dopUrl[] = 'areas_for_user[]='. $area;
-            }elseif($key === 'areas_for_objects'){
-                foreach($param as $area) $dopUrl[] = 'areas_for_objects[]='. $area;
+            }elseif($key === 'areas_for_object'){
+                foreach($param as $area) $dopUrl[] = 'areas_for_object[]='. $area;
             }else{
                 $dopUrl[] = $key .'='. $param;
             }

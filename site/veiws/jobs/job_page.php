@@ -34,16 +34,9 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
     }
 }
 
-$creater_user = $DB->query('
-    SELECT u.*
-      FROM users u
-        WHERE u."id"='. $job['createrUserID'])->fetchAll();
+$creater_user = $DB->query('SELECT u.* FROM users u WHERE u."id"='. $job['createrUserID'])->fetch();
 $worker_user = null;
-if(!empty($job['workerID']))
-    $worker_user = $DB->query('
-        SELECT u.*
-          FROM users u
-            WHERE u."id"='. $job['workerID'])->fetchAll();
+if(!empty($job['workerID'])) $worker_user = $DB->query('SELECT u.* FROM users u WHERE u."id"='. $job['workerID'])->fetch();
 $kinds_of_jobs = $DB->query('
     SELECT *
       FROM links_kinds_of_jobs_objects lkj
@@ -103,7 +96,7 @@ $answers = $DB->query('
                     <p>Номер вакансии: <b><?php echo $job['id']; ?></b></p>
                     <div class="product-customer clearfix">
                         <div class="product-customer-left">
-                            <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                            <span>Заказчик:</span><br><?php echo $creater_user['surname'] .' '. $creater_user['name'] .' '. $creater_user['second_name']; ?>
                         </div>
                         <div class="product-customer-right">
                             Бюджет: <?php echo $job['amount']; ?> руб.
@@ -203,10 +196,10 @@ $answers = $DB->query('
     <div class="product-holder">
         <div class="product-title"><?php echo $job['name']; ?></div>
         <?php
-            if(!empty($worker_user[0])){
-                echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
+            if(!empty($worker_user)){
+                echo 'Исполнитель: '. $worker_user['name'] .' '. $worker_user['surname'];
                 if(!empty($_SESSION['user']))
-                    echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
+                    echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user['id'] .'/">написать исполнителю</a>';
             }else{
                 echo 'Исполнитель не назначен.';
             }
@@ -217,7 +210,7 @@ $answers = $DB->query('
             <p>Сфера деятельности: <?php echo implode(', ', $kinds_of_jobs_arr); ?></p>
             <p>График работы: <?php echo $job['s_name']; ?></p>
             <p>Требуемый опыт работы: <?php echo $job['require'];?></p>
-            <p>Работодатель: <?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></p>
+            <p>Работодатель: <?php echo $creater_user['surname'] .' '. $creater_user['name'] .' '. $creater_user['second_name']; ?></p>
             <?php if(!empty($_SESSION['user'])){ ?>
             <p>тел. +8 987 456 45 45</p>
             <?php } ?>
@@ -239,10 +232,10 @@ $answers = $DB->query('
     }
 }*/
 ?>
-<?php /*if(!empty($worker_user[0])){
-        echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
+<?php /*if(!empty($worker_user)){
+        echo 'Исполнитель: '. $worker_user['name'] .' '. $worker_user['surname'];
         if(!empty($_SESSION['user']))
-            echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
+            echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user['id'] .'/">написать исполнителю</a>';
     }else{
         echo 'Исполнитель не назначен.';
     }*/

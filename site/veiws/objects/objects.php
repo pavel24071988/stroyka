@@ -9,10 +9,10 @@ if(isset($_GET['search']) && $_GET['search'] === 'true'){
     
     $kindSelect = '';
     $kindLeftJoin = '';
-    if(!empty($_GET['areas_for_objects'])){
+    if(!empty($_GET['areas_for_object'])){
         $kindSelect = ' lkjo."kindOfJobID",';
         $kindLeftJoin = ' LEFT JOIN links_kinds_of_jobs_objects lkjo ON o.id = lkjo."objectID"';
-        $dopSQL[] = 'lkjo."kindOfJobID" IN (\''. implode('\', \'', $_GET['areas_for_objects']) .'\')';
+        $dopSQL[] = 'lkjo."kindOfJobID" IN (\''. implode('\', \'', $_GET['areas_for_object']) .'\')';
     }
     
     $sql = '
@@ -114,7 +114,7 @@ foreach($areas as $general_area){
                         <div class="column-searcher-categories">
                             <div class="column-searcher-categories-headline">Виды работ</div>
                             <ul class="searcher-categories">
-                                <?php echo Application::getListOfAreas('objects', null, $_GET); ?>
+                                <?php echo Application::getListOfAreas('object', null, $_GET); ?>
                             </ul>
                             <input type="hidden" name="search" value="true" />
                             <button type="submit">показать</button>

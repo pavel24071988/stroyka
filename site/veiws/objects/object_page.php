@@ -34,16 +34,9 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
     }
 }
 
-$creater_user = $DB->query('
-    SELECT u.*
-      FROM users u
-        WHERE u."id"='. $object['createrUserID'])->fetchAll();
+$creater_user = $DB->query('SELECT u.* FROM users u WHERE u."id"='. $object['createrUserID'])->fetch();
 $worker_user = null;
-if(!empty($object['workerID']))
-    $worker_user = $DB->query('
-        SELECT u.*
-          FROM users u
-            WHERE u."id"='. $object['workerID'])->fetchAll();
+if(!empty($object['workerID'])) $worker_user = $DB->query('SELECT u.* FROM users u WHERE u."id"='. $object['workerID'])->fetchAll();
 $kinds_of_jobs = $DB->query('
     SELECT *
       FROM links_kinds_of_jobs_objects lkj
@@ -95,7 +88,7 @@ $answers = $DB->query('
 <span>Номер объекта: <?php //echo $object['id']; ?></span>
 <span>Опубликованно: <?php //echo date('j.m.Y H:i:s', strtotime($object['created'])); ?></span>
 <hr/>
-<div>Заказчик: <?php //echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?></div>
+<div>Заказчик: <?php //echo $creater_user['surname'] .' '. $creater_user['name'] .' '. $creater_user['second_name']; ?></div>
 <div><strong>Бюджет</strong>: <?php //echo $object['amount'];?></div>
 <hr/>
 <br/>
@@ -126,10 +119,10 @@ $answers = $DB->query('
 }*/
 ?>
 <?php
-    /*if(!empty($worker_user[0])){
-        echo 'Исполнитель: '. $worker_user[0]['name'] .' '. $worker_user[0]['surname'];
+    /*if(!empty($worker_user)){
+        echo 'Исполнитель: '. $worker_user['name'] .' '. $worker_user['surname'];
         if(!empty($_SESSION['user']))
-            echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user[0]['id'] .'/">написать исполнителю</a>';
+            echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user['id'] .'/">написать исполнителю</a>';
     }else{
         echo 'Исполнитель не назначен.';
     }*/
@@ -163,7 +156,7 @@ $answers = $DB->query('
                     <div class="product-customer clearfix">
                         <div class="product-customer-left">
                             <?php if(!empty($creater_user)){ ?>
-                            <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                            <span>Заказчик:</span><br><?php echo $creater_user['surname'] .' '. $creater_user['name'] .' '. $creater_user['second_name']; ?>
                             <?php } ?>
                         </div>
                         <div class="product-customer-right">
@@ -277,7 +270,7 @@ $answers = $DB->query('
             <div class="product-customer clearfix">
                 <div class="product-customer-left">
                     <?php if(!empty($creater_user)){ ?>
-                    <span>Заказчик:</span><br><?php echo $creater_user[0]['surname'] .' '. $creater_user[0]['name'] .' '. $creater_user[0]['second_name']; ?>
+                    <span>Заказчик:</span><br><?php echo $creater_user['surname'] .' '. $creater_user['name'] .' '. $creater_user['second_name']; ?>
                     <?php } ?>
                 </div>
                 <div class="product-customer-right">
