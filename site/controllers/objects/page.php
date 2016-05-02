@@ -35,7 +35,8 @@ if(!empty($applicationURL[2])){
                (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
                c.name as city_name
           FROM objects o
-          LEFT JOIN cities c ON o."cityID" = c.id';
+          LEFT JOIN cities c ON o."cityID" = c.id
+            WHERE o.type_of_kind<>2';
     $allObjects = $DB->query($sql)->fetchAll();
     $offset = 0;
     if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;

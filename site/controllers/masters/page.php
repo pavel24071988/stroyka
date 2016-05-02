@@ -120,7 +120,8 @@ foreach($users as $user){
     </div>
     <div class="tipical-content-headline">Мастера</div>
     <div class="columns-holder clearfix">
-        <div class="column-left">
+        <div class="column-left" <?php if(empty($users)) echo 'style="text-align: center;"'; ?>>
+            <?php if(empty($users)) echo '<h4>По выбранным параметра ничего не найдено.</h4>'; ?>
             <?php foreach($users as $user){
                 $users_professions = $DB->query('
                 SELECT *
@@ -162,7 +163,7 @@ foreach($users as $user){
                         <br>
                         <a href="/users/<?php echo $user['id']; ?>/" class="specialist-feedbacks"><?php echo $user['comment_count']; ?> отзывов</a>
                     </div>
-                    <span class="star-master active"></span>
+                    <span class="star-master <!--active-->"></span>
                 </div>
                 <div class="product-sub-headline">Фото работ</div>
                 <?php echo implode(' ', $imgs); ?>

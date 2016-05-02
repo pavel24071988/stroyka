@@ -15,7 +15,8 @@ class usersModel
                       FROM users_objects uo
                         WHERE uo."objectID" = o.id) as responses
               FROM objects o
-                WHERE o."createrUserID"='. $userID)->fetchAll();
+                WHERE o."createrUserID"='. $userID .'
+                AND o.type_of_kind<>2')->fetchAll();
         return $objects;
     }
     
@@ -28,7 +29,8 @@ class usersModel
                               c."type"=\'object_comment\') as comment_count
               FROM objects o
               LEFT JOIN users_objects uo ON o."id" = uo."objectID"
-                WHERE uo."fromUserID"='. $userID)->fetchAll();
+                WHERE uo."fromUserID"='. $userID .'
+                AND o.type_of_kind<>2')->fetchAll();
         return $objects;
     }
     

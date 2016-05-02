@@ -7,6 +7,22 @@ if(empty($_SESSION['user'])){
 $DB = Application::$DB;
 $applicationURL = Application::$URL;
 $rows_to_check = [];
+
+$cities = Application::$DB->query('SELECT * FROM cities')->fetchAll();
+$areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
+
+$cities_options = '';
+$areas_options = '';
+
+foreach($cities as $general_city){
+    if(!empty($_POST['cityID']) && (int) $_POST['cityID'] === $general_city['id']) $cities_options .= '<option selected value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+    $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
+}
+foreach($areas as $general_area){
+    if(!empty($_POST['areaID']) && (int) $_POST['areaID'] === $general_area['id']) $areas_options .= '<option selected value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';;
+    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+}
+
 if($applicationURL['2'] === 'add'){
     $main_title = 'Формирование объекта';
     $button_name = 'ВЫСТАВИТЬ ОБЪЕКТ';
@@ -23,7 +39,7 @@ if($applicationURL['2'] === 'add'){
             $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $create_sql = $DB->prepare('
-                INSERT INTO objects (amount, cpo, "createrUserID", "dateFrom", "dateTo", description, house, name, recomendations, require, street, type_of_kind)
+                INSERT INTO objects (amount, cpo, "createrUserID", "dateFrom", "dateTo", description, house, name, recomendations, require, street, type_of_kind, phone, email, "areaID", "cityID")
                   VALUES(\''. $_POST['amount'] .'\',
                          \''. $_POST['cpo'] .'\',
                          \''. $_SESSION['user']['id'] .'\',
@@ -35,7 +51,11 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['recomendations'] .'\',
                          \''. $_POST['require'] .'\',
                          \''. $_POST['street'] .'\',
-                         \''. $_POST['type_of_kind'] .'\')');
+                         \''. $_POST['type_of_kind'] .'\',
+                         \''. $_POST['phone'] .'\',
+                         \''. $_POST['email'] .'\',
+                         \''. $_POST['areaID'] .'\',
+                         \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
                 $error = '<div style="color: red;">Объект создан.</div>';
             }else{
@@ -69,7 +89,11 @@ if($applicationURL['2'] === 'add'){
                     "recomendations"=\''. $_POST['recomendations'] .'\',
                     "require"=\''. $_POST['require'] .'\',
                     "street"=\''. $_POST['street'] .'\',
-                    "type_of_kind"=\''. $_POST['type_of_kind'] .'\'
+                    "type_of_kind"=\''. $_POST['type_of_kind'] .'\',
+                    "phone"=\''. $_POST['phone'] .'\',
+                    "email"=\''. $_POST['email'] .'\',
+                    "areaID"=\''. $_POST['areaID'] .'\',
+                    "cityID"=\''. $_POST['cityID'] .'\'
                         WHERE "id"='. $applicationURL[2]);
             if($update_check->execute() === true){
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetchAll();
@@ -220,24 +244,16 @@ if(!empty($object)){
                             <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="personal-data-row clearfix">
                                 <label class="red">область:</label>
-                                <select>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
+                                <select name="areaID">
+                                    <?php if(!empty($area)) echo '<option value="'. $area['id'] .'">'. $area['name'] .'</option>'; ?>
+                                    <?php echo $areas_options; ?>
                                 </select>
                             </div>
                             <div class="personal-data-row clearfix">
                                 <label class="red">город:</label>
-                                <select>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
-                                    <option>Воронежская обл.</option>
+                                <select name="cityID">
+                                    <?php if(!empty($city)) echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>'; ?>
+                                    <?php echo $cities_options; ?>
                                 </select>
                             </div>
                             <div class="personal-data-row clearfix">
@@ -274,6 +290,7 @@ if(!empty($object)){
                                     <label>до:</label><input id="to" type="text" name="dateTo" value="<?php echo date('j.m.Y', strtotime($object['dateTo'])); ?>"><span class="calendar"></span>
                                 </div>
                             </div>
+                            <!--
                             <br>
                             <div class="personal-data-form-headline">Требуемые рабочие:</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
@@ -297,14 +314,15 @@ if(!empty($object)){
                                 </div>
                                 <a href="#" class="worker-row-control plus"></a>
                             </div>
+                            -->
                             <br>
                             <div class="personal-data-form-headline">Контактная информация:</div>
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="personal-data-row clearfix">
-                                <label>телефон:</label><input type="text">
+                                <label>телефон:</label><input name="phone" value="<?php echo $object['phone']; ?>" type="text">
                             </div>
                             <div class="personal-data-row clearfix">
-                                <label>почта:</label><input type="text">
+                                <label>почта:</label><input name="email" value="<?php echo $object['email']; ?>" type="text">
                             </div>
                             <br>
                             <div class="personal-data-form-headline">Прикрепить изображение:</div>

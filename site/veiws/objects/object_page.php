@@ -202,7 +202,7 @@ $answers = $DB->query('
                             <div class="feedback-item-body clearfix">
                                 <div class="feedback-item-avatar">
                                     <a href="<?php echo '/users/'. $answer['id'] .'/'; ?>">
-                                        <img src="<?php echo '/images/users/'. $answer['id'] .'/'. $answer['avatar']; ?>" />
+                                        <img width="100px" height="81px" src="<?php echo '/images/users/'. $answer['id'] .'/'. $answer['avatar']; ?>" />
                                     </a>
                                 </div>
                                 <div class="feedback-item-content clearfix">

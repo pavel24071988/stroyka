@@ -21,7 +21,7 @@ if(!empty($_POST)){
         }else{
             unset($_SESSION['user']);
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
-            echo '<meta http-equiv="refresh" content="1;URL=/">';
+            echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/">';
         }
         
     }

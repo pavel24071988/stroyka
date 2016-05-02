@@ -55,7 +55,8 @@ $jobs = Application::$DB->query($sql)->fetchAll();
         </ul>
     </div>
     <div class="columns-holder clearfix">
-        <div class="column-left">
+        <div class="column-left" <?php if(empty($jobs)) echo 'style="text-align: center;"'; ?>>
+            <?php if(empty($jobs)) echo '<h4>По выбранным параметра ничего не найдено.</h4>'; ?>
             <?php foreach($jobs as $job){ ?>
             <div class="column-product-item">
                 <div class="column-product-item-top clearfix">

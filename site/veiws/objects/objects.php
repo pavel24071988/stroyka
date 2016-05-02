@@ -24,6 +24,7 @@ if(isset($_GET['search']) && $_GET['search'] === 'true'){
             FROM objects o
             LEFT JOIN cities c ON o."cityID" = c.id
             '. $kindLeftJoin .'';
+    $dopSQL[] = 'o.type_of_kind<>2';
     if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
     $sql .= ' ORDER BY o.id, o.created';
     $allObjects = Application::$DB->query($sql)->fetchAll();
@@ -69,7 +70,8 @@ foreach($areas as $general_area){
 
     <div class="columns-holder clearfix">
         <div class="column-left">
-            <div class="objects-holder">
+            <div class="objects-holder" <?php if(empty($common_data['objects'])) echo 'style="text-align: center;"'; ?>>
+                <?php if(empty($common_data['objects'])) echo '<h4>По выбранным параметра ничего не найдено.</h4>'; ?>
                 <?php foreach($common_data['objects'] as $object){ ?>
                 <div class="object-item clearfix">
                     <div class="object-item-description">

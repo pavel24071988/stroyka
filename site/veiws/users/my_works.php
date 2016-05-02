@@ -95,7 +95,7 @@ $my_works = $DB->query('
                             <div class="myworks-year-item">
                                 <div class="myworks-item-name"><?php echo $work['name']; ?></div>
                                 <a href="<?php echo '/objects/'. $work['id'] .'/'; ?>" class="myworks-item-photo">
-                                    <img src="<?php echo '/images/objects/'. $work['id'] .'/'. $work['src']; ?>" />
+                                    <img width="300px" height="145px" src="<?php echo '/images/objects/'. $work['id'] .'/'. $work['src']; ?>" />
                                 </a>
                                 <div class="myworks-item-meta">
                                     <p><b>Стоимость:</b> <?php echo $work['amount']; ?> руб.</p>

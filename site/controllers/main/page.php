@@ -10,6 +10,7 @@ if(isset($_GET['search'])){
     echo '<meta http-equiv="refresh" content="1;URL='. $href .'">';
 }
 
+$dopSQL[] = 'o.type_of_kind<>2';
 $sql = '
     SELECT o.*,
            (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
@@ -122,12 +123,12 @@ foreach($area_of_jobs as $area_of_job){
                     WHERE oi."objectID"='. $object['id'])->fetchAll();
             $object_imgs_arr = [];
             foreach($object_imgs as $object_img){
-                $object_imgs_arr[] = '<img width="100px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+                $object_imgs_arr[] = '<img width="100px" height="100px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
             }
         ?>
         <div class="object-item clearfix">
             <div class="object-item-description">
-                <div class="object-item-headline">Строительство бани</div>
+                <div class="object-item-headline"><a href="/objects/<?php echo $object['id']; ?>/"><?php echo $object['name']; ?></a></div>
                 <div class="object-item-info">
                     <div class="snip-desription">Краткое описание.</div>
                     <?php echo $object['description']; ?>

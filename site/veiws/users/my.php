@@ -188,7 +188,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                     </div>
                 </div>
-                <span class="star-master active"></span>
+                <span class="star-master <!--active-->"></span>
                 <span class="last-time">Был 5 часов 11 минут назад</span>
             </div>
             <div class="product-sub-headline">О себе</div>
