@@ -306,20 +306,20 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
-                                <a href="#" class="tipical-button">Добавить</a>
+                                <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
                             </div>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Редактировать</a>
+                                <a href="#" class="tipical-button">Редактировать</a>
                             </div>
                             <?php echo $user['description']; ?>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Услуги и цены</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Добавить</a>
+                                <a href="#" class="tipical-button">Добавить</a>
                             </div>
                             <?php echo $user['price_description']; ?>
                         </div>

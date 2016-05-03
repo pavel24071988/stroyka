@@ -20,11 +20,10 @@ $sql = '
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 $objects = $DB->query($sql)->fetchAll();
 $cities = $DB->query('SELECT * FROM cities')->fetchAll();
-$area_of_jobsOptions = [];
 $citiesOptions = [];
 foreach($cities as $city) $citiesOptions[] = '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
-$area_of_jobs = $DB->query('SELECT * FROM area_of_jobs')->fetchAll();
-foreach($area_of_jobs as $area_of_job) $area_of_jobsOptions[] = '<option value="'. $area_of_job['id'] .'">'. $area_of_job['name'] .'</option>';
+$area_of_jobs_select = $DB->query('SELECT * FROM kinds_of_jobs')->fetchAll();
+foreach($area_of_jobs_select as $area_of_job) $area_of_jobs[] = '<option value="'. $area_of_job['id'] .'">'. $area_of_job['name'] .'</option>';
 
 /*
 $cities = $DB->query('SELECT * FROM cities c')->fetchAll();
@@ -88,7 +87,7 @@ foreach($area_of_jobs as $area_of_job){
 <div class="content">
     <div class="search-block">
         <div class="search-block-headline">Поиск</div>
-        <form class="search-block-form" method="GET">
+        <form class="search-block-form" method="GET" action="/masters/">
             <input type="hidden" value="true" name="search" />
             <fieldset>
                 <div class="search-block-holder clearfix">
@@ -99,11 +98,11 @@ foreach($area_of_jobs as $area_of_job){
                             <option value="jobs">Вакансии</option>
                         </select>
                         <select class="tipical-select" name="cityID">
-                            <option value="0">По всем городам</option>
+                            <option value="">По всем городам</option>
                             <?php echo implode('', $citiesOptions) ?>
                         </select>
-                        <select class="tipical-select" name="areaJID">
-                            <?php echo implode('', $area_of_jobsOptions) ?>
+                        <select class="tipical-select" name="areas_for_job[]">
+                            <?php echo implode('', $area_of_jobs) ?>
                         </select>
                     </div>
                     <div class="search-block-right">
