@@ -58,8 +58,8 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                $lastInsertId = $DB->lastInsertId('objects_id_seq');
                 if(!empty($_POST['areas_for_object'])){
-                    $lastInsertId = $DB->lastInsertId('objects_id_seq');
                     foreach($_POST['areas_for_object'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Объект создан.</div>';
@@ -252,7 +252,7 @@ if(!empty($object)){
                     <?php if(!empty($error)) echo $error; ?>
                     <div class="my-page-wrapper-headline">
                         <span class="edit-process"><?php echo $main_title; ?>:</span><br><?php echo $object['name']; ?>
-                        <a href="#" class="close-edit"><?php if($applicationURL['2'] !== 'add') echo '(Закрыть)'; ?></a>
+                        <?php if($applicationURL['2'] !== 'add') echo '<a href="/objects/'. $applicationURL['2'] .'/close/" class="close-edit">(Закрыть)</a>'; ?>
                     </div>
                     <form class="personal-data-form" method="POST" enctype="multipart/form-data" action="/objects/<?php if($applicationURL['2'] === 'add') echo 'add/'; else echo $object['id'] .'/edit/'; ?>">
                         <input type="hidden" name="cpo" value="<?php echo 'нет'; ?>"/>

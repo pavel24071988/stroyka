@@ -36,7 +36,8 @@ if(!empty($applicationURL[2])){
                c.name as city_name
           FROM objects o
           LEFT JOIN cities c ON o."cityID" = c.id
-            WHERE o.type_of_kind<>2';
+            WHERE o.type_of_kind<>2 AND
+                  o.status<>\'archive\'';
     $allObjects = $DB->query($sql)->fetchAll();
     $offset = 0;
     if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;

@@ -2,7 +2,7 @@
 // ище данные для формы поиска
 $DB = Application::$DB;
 $masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->fetch();
-$jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs')->fetch();
+$jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs WHERE status<>\'archive\'')->fetch();
 $companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 0')->fetch();
 
 if(isset($_GET['search'])){
@@ -11,6 +11,7 @@ if(isset($_GET['search'])){
 }
 
 $dopSQL[] = 'o.type_of_kind<>2';
+$dopSQL[] = 'o.status<>\'archive\'';
 $sql = '
     SELECT o.*,
            (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,

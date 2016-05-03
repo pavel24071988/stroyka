@@ -4,6 +4,8 @@ $myObjects = $usersModel->getMyOwnerObjects($_SESSION['user']['id']);
 $responseObjects = $usersModel->getMyResponseObjects($_SESSION['user']['id']);
 $myJobs = $usersModel->getMyOwnerJobs($_SESSION['user']['id']);
 $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
+$myArchiveObjects = $usersModel->getMyOwnerArchiveObjects($_SESSION['user']['id']);
+$myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
 ?>
 <!--
 <h1>Объекты:</h1>
@@ -103,7 +105,7 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                                     </div>
                                 </div>
                                 <div class="objects-tabel-cell feedback-small">
-                                    <a href="/objects/<?php echo $myObject['id']; ?>/edit/">снять заявку</a>
+                                    <a href="/objects/<?php echo $responseObject['id']; ?>/edit/">снять заявку</a>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +157,7 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                     </div>
                     <?php } ?>
                 </div>
-                <!--<div class="my-page-wrapper-headline">Архив</div>
+                <div class="my-page-wrapper-headline">Архив</div>
                 <div class="archive-subheadline">Объекты:</div>
                 <table class="archive-table" >
                     <colgroup>
@@ -168,31 +170,16 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <th>Название</th>
                         <th>Отправлено в архив</th>
                     </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
+                    <?php
+                    foreach($myArchiveObjects as $object){
+                        echo '
+                        <tr>
+                            <td>'. $object['id'] .'</td>
+                            <td>'. $object['name'] .'</td>
+                            <td>'. $object['created'] .'</td>
+                        </tr>';
+                    }
+                    ?>
                 </table>
                 <div class="archive-subheadline">Вакансии:</div>
                 <table class="archive-table" >
@@ -201,38 +188,17 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <col width="63%">
                         <col width="21%">
                     </colgroup>
-                    <tr>
-                        <th>Номер</th>
-                        <th>Название</th>
-                        <th>Отправлено в архив</th>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
+                    <?php
+                    foreach($myArchiveJobs as $job){
+                        echo '
+                        <tr>
+                            <td>'. $job['id'] .'</td>
+                            <td>'. $job['name'] .'</td>
+                            <td>'. $job['created'] .'</td>
+                        </tr>';
+                    }
+                    ?>
                 </table>
-                -->
             </div>
         </div>
     </div>

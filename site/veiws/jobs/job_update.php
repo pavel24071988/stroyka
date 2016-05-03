@@ -31,6 +31,7 @@ if($applicationURL['2'] === 'add'){
     // обрабатываем пост здесь
     if(!empty($_POST)){
         $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название',/* 'require' => 'Требования'*/];
+        if(empty($_POST['bargain'])) $_POST['bargain'] = 'off';
         if(empty($_POST['require'])) $_POST['require'] = '';
         if(empty($_POST['conditions'])) $_POST['conditions'] = '';
         $errors = [];
@@ -56,8 +57,8 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                $lastInsertId = $DB->lastInsertId('jobs_id_seq');
                 if(!empty($_POST['areas_for_job'])){
-                    $lastInsertId = $DB->lastInsertId('jobs_id_seq');
                     foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Вакансия создана.</div>';
@@ -68,7 +69,7 @@ if($applicationURL['2'] === 'add'){
         }
     }
 }else{
-    $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="#" class="close-edit">(Закрыть)</a>';
+    $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
     $button_name = 'Обновить';
     
     $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
@@ -121,7 +122,7 @@ if($applicationURL['2'] === 'add'){
                 }
                 
                 $job = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
-                $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="#" class="close-edit">(Закрыть)</a>';
+                $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
                 $error = '<div style="color: red;">Вакансия отредактирована.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';

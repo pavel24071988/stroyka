@@ -15,8 +15,22 @@ class usersModel
                       FROM users_objects uo
                         WHERE uo."objectID" = o.id) as responses
               FROM objects o
-                WHERE o."createrUserID"='. $userID .'
-                AND o.type_of_kind<>2')->fetchAll();
+                WHERE o."createrUserID"='. $userID .' AND
+                      o.type_of_kind<>2 AND
+                      o.status<>\'archive\'')->fetchAll();
+        return $objects;
+    }
+    
+    public static function getMyOwnerArchiveObjects($userID){
+        $objects = self::$DB->query('
+            SELECT o.*,
+                   (SELECT COUNT(uo."objectID")
+                      FROM users_objects uo
+                        WHERE uo."objectID" = o.id) as responses
+              FROM objects o
+                WHERE o."createrUserID"='. $userID .' AND
+                      o.type_of_kind<>2 AND
+                      o.status=\'archive\'')->fetchAll();
         return $objects;
     }
     
@@ -41,7 +55,20 @@ class usersModel
                       FROM users_jobs uj
                         WHERE uj."jobID" = j.id) as responses
               FROM jobs j
-                WHERE j."createrUserID"='. $userID)->fetchAll();
+                WHERE j."createrUserID"='. $userID .' AND
+                      j.status<>\'archive\'')->fetchAll();
+        return $jobs;
+    }
+    
+    public static function getMyOwnerArchiveJobs($userID){
+        $jobs = self::$DB->query('
+            SELECT j.*,
+                   (SELECT COUNT(uj."jobID")
+                      FROM users_jobs uj
+                        WHERE uj."jobID" = j.id) as responses
+              FROM jobs j
+                WHERE j."createrUserID"='. $userID .' AND
+                      j.status=\'archive\'')->fetchAll();
         return $jobs;
     }
     
