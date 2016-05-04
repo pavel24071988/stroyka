@@ -30,8 +30,8 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома',/* 'name' => 'Название', 'require' => 'Требования'*/];
-        if(empty($_POST['name'])) $_POST['name'] = '';
+        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название',/* 'require' => 'Требования'*/];
+        if(empty($_POST['bargain'])) $_POST['bargain'] = 'off';
         if(empty($_POST['require'])) $_POST['require'] = '';
         if(empty($_POST['conditions'])) $_POST['conditions'] = '';
         $errors = [];
@@ -57,18 +57,19 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                $lastInsertId = $DB->lastInsertId('jobs_id_seq');
                 if(!empty($_POST['areas_for_job'])){
-                    $lastInsertId = $DB->lastInsertId('jobs_id_seq');
                     foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Вакансия создана.</div>';
+                echo '<meta http-equiv="refresh" content="1;URL=/jobs/'. $lastInsertId .'/">';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
             }
         }
     }
 }else{
-    $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="#" class="close-edit">(Закрыть)</a>';
+    $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
     $button_name = 'Обновить';
     
     $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
@@ -88,8 +89,7 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома',/* 'name' => 'Название', 'require' => 'Требования'*/];
-        if(empty($_POST['name'])) $_POST['name'] = '';
+        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название',/* 'require' => 'Требования'*/];
         if(empty($_POST['require'])) $_POST['require'] = '';
         if(empty($_POST['cpo'])) $_POST['cpo'] = 'off';
         if(empty($_POST['dateTo'])) $_POST['dateTo'] = '';
@@ -121,7 +121,8 @@ if($applicationURL['2'] === 'add'){
                     foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $area_for_job .')')->execute();
                 }
                 
-                $common_data['job'] = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
+                $job = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
+                $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
                 $error = '<div style="color: red;">Вакансия отредактирована.</div>';
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
@@ -210,6 +211,11 @@ if(!empty($job)){
                         <div class="personal-data-form-headline red">Обязательные параметры выделены красным</div>
                         <div class="personal-data-form-text">
                             Лемма охватывает интеграл от функции, обращающейся в бесконечность вдоль линии. Векторное поле решительно уравновешивает Наибольший Общий Делитель (НОД). Дивергенция векторного поля переворачивает криволинейный интеграл. Бином Ньютона переворачивает эмпирический график функции многих переменных, при этом, вместо 13 можно взять любую другую константу.
+                        </div>
+                        <div class="personal-data-form-headline red">Название</div>
+                        <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-data-row clearfix">
+                            <input type="text" name="name" value="<?php echo $job['name']; ?>"><label style="color: #010101; font-size: 14px;"></label>
                         </div>
                         <div class="personal-data-form-headline red">Место работы</div>
                         <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>

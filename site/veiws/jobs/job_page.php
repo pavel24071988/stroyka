@@ -69,6 +69,15 @@ $answers = $DB->query('
     echo $edit_buttons;
     */
 ?>
+
+<?php
+// помещаем в архив
+if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_owner){
+    $update_job = $DB->prepare('UPDATE jobs SET "status"=\'archive\' WHERE "id"='. $applicationURL[2])->execute();
+    echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
+}
+?>
+
 <?php if(!empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="my-page-content clearfix">

@@ -32,6 +32,7 @@ $dopSQL = [];
 if(!empty($_GET['cityID'])) $dopSQL[] = 'j."cityID"='. $_GET['cityID'];
 if(!empty($_GET['areaID'])) $dopSQL[] = 'j."areaID"='. $_GET['areaID'];
 if(!empty($_GET['search_str'])) $dopSQL[] = 'j."name" LIKE \'%'. $_GET['search_str'] .'%\'';
+$dopSQL[] = 'j.status=\'archive\'';
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 $sql .= ' ORDER BY j.created';
 $allJobs = Application::$DB->query($sql)->fetchAll();

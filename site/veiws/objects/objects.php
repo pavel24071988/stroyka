@@ -25,6 +25,7 @@ if(isset($_GET['search']) && $_GET['search'] === 'true'){
             LEFT JOIN cities c ON o."cityID" = c.id
             '. $kindLeftJoin .'';
     $dopSQL[] = 'o.type_of_kind<>2';
+    $dopSQL[] = 'o.status<>\'archive\'';
     if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
     $sql .= ' ORDER BY o.id, o.created';
     $allObjects = Application::$DB->query($sql)->fetchAll();

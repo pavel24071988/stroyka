@@ -78,8 +78,8 @@ class Application
                 '. $msgStr .'
                 <li><a href="/users/'. $user['id'] .'/my_settings/">Настройки</a></li>
                 <li><a href="/users/'. $user['id'] .'/my_works/">Мои работы</a></li>
-                <li><a href="/users/'. $user['id'] .'/my_insurance/">Страхование</a></li>
-                <li><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></li>
+                <!--<li><a href="/users/'. $user['id'] .'/my_insurance/">Страхование</a></li>
+                <li><a href="/users/'. $user['id'] .'/my_low/">Юридические услуги</a></li>-->
             </ul>
         </div>';
         return $left_menu;
