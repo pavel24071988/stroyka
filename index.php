@@ -28,13 +28,13 @@ $application = new Application;
             <a href="/" class="logotype"></a>
             <ul class="navigation clearfix">
                 <li>
-                    <a class="active" href="/masters/">Мастера</a>
+                    <a <?php if($application::$URL[1] === 'masters') echo 'class="active"'; ?> href="/masters/">Мастера</a>
                 </li>
                 <li>
-                    <a href="/objects/">Заказы</a>
+                    <a <?php if($application::$URL[1] === 'objects') echo 'class="active"'; ?> href="/objects/">Заказы</a>
                 </li>
                 <li>
-                    <a href="/jobs/">Вакансии</a>
+                    <a <?php if($application::$URL[1] === 'jobs') echo 'class="active"'; ?> href="/jobs/">Вакансии</a>
                 </li>
             </ul>
             <?php
