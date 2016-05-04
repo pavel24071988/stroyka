@@ -93,7 +93,7 @@ foreach($area_of_jobs as $area_of_job){
             <fieldset>
                 <div class="search-block-holder clearfix">
                     <div class="search-block-left">
-                        <select class="tipical-select" name="type">
+                        <select id="masters-select" class="tipical-select" name="type">
                             <option value="masters">Мастера</option>
                             <option value="objects">Заказы</option>
                             <option value="jobs">Вакансии</option>

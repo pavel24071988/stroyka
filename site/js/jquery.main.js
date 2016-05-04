@@ -60,6 +60,8 @@ $(document).ready(function() {
 	$('#forward')	.on('click', function() {
 		$('.registration-form fieldset[id]').hide();
 		$('#step2').fadeIn(700);
+		$('.registration-breadcrumb a').removeClass('active');
+		$('.registration-breadcrumb a[data-id="step2"]').addClass('active');
 		return false;
 	});
 	//
@@ -74,6 +76,11 @@ $(document).ready(function() {
 			$(this).find('input').attr('checked', '');
 		}
 
+	});
+	//
+	$('#masters-select').on('change', function(){
+		var act = $('#masters-select option:selected').val();
+		$(this).parents('form.search-block-form').attr("action", "/"+act+"/");
 	});
 });
 //
