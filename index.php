@@ -28,7 +28,7 @@ $application = new Application;
             <a href="/" class="logotype"></a>
             <ul class="navigation clearfix">
                 <li>
-                    <a href="/masters/">Мастера</a>
+                    <a class="active" href="/masters/">Мастера</a>
                 </li>
                 <li>
                     <a href="/objects/">Заказы</a>
@@ -40,7 +40,7 @@ $application = new Application;
             <?php
             if(!empty($_SESSION['user'])){
                 $userMessages = $application::getCountsUserMessages($_SESSION['user']['id']);
-                echo '<a href="/users/'. $_SESSION['user']['id'] .'/" class="login">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/" class="login">Выйти</a>';
+                echo '<a href="/login/logout/" class="login no-lock">Выйти</a> <a href="/users/'. $_SESSION['user']['id'] .'/" class="login no-lock">'. $_SESSION['user']['name'] .'</a>';
             }else{
                 echo '<a href="/login/" class="login">Авторизация</a>';
             }

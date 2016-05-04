@@ -55,7 +55,13 @@ $(document).ready(function() {
 		$('.registration-form fieldset[id]').hide();
 		$('#'+ curid).fadeIn(700);
 		return false;
-	});	
+	});
+	//
+	$('#forward')	.on('click', function() {
+		$('.registration-form fieldset[id]').hide();
+		$('#step2').fadeIn(700);
+		return false;
+	});
 	//
 	$('.searcher-sub-categories li .searcher-categories-item label').on('click', function() {
 		var $this = $( this );

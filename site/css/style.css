@@ -141,7 +141,7 @@ p {margin-bottom: 7px;}
 }
 .navigation li {
 	float: left;
-	width: 100px;
+	margin-right: 25px;
 	line-height: 80px;
 }
 .navigation li a {
@@ -177,7 +177,10 @@ p {margin-bottom: 7px;}
 	width: 12px;
 	height: 12px;
 }
-.header .login.no-lock:before {content: '';}
+.header .login.no-lock:before {
+	content: '';
+	display: none;
+}
 .wrapper .sub-header {
 	color: #fff;
 	background: url(/images/sub-header.jpg) repeat-x top left #146f90;
@@ -329,12 +332,15 @@ p {margin-bottom: 7px;}
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 18px;
+    height: 36px;
 }
+.object-item-description .object-item-headline a {color: #073f5f;}
 .object-item-description .object-item-info {
 	color: #323333;
 	line-height: 21px;
 	padding-bottom: 28px;
 	width: 98%;
+	min-height: 85px;
 }
 .object-item-info .snip-desription {
 	color: #1c2f3b;
@@ -726,7 +732,10 @@ p {margin-bottom: 7px;}
 	color: #044058;
 }
 .my-page-breadcrumb ul li:first-child:before {content: '';}
-.my-page-breadcrumb ul li a {color: #044058;}
+.my-page-breadcrumb ul li a {
+	color: #044058;
+	white-space: nowrap;
+}
 .my-page-wrapper .product-holder {margin-left: 13px;}
 .product-holder .product-theme {
 	padding-bottom: 14px;
@@ -1686,7 +1695,12 @@ p {margin-bottom: 7px;}
 	color: #054157;
 	margin-left: 15px;
 	font-size: 12px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	text-decoration: underline;
 }
+.change-status:hover {text-decoration: none;}
 .specialist-meta-block {padding: 0 10px 15px 10px;}
 .specialist-meta-block .specialist-block-title {
 	height: 33px;
@@ -2039,6 +2053,11 @@ p {margin-bottom: 7px;}
 .jssorb03 {
 	border-radius: 6px;
 	background: rgba(0,0,0,.6);
+}
+/* new */
+.navigation li a.active {
+	font-weight: bold;
+	color: #ffcd00;
 }
 /* page styles end */
 
