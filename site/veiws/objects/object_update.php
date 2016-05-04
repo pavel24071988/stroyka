@@ -120,13 +120,20 @@ if($applicationURL['2'] === 'add'){
                 if(!empty($_POST['areas_for_object'])){
                     $DB->prepare('DELETE FROM links_kinds_of_jobs_objects WHERE "objectID"='. $applicationURL[2])->execute();
                     foreach($_POST['areas_for_object'] as $areas_for_object){
-                        $dd = 'INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')';
                         $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')')->execute();
                     }
                 }
                 
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
                 $error = '<div style="color: red;">Объект отредактирован.</div>';
+                
+                // отправляем откликнувшимся пользователям сообщения
+                $submitUsers = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."objectID"='. $applicationURL[2])->fetchAll();
+                foreach($submitUsers as $user)
+                    $DB->prepare('
+                        INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+                        ('. $_SESSION['user']['id'] .', \'Заказ № '. $applicationURL[2] .' был изменен. Просьба проверить.\', '. $user['fromUserID'] .', \'system_object\', '. $applicationURL[2] .')
+                    ')->execute();
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
             }

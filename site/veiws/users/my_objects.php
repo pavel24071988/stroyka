@@ -76,7 +76,7 @@ $myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
                                     </a>
                                 </div>
                                 <div class="objects-tabel-cell exposed-small cntr">
-                                    <?php echo $myObject['responses']; ?> откликов<br><a href="/objects/<?php echo $myObject['id']; ?>/"><b>(10 новых)</b></a>
+                                    <?php echo $myObject['responses']; ?> откликов<br><a href="/objects/<?php echo $myObject['id']; ?>/"><!--<b>(10 новых)</b>--></a>
                                 </div>
                                 <div class="objects-tabel-cell exposed-small">
                                     <a href="/objects/<?php echo $myObject['id']; ?>/edit/">редактировать</a>
@@ -97,12 +97,14 @@ $myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
                                     <a href="<?php echo '/objects/'. $responseObject['id'] .'/'; ?>">
                                     <?php echo '№'. $responseObject['id'] .' "'. $responseObject['name'] .'" ('. $responseObject['amount'] .' руб) от '. date('j.m.Y', strtotime($responseObject['created'])); ?>
                                     </a>
-                                    <div class="edit-snippet">Последняя правка 24.12.2015 (17:55)</div>
+                                    <div class="edit-snippet"><!--Последняя правка 24.12.2015 (17:55)--></div>
                                 </div>
                                 <div class="objects-tabel-cell feedback-mid">
+                                    <?php if(!empty($responseObject['last_system'])){ ?>
                                     <div class="feedback-info alert">
-                                        На рассмотрении.<br><b>Внимание! Заказчик отредактировал<br>заявку 24.12.2015 (17:55)</b>
+                                        На рассмотрении.<br><b><?php echo $responseObject['last_system']; ?><!--Внимание! Заказчик отредактировал<br>заявку 24.12.2015 (17:55)--></b>
                                     </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="objects-tabel-cell feedback-small">
                                     <a href="/objects/<?php echo $responseObject['id']; ?>/edit/">снять заявку</a>
@@ -146,10 +148,18 @@ $myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
                                 </a>
                             </div>
                             <div class="objects-tabel-cell feedback-mid">
+                                <?php if(!empty($responseJob['last_system'])){ ?>
+                                <div class="feedback-info alert">
+                                    На рассмотрении.<br><b><?php echo $responseJob['last_system']; ?></b>
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <!--
                                 <div class="feedback-info ok">
                                     Ваша зявка рассмотрена заказчиком,<br><a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $responseJob['createrUserID']; ?>/">напишите ему</a>, чтобы<br>договориться об условиях!
                                 </div>
                             </div>
+                            -->
                             <div class="objects-tabel-cell feedback-small">
                                 <a href="#">снять заявку</a>
                             </div>

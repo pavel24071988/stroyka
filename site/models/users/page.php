@@ -40,7 +40,13 @@ class usersModel
                    (SELECT COUNT(c.id)
                       FROM comments c
                         WHERE c."typeID" = o.id AND
-                              c."type"=\'object_comment\') as comment_count
+                              c."type"=\'object_comment\') as comment_count,
+                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                      FROM messages m
+                        WHERE m."typeID" = o.id AND
+                              m."type" = \'system_object\'
+                          ORDER BY m.created DESC
+                            LIMIT 1) as last_system
               FROM objects o
               LEFT JOIN users_objects uo ON o."id" = uo."objectID"
                 WHERE uo."fromUserID"='. $userID .'
@@ -78,7 +84,13 @@ class usersModel
                    (SELECT COUNT(c.id)
                       FROM comments c
                         WHERE c."typeID" = j.id AND
-                              c."type"=\'job_comment\') as comment_count
+                              c."type"=\'job_comment\') as comment_count,
+                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                      FROM messages m
+                        WHERE m."typeID" = j.id AND
+                              m."type" ILIKE \'system_job\'
+                          ORDER BY m.created DESC
+                            LIMIT 1) as last_system
               FROM jobs j
               LEFT JOIN users_jobs uj ON j."id" = uj."jobID"
                 WHERE uj."fromUserID"='. $userID)->fetchAll();

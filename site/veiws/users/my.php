@@ -289,7 +289,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
-                                    <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                                    <p><b>Место работы:</b> г. <?php echo $user['cityID']; ?></p>
                                     <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>

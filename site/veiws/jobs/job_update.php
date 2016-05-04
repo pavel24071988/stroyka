@@ -124,6 +124,14 @@ if($applicationURL['2'] === 'add'){
                 $job = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
                 $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
                 $error = '<div style="color: red;">Вакансия отредактирована.</div>';
+                
+                // отправляем откликнувшимся пользователям сообщения
+                $submitUsers = $DB->query('SELECT uj.* FROM users_jobs uj WHERE uj."jobID"='. $applicationURL[2])->fetchAll();
+                foreach($submitUsers as $user)
+                    $DB->prepare('
+                        INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+                        ('. $_SESSION['user']['id'] .', \'Вакансия № '. $applicationURL[2] .' была изменена. Просьба проверить.\', '. $user['fromUserID'] .', \'system_job\', '. $applicationURL[2] .')
+                    ')->execute();
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
             }
