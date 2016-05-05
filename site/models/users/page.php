@@ -85,7 +85,7 @@ class usersModel
                       FROM comments c
                         WHERE c."typeID" = j.id AND
                               c."type"=\'job_comment\') as comment_count,
-                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                    (SELECT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\') || \'  \' || m.text)
                       FROM messages m
                         WHERE m."typeID" = j.id AND
                               m."type" ILIKE \'system_job\'
