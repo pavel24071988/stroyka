@@ -14,6 +14,7 @@ if(isset($_SESSION['user'])){
 // обработаем POST - например при подписывании на объект
 if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_SESSION['user'])){
     if(isset($_POST['submitOrder'])){
+        if(empty($_POST['description'])) $_POST['description'] = '';
         $sql = $DB->prepare('
             INSERT INTO users_objects ("description", "fromUserID", "objectID")
               VALUES(\''. $_POST['description'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['objectID'] .'\')');
@@ -26,11 +27,19 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
     $update_object = $DB->prepare('UPDATE objects SET "workerID"=\''. $_POST['user_to_object'] .'\' WHERE "id"='. $applicationURL[2]);
     if($update_object->execute() === true){
         $object['workerID'] = $_POST['user_to_object'];
+        $DB->prepare('
+            INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+            ('. $_SESSION['user']['id'] .', \'Вы назначены исполнителем на объект № '. $applicationURL[2] .'.\', '. $_POST['user_to_object'] .', \'system_object\', '. $applicationURL[2] .')
+        ')->execute();
     }
 }elseif(isset($_POST['user_remove_object']) && !empty($_SESSION['user'])){
     $update_object = $DB->prepare('UPDATE objects SET "workerID"=NULL WHERE "id"='. $applicationURL[2]);
     if($update_object->execute() === true){
         $object['workerID'] = NULL;
+        $DB->prepare('
+            INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+            ('. $_SESSION['user']['id'] .', \'Вы сняты с объекта № '. $applicationURL[2] .'.\', '. $_POST['user_remove_object'] .', \'system_object\', '. $applicationURL[2] .')
+        ')->execute();
     }
 }
 
@@ -83,6 +92,15 @@ $answers = $DB->query('
     echo '<br/>';
     echo $edit_buttons;*/
 ?>
+
+<?php
+// помещаем в архив
+if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_owner){
+    $update_job = $DB->prepare('UPDATE objects SET "status"=\'archive\' WHERE "id"='. $applicationURL[2])->execute();
+    echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
+}
+?>
+
 <!--
 <h1><?php //echo $object['name']; ?></h1>
 <span>Номер объекта: <?php //echo $object['id']; ?></span>
@@ -184,6 +202,7 @@ $answers = $DB->query('
                         ?>
                     </div>
                     <div class="product-theme">
+                        <?php if($check_owner){ ?>
                         <div class="product-theme-headline">
                             <span>Ответы</span>
                         </div>
@@ -222,28 +241,29 @@ $answers = $DB->query('
                                     if(!empty($_SESSION['user'])){
                                         if($_SESSION['user']['id'] === $object['createrUserID']){
                                             if((int)$object['workerID'] === $answer['id'])
-                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_remove_object"/><input type="submit" value="Отказаться" /></form>';
+                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_remove_object"/><input class="tipical-button" style="line-height: normal;" type="submit" value="Отказаться" /></form>';
                                             elseif(empty($object['workerID']))
-                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_object"/><input type="submit" value="Принять" /></form>';
+                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_object"/><input class="tipical-button" style="line-height: normal;" type="submit" value="Принять" /></form>';
                                         }
                                     }
                                 ?>
                             </div>
                         </div>
+                        <?php } ?>
                         <?php
                             }
                         } ?>
                     </div>
                 </div>
-            </div>
-            <?php 
-            if(!empty($_SESSION['user'])){
-                if($_SESSION['user']['id'] !== $object['createrUserID']){
-                    if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><textarea class="tipical-textarea" name="description"></textarea><input class="tipical-button" style="line-height: normal;" type="submit" name="submitOrder" value="Откликнуться"/></form>';
-                    else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                <?php 
+                if(!empty($_SESSION['user'])){
+                    if($_SESSION['user']['id'] !== $object['createrUserID']){
+                        if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><!--<textarea class="tipical-textarea" name="description"></textarea>--><input class="tipical-button" style="line-height: normal;" type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                        else echo '<form method="POST"><input type="hidden" value="'. $object['id'] .'" name="objectID"><input type="submit" class="tipical-button" style="line-height: normal;" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                    }
                 }
-            }
-            ?>
+                ?>
+            </div>
         </div>
     </div>
 </div>

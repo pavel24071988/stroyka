@@ -2,7 +2,7 @@
 // ище данные для формы поиска
 $DB = Application::$DB;
 $masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->fetch();
-$jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs')->fetch();
+$jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs WHERE status<>\'archive\'')->fetch();
 $companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 0')->fetch();
 
 if(isset($_GET['search'])){
@@ -11,6 +11,7 @@ if(isset($_GET['search'])){
 }
 
 $dopSQL[] = 'o.type_of_kind<>2';
+$dopSQL[] = 'o.status<>\'archive\'';
 $sql = '
     SELECT o.*,
            (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = o.id AND c."type"=\'object_comment\') as comment_count,
@@ -20,11 +21,10 @@ $sql = '
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 $objects = $DB->query($sql)->fetchAll();
 $cities = $DB->query('SELECT * FROM cities')->fetchAll();
-$area_of_jobsOptions = [];
 $citiesOptions = [];
 foreach($cities as $city) $citiesOptions[] = '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
-$area_of_jobs = $DB->query('SELECT * FROM area_of_jobs')->fetchAll();
-foreach($area_of_jobs as $area_of_job) $area_of_jobsOptions[] = '<option value="'. $area_of_job['id'] .'">'. $area_of_job['name'] .'</option>';
+$area_of_jobs_select = $DB->query('SELECT * FROM kinds_of_jobs')->fetchAll();
+foreach($area_of_jobs_select as $area_of_job) $area_of_jobs[] = '<option value="'. $area_of_job['id'] .'">'. $area_of_job['name'] .'</option>';
 
 /*
 $cities = $DB->query('SELECT * FROM cities c')->fetchAll();
@@ -88,22 +88,22 @@ foreach($area_of_jobs as $area_of_job){
 <div class="content">
     <div class="search-block">
         <div class="search-block-headline">Поиск</div>
-        <form class="search-block-form" method="GET">
+        <form class="search-block-form" method="GET" action="/masters/">
             <input type="hidden" value="true" name="search" />
             <fieldset>
                 <div class="search-block-holder clearfix">
                     <div class="search-block-left">
-                        <select class="tipical-select" name="type">
+                        <select id="masters-select" class="tipical-select" name="type">
                             <option value="masters">Мастера</option>
                             <option value="objects">Заказы</option>
                             <option value="jobs">Вакансии</option>
                         </select>
                         <select class="tipical-select" name="cityID">
-                            <option value="0">По всем городам</option>
+                            <option value="">По всем городам</option>
                             <?php echo implode('', $citiesOptions) ?>
                         </select>
-                        <select class="tipical-select" name="areaJID">
-                            <?php echo implode('', $area_of_jobsOptions) ?>
+                        <select id="jobs-select" class="tipical-select" name="areas_for_job[]">
+                            <?php echo implode('', $area_of_jobs) ?>
                         </select>
                     </div>
                     <div class="search-block-right">

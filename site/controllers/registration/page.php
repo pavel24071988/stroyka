@@ -204,7 +204,7 @@ if(!empty($_POST)){
                         </div>
                     </div>
                 </div>
-                <button class="tipical-button forward">Далее</button>
+                <a href="#" class="tipical-button forward" id="forward">Далее</a>
             </fieldset>
             <fieldset id="step2" style="display: none;">
                 <div class="registration-form-columns clearfix">

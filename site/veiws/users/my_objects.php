@@ -4,6 +4,8 @@ $myObjects = $usersModel->getMyOwnerObjects($_SESSION['user']['id']);
 $responseObjects = $usersModel->getMyResponseObjects($_SESSION['user']['id']);
 $myJobs = $usersModel->getMyOwnerJobs($_SESSION['user']['id']);
 $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
+$myArchiveObjects = $usersModel->getMyOwnerArchiveObjects($_SESSION['user']['id']);
+$myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
 ?>
 <!--
 <h1>Объекты:</h1>
@@ -74,7 +76,7 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                                     </a>
                                 </div>
                                 <div class="objects-tabel-cell exposed-small cntr">
-                                    <?php echo $myObject['responses']; ?> откликов<br><a href="/objects/<?php echo $myObject['id']; ?>/"><b>(10 новых)</b></a>
+                                    <?php echo $myObject['responses']; ?> откликов<br><a href="/objects/<?php echo $myObject['id']; ?>/"><!--<b>(10 новых)</b>--></a>
                                 </div>
                                 <div class="objects-tabel-cell exposed-small">
                                     <a href="/objects/<?php echo $myObject['id']; ?>/edit/">редактировать</a>
@@ -95,15 +97,17 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                                     <a href="<?php echo '/objects/'. $responseObject['id'] .'/'; ?>">
                                     <?php echo '№'. $responseObject['id'] .' "'. $responseObject['name'] .'" ('. $responseObject['amount'] .' руб) от '. date('j.m.Y', strtotime($responseObject['created'])); ?>
                                     </a>
-                                    <div class="edit-snippet">Последняя правка 24.12.2015 (17:55)</div>
+                                    <div class="edit-snippet"><!--Последняя правка 24.12.2015 (17:55)--></div>
                                 </div>
                                 <div class="objects-tabel-cell feedback-mid">
+                                    <?php if(!empty($responseObject['last_system'])){ ?>
                                     <div class="feedback-info alert">
-                                        На рассмотрении.<br><b>Внимание! Заказчик отредактировал<br>заявку 24.12.2015 (17:55)</b>
+                                        На рассмотрении.<br><b><?php echo $responseObject['last_system']; ?><!--Внимание! Заказчик отредактировал<br>заявку 24.12.2015 (17:55)--></b>
                                     </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="objects-tabel-cell feedback-small">
-                                    <a href="/objects/<?php echo $myObject['id']; ?>/edit/">снять заявку</a>
+                                    <a href="/objects/<?php echo $responseObject['id']; ?>/edit/">снять заявку</a>
                                 </div>
                             </div>
                         </div>
@@ -144,10 +148,18 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                                 </a>
                             </div>
                             <div class="objects-tabel-cell feedback-mid">
+                                <?php if(!empty($responseJob['last_system'])){ ?>
+                                <div class="feedback-info alert">
+                                    На рассмотрении.<br><b><?php echo $responseJob['last_system']; ?></b>
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <!--
                                 <div class="feedback-info ok">
                                     Ваша зявка рассмотрена заказчиком,<br><a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_messages/dialogs/<?php echo $responseJob['createrUserID']; ?>/">напишите ему</a>, чтобы<br>договориться об условиях!
                                 </div>
                             </div>
+                            -->
                             <div class="objects-tabel-cell feedback-small">
                                 <a href="#">снять заявку</a>
                             </div>
@@ -155,7 +167,7 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                     </div>
                     <?php } ?>
                 </div>
-                <!--<div class="my-page-wrapper-headline">Архив</div>
+                <div class="my-page-wrapper-headline">Архив</div>
                 <div class="archive-subheadline">Объекты:</div>
                 <table class="archive-table" >
                     <colgroup>
@@ -168,31 +180,16 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <th>Название</th>
                         <th>Отправлено в архив</th>
                     </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
+                    <?php
+                    foreach($myArchiveObjects as $object){
+                        echo '
+                        <tr>
+                            <td>'. $object['id'] .'</td>
+                            <td>'. $object['name'] .'</td>
+                            <td>'. $object['created'] .'</td>
+                        </tr>';
+                    }
+                    ?>
                 </table>
                 <div class="archive-subheadline">Вакансии:</div>
                 <table class="archive-table" >
@@ -201,38 +198,17 @@ $responseJobs = $usersModel->getMyResponseJobs($_SESSION['user']['id']);
                         <col width="63%">
                         <col width="21%">
                     </colgroup>
-                    <tr>
-                        <th>Номер</th>
-                        <th>Название</th>
-                        <th>Отправлено в архив</th>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
-                    <tr>
-                        <td>1775</td>
-                        <td>Ремонт санузла</td>
-                        <td>10.05.2015</td>
-                    </tr>
+                    <?php
+                    foreach($myArchiveJobs as $job){
+                        echo '
+                        <tr>
+                            <td>'. $job['id'] .'</td>
+                            <td>'. $job['name'] .'</td>
+                            <td>'. $job['created'] .'</td>
+                        </tr>';
+                    }
+                    ?>
                 </table>
-                -->
             </div>
         </div>
     </div>

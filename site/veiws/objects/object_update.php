@@ -31,7 +31,7 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        //$rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', 'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'];
+        $rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -58,11 +58,12 @@ if($applicationURL['2'] === 'add'){
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){
+                $lastInsertId = $DB->lastInsertId('objects_id_seq');
                 if(!empty($_POST['areas_for_object'])){
-                    $lastInsertId = $DB->lastInsertId('objects_id_seq');
                     foreach($_POST['areas_for_object'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Объект создан.</div>';
+                echo '<meta http-equiv="refresh" content="1;URL=/objects/'. $lastInsertId .'/">';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
             }
@@ -89,7 +90,7 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        //$rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', 'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'];
+        $rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -119,13 +120,20 @@ if($applicationURL['2'] === 'add'){
                 if(!empty($_POST['areas_for_object'])){
                     $DB->prepare('DELETE FROM links_kinds_of_jobs_objects WHERE "objectID"='. $applicationURL[2])->execute();
                     foreach($_POST['areas_for_object'] as $areas_for_object){
-                        $dd = 'INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')';
                         $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $applicationURL[2] .', '. $areas_for_object .')')->execute();
                     }
                 }
                 
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
                 $error = '<div style="color: red;">Объект отредактирован.</div>';
+                
+                // отправляем откликнувшимся пользователям сообщения
+                $submitUsers = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."objectID"='. $applicationURL[2])->fetchAll();
+                foreach($submitUsers as $user)
+                    $DB->prepare('
+                        INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+                        ('. $_SESSION['user']['id'] .', \'Заказ № '. $applicationURL[2] .' был изменен. Просьба проверить.\', '. $user['fromUserID'] .', \'system_object\', '. $applicationURL[2] .')
+                    ')->execute();
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
             }
@@ -233,9 +241,7 @@ if(!empty($object)){
 <input type="submit" value="<?php echo $button_name; ?>"/>
 </form>
 -->
-<?php if(!empty($error)) echo $error; ?>
 <div class="content">
-
         <div class="my-page-content clearfix">
             <?php echo Application::getLeftMenu(); ?>
             <div class="my-page-wrapper">
@@ -250,9 +256,10 @@ if(!empty($object)){
                     </ul>
                 </div>
                 <div class="my-page-wrapper-content">
+                    <?php if(!empty($error)) echo $error; ?>
                     <div class="my-page-wrapper-headline">
                         <span class="edit-process"><?php echo $main_title; ?>:</span><br><?php echo $object['name']; ?>
-                        <a href="#" class="close-edit"><?php if($applicationURL['2'] !== 'add') echo '(Закрыть)'; ?></a>
+                        <?php if($applicationURL['2'] !== 'add') echo '<a href="/objects/'. $applicationURL['2'] .'/close/" class="close-edit">(Закрыть)</a>'; ?>
                     </div>
                     <form class="personal-data-form" method="POST" enctype="multipart/form-data" action="/objects/<?php if($applicationURL['2'] === 'add') echo 'add/'; else echo $object['id'] .'/edit/'; ?>">
                         <input type="hidden" name="cpo" value="<?php echo 'нет'; ?>"/>
@@ -266,6 +273,11 @@ if(!empty($object)){
                         <fieldset>
                             <div class="personal-data-form-text">
                                 Лемма охватывает интеграл от функции, обращающейся в бесконечность вдоль линии. Векторное поле решительно уравновешивает Наибольший Общий Делитель (НОД). Дивергенция векторного поля переворачивает криволинейный интеграл. Бином Ньютона переворачивает эмпирический график функции многих переменных, при этом, вместо 13 можно взять любую другую константу.
+                            </div>
+                            <div class="personal-data-form-headline red">Название</div>
+                            <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-data-row clearfix">
+                                <input type="text" name="name" value="<?php echo $object['name']; ?>"><label style="color: #010101; font-size: 14px;"></label>
                             </div>
                             <div class="personal-data-form-headline red">Адрес стройплощадки:</div>
                             <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>

@@ -15,8 +15,22 @@ class usersModel
                       FROM users_objects uo
                         WHERE uo."objectID" = o.id) as responses
               FROM objects o
-                WHERE o."createrUserID"='. $userID .'
-                AND o.type_of_kind<>2')->fetchAll();
+                WHERE o."createrUserID"='. $userID .' AND
+                      o.type_of_kind<>2 AND
+                      o.status<>\'archive\'')->fetchAll();
+        return $objects;
+    }
+    
+    public static function getMyOwnerArchiveObjects($userID){
+        $objects = self::$DB->query('
+            SELECT o.*,
+                   (SELECT COUNT(uo."objectID")
+                      FROM users_objects uo
+                        WHERE uo."objectID" = o.id) as responses
+              FROM objects o
+                WHERE o."createrUserID"='. $userID .' AND
+                      o.type_of_kind<>2 AND
+                      o.status=\'archive\'')->fetchAll();
         return $objects;
     }
     
@@ -26,7 +40,13 @@ class usersModel
                    (SELECT COUNT(c.id)
                       FROM comments c
                         WHERE c."typeID" = o.id AND
-                              c."type"=\'object_comment\') as comment_count
+                              c."type"=\'object_comment\') as comment_count,
+                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                      FROM messages m
+                        WHERE m."typeID" = o.id AND
+                              m."type" = \'system_object\'
+                          ORDER BY m.created DESC
+                            LIMIT 1) as last_system
               FROM objects o
               LEFT JOIN users_objects uo ON o."id" = uo."objectID"
                 WHERE uo."fromUserID"='. $userID .'
@@ -41,7 +61,20 @@ class usersModel
                       FROM users_jobs uj
                         WHERE uj."jobID" = j.id) as responses
               FROM jobs j
-                WHERE j."createrUserID"='. $userID)->fetchAll();
+                WHERE j."createrUserID"='. $userID .' AND
+                      j.status<>\'archive\'')->fetchAll();
+        return $jobs;
+    }
+    
+    public static function getMyOwnerArchiveJobs($userID){
+        $jobs = self::$DB->query('
+            SELECT j.*,
+                   (SELECT COUNT(uj."jobID")
+                      FROM users_jobs uj
+                        WHERE uj."jobID" = j.id) as responses
+              FROM jobs j
+                WHERE j."createrUserID"='. $userID .' AND
+                      j.status=\'archive\'')->fetchAll();
         return $jobs;
     }
     
@@ -51,7 +84,13 @@ class usersModel
                    (SELECT COUNT(c.id)
                       FROM comments c
                         WHERE c."typeID" = j.id AND
-                              c."type"=\'job_comment\') as comment_count
+                              c."type"=\'job_comment\') as comment_count,
+                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                      FROM messages m
+                        WHERE m."typeID" = j.id AND
+                              m."type" ILIKE \'system_job\'
+                          ORDER BY m.created DESC
+                            LIMIT 1) as last_system
               FROM jobs j
               LEFT JOIN users_jobs uj ON j."id" = uj."jobID"
                 WHERE uj."fromUserID"='. $userID)->fetchAll();

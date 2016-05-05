@@ -28,19 +28,19 @@ $application = new Application;
             <a href="/" class="logotype"></a>
             <ul class="navigation clearfix">
                 <li>
-                    <a href="/masters/">Мастера</a>
+                    <a <?php if($application::$URL[1] === 'masters') echo 'class="active"'; ?> href="/masters/">Мастера</a>
                 </li>
                 <li>
-                    <a href="/objects/">Заказы</a>
+                    <a <?php if($application::$URL[1] === 'objects') echo 'class="active"'; ?> href="/objects/">Заказы</a>
                 </li>
                 <li>
-                    <a href="/jobs/">Вакансии</a>
+                    <a <?php if($application::$URL[1] === 'jobs') echo 'class="active"'; ?> href="/jobs/">Вакансии</a>
                 </li>
             </ul>
             <?php
             if(!empty($_SESSION['user'])){
                 $userMessages = $application::getCountsUserMessages($_SESSION['user']['id']);
-                echo '<a href="/users/'. $_SESSION['user']['id'] .'/" class="login">'. $_SESSION['user']['name'] .'</a> <a href="/login/logout/" class="login">Выйти</a>';
+                echo '<a href="/login/logout/" class="login no-lock">Выйти</a> <a href="/users/'. $_SESSION['user']['id'] .'/" class="login no-lock">'. $_SESSION['user']['name'] .'</a>';
             }else{
                 echo '<a href="/login/" class="login">Авторизация</a>';
             }

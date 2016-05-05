@@ -55,7 +55,15 @@ $(document).ready(function() {
 		$('.registration-form fieldset[id]').hide();
 		$('#'+ curid).fadeIn(700);
 		return false;
-	});	
+	});
+	//
+	$('#forward')	.on('click', function() {
+		$('.registration-form fieldset[id]').hide();
+		$('#step2').fadeIn(700);
+		$('.registration-breadcrumb a').removeClass('active');
+		$('.registration-breadcrumb a[data-id="step2"]').addClass('active');
+		return false;
+	});
 	//
 	$('.searcher-sub-categories li .searcher-categories-item label').on('click', function() {
 		var $this = $( this );
@@ -68,6 +76,18 @@ $(document).ready(function() {
 			$(this).find('input').attr('checked', '');
 		}
 
+	});
+	//
+	$('#masters-select').on('change', function(){
+		var act = $('#masters-select option:selected').val();
+		$(this).parents('form.search-block-form').attr("action", "/"+act+"/");
+		if ( act == 'masters' ) {
+			$('#jobs-select').attr('name', "areas_for_user[]");
+		} else if ( act == 'objects' ) {
+			$('#jobs-select').attr('name', "areas_for_object[]");
+		} else if ( act == 'jobs' ) {
+			$('#jobs-select').attr('name', "areas_for_job[]");
+		}
 	});
 });
 //

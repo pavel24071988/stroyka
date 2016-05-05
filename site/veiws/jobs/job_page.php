@@ -14,6 +14,7 @@ if(isset($_SESSION['user'])){
 // обработаем POST - например при подписывании на объект
 if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_SESSION['user'])){
     if(isset($_POST['submitOrder'])){
+        if(empty($_POST['description'])) $_POST['description'] = '';
         $sql = $DB->prepare('
             INSERT INTO users_jobs ("description", "fromUserID", "jobID")
               VALUES(\''. $_POST['description'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['jobID'] .'\')');
@@ -26,11 +27,19 @@ if((isset($_POST['submitOrder']) || isset($_POST['unsubmitOrder'])) && isset($_S
     $update_job = $DB->prepare('UPDATE jobs SET "workerID"=\''. $_POST['user_to_job'] .'\' WHERE "id"='. $applicationURL[2]);
     if($update_job->execute() === true){
         $job['workerID'] = $_POST['user_to_job'];
+        $DB->prepare('
+            INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+            ('. $_SESSION['user']['id'] .', \'Вы назначены исполнителем на вакансию № '. $applicationURL[2] .'.\', '. $_POST['user_to_job'] .', \'system_job\', '. $applicationURL[2] .')
+        ')->execute();
     }
 }elseif(isset($_POST['user_remove_job']) && !empty($_SESSION['user'])){
     $update_job = $DB->prepare('UPDATE jobs SET "workerID"=NULL WHERE "id"='. $applicationURL[2]);
     if($update_job->execute() === true){
         $job['workerID'] = NULL;
+        $DB->prepare('
+            INSERT INTO messages ("fromUserID", "text", "toUserID", "type", "typeID") VALUES
+            ('. $_SESSION['user']['id'] .', \'Вы сняты с вакансии № '. $applicationURL[2] .'.\', '. $_POST['user_remove_job'] .', \'system_job\', '. $applicationURL[2] .')
+        ')->execute();
     }
 }
 
@@ -69,6 +78,15 @@ $answers = $DB->query('
     echo $edit_buttons;
     */
 ?>
+
+<?php
+// помещаем в архив
+if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_owner){
+    $update_job = $DB->prepare('UPDATE jobs SET "status"=\'archive\' WHERE "id"='. $applicationURL[2])->execute();
+    echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
+}
+?>
+
 <?php if(!empty($_SESSION['user'])){ ?>
 <div class="content">
     <div class="my-page-content clearfix">
@@ -116,12 +134,6 @@ $answers = $DB->query('
                     <div class="product-sub-meta-item">Условия:<br>
                     <?php echo $job['conditions'];?>
                     </div>
-                    <?php
-                        if(!$check_owner){
-                            if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><textarea name="description"></textarea><br/><input type="submit" name="submitOrder" value="Откликнуться"/></form>';
-                            else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
-                        }
-                    ?>
                     <div class="product-theme">
                         <?php if($check_owner){ ?>
                         <div class="product-theme-headline">
@@ -158,11 +170,12 @@ $answers = $DB->query('
                             </div>
                             <div class="feedback-item-reply">
                                 <?php
-                                    if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $answer['id']){
-                                        if(!(empty($job['workerID']))){
-                                            if((int) $job['workerID'] === $answer['id']) echo '<form method="POST"><input class="feedback-item-reply-button" type="submit" name="user_remove_job" value="Отклонить"/></form>';
-                                        }else{
-                                            echo '<form method="POST"><input class="feedback-item-reply-button" type="hidden" value="'. $answer['id'] .'" name="user_to_job"><input type="submit" value="Принять"/></form>';
+                                    if(!empty($_SESSION['user'])){
+                                        if($_SESSION['user']['id'] === $job['createrUserID']){
+                                            if((int)$job['workerID'] === $answer['id'])
+                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_remove_job"/><input class="tipical-button" style="line-height: normal;" type="submit" value="Отказаться" /></form>';
+                                            elseif(empty($object['workerID']))
+                                                echo '<form method="POST"><input type="hidden" value="'. $answer['id'] .'" name="user_to_job"/><input class="tipical-button" style="line-height: normal;" type="submit" value="Принять" /></form>';
                                         }
                                     }
                                 ?>
@@ -174,6 +187,14 @@ $answers = $DB->query('
                         } ?>
                     </div>
                 </div>
+                <?php
+                if(!empty($_SESSION['user'])){
+                    if($_SESSION['user']['id'] !== $job['createrUserID']){
+                        if(empty($checkSubmitUser)) echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><!--<textarea class="tipical-textarea" name="description"></textarea>--><input class="tipical-button" style="line-height: normal;" type="submit" name="submitOrder" value="Откликнуться"/></form>';
+                        else echo '<form method="POST"><input type="hidden" value="'. $job['id'] .'" name="jobID"><input type="submit" class="tipical-button" style="line-height: normal;" name="unsubmitOrder" value="Отказаться от выполнения"/></form>';
+                    }
+                }
+                ?>
             </div>
         </div>
     </div>

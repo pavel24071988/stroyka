@@ -289,7 +289,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
-                                    <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                                    <p><b>Место работы:</b> г. <?php echo $user['cityID']; ?></p>
                                     <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
@@ -306,20 +306,20 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
-                                <a href="#" class="tipical-button">Добавить</a>
+                                <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
                             </div>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Редактировать</a>
+                                <a href="#" class="tipical-button">Редактировать</a>
                             </div>
                             <?php echo $user['description']; ?>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Услуги и цены</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Добавить</a>
+                                <a href="#" class="tipical-button">Добавить</a>
                             </div>
                             <?php echo $user['price_description']; ?>
                         </div>
