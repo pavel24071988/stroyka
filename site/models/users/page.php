@@ -41,7 +41,7 @@ class usersModel
                       FROM comments c
                         WHERE c."typeID" = o.id AND
                               c."type"=\'object_comment\') as comment_count,
-                    (SELECT CONCAT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\'), \'  \', m.text)
+                    (SELECT (to_char(m.created, \'DD.MM.YYYY (HH24:MI)\') || \'  \' || m.text)
                       FROM messages m
                         WHERE m."typeID" = o.id AND
                               m."type" = \'system_object\'
