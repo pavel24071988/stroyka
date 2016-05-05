@@ -102,7 +102,7 @@ foreach($area_of_jobs as $area_of_job){
                             <option value="">По всем городам</option>
                             <?php echo implode('', $citiesOptions) ?>
                         </select>
-                        <select class="tipical-select" name="areas_for_job[]">
+                        <select id="jobs-select" class="tipical-select" name="areas_for_job[]">
                             <?php echo implode('', $area_of_jobs) ?>
                         </select>
                     </div>

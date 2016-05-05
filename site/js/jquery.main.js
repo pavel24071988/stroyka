@@ -81,6 +81,13 @@ $(document).ready(function() {
 	$('#masters-select').on('change', function(){
 		var act = $('#masters-select option:selected').val();
 		$(this).parents('form.search-block-form').attr("action", "/"+act+"/");
+		if ( act == 'masters' ) {
+			$('#jobs-select').attr('name', "areas_for_user[]");
+		} else if ( act == 'objects' ) {
+			$('#jobs-select').attr('name', "areas_for_object[]");
+		} else if ( act == 'jobs' ) {
+			$('#jobs-select').attr('name', "areas_for_job[]");
+		}
 	});
 });
 //
