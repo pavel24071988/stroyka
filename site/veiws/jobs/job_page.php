@@ -95,7 +95,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
             <div class="my-page-breadcrumb">
                 <ul>
                     <li>
-                        <a href="/jobs/">Объекты и вакансии</a>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Объекты и вакансии</a>
                     </li>
                     <li>
                         <a href="#"><?php echo $job['name']; ?></a>
@@ -207,7 +207,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
                 <a href="/">Главная</a>
             </li>
             <li>
-                <a href="/jobs">Вакансии</a>
+                <a href="/jobs/">Вакансии</a>
             </li>
             <li>
                 <a href=""><?php echo $job['name']; ?></a>
@@ -217,13 +217,13 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
     <div class="product-holder">
         <div class="product-title"><?php echo $job['name']; ?></div>
         <?php
-            if(!empty($worker_user)){
+            /*if(!empty($worker_user)){
                 echo 'Исполнитель: '. $worker_user['name'] .' '. $worker_user['surname'];
                 if(!empty($_SESSION['user']))
                     echo '<br/><a href="/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $worker_user['id'] .'/">написать исполнителю</a>';
             }else{
                 echo 'Исполнитель не назначен.';
-            }
+            }*/
         ?>
         <div class="product-meta">
             <p>Опубликовано: <?php echo date('j.m.Y H:i:s', strtotime($job['created'])); ?></p>

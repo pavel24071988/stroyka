@@ -38,13 +38,22 @@ if(!empty($_POST)){
             }
         }
         
+        $city = $DB->query('SELECT c.id FROM cities c WHERE c.name=\''. $_POST['city_name'] .'\'')->fetch();
+        if(empty($cities)){
+            $city = $DB->prepare('INSERT INTO cities (name) VALUES(\''. $_POST['city_name'] .'\')')->execute();
+            $cityID = $DB->lastInsertId('cities_id_seq');
+        }else{
+            $cityID = $city['id'];
+        }
+        $city_name = 
+        
         $update_check = $DB->prepare('
             UPDATE users
               SET "name"=\''. $_POST['name'] .'\',
                   "surname"=\''. $_POST['surname'] .'\',
                   "second_name"=\''. $_POST['second_name'] .'\',
                   "experience"=\''. $_POST['experience'] .'\',
-                  "cityID"=\''. $_POST['cityID'] .'\'
+                  "cityID"=\''. $cityID .'\'
                   '. $avatar_update_str .'
                 WHERE "id"='. $user['id']);
         if($update_check->execute() === true){
@@ -55,10 +64,11 @@ if(!empty($_POST)){
     }
     $user = $DB->query('
         SELECT u.*,
+               c.name as city_name,
                (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count
           FROM users u
-            WHERE u."id"='. $user['id'])->fetchAll();
-    $user = $user[0];
+          LEFT JOIN cities c ON u."cityID" = c.id
+            WHERE u."id"='. $user['id'])->fetch();
     $_SESSION['user'] = $user;
 }
 
@@ -105,8 +115,8 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                     
                     <fieldset>
                         <div class="personal-data-form-headline">Личные данные:</div>
-                        <p>Фотография</p>
-                        <input type="file" name="avatar" />
+                        <!--<p>Фотография</p>
+                        <input type="file" name="avatar" />-->
                         <div class="personal-data-row clearfix">
                             <div class="personal-data-row-cell">
                                 <label>Фамилия:</label><input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
@@ -120,7 +130,7 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                                 <label>Имя:</label><input type="text" value='<?php echo $user['name']; ?>' name="name" />
                             </div>
                             <div class="personal-data-row-cell">
-                                <label>Место работы:</label><input type="text" value='<?php echo $user['cityID']; ?>' name="cityID" />
+                                <label>Место работы:</label><input type="text" value='<?php echo $user['city_name']; ?>' name="city_name" />
                             </div>
                         </div>
                         <div class="personal-data-row clearfix">

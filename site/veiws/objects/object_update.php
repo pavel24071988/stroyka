@@ -31,8 +31,9 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
+        $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
+        if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
@@ -63,7 +64,8 @@ if($applicationURL['2'] === 'add'){
                     foreach($_POST['areas_for_object'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Объект создан.</div>';
-                echo '<meta http-equiv="refresh" content="1;URL=/objects/'. $lastInsertId .'/">';
+                /*echo '<meta http-equiv="refresh" content="1;URL=/objects/'. $lastInsertId .'/">';*/
+                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
             }
@@ -90,8 +92,9 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома', 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
+        $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
+        if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
@@ -126,6 +129,7 @@ if($applicationURL['2'] === 'add'){
                 
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
                 $error = '<div style="color: red;">Объект отредактирован.</div>';
+                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
                 
                 // отправляем откликнувшимся пользователям сообщения
                 $submitUsers = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."objectID"='. $applicationURL[2])->fetchAll();
@@ -382,7 +386,8 @@ if(!empty($object)){
                             <br><br>
                             <div class="personal-form-recomendation">
                                 <div class="personal-form-recomendation-headline">Рекомендации</div>
-                                <textarea class="personal-form-textarea" name="recomendations"><?php echo $object['recomendations']; ?></textarea>
+                                <div>Текст</div>
+                                <!--<textarea class="personal-form-textarea" name="recomendations"><?php echo $object['recomendations']; ?></textarea>-->
                             </div>
                             <button class="personal-data-form-submit" style="width: 100%;" type="submit" value="<?php echo $button_name; ?>"><?php echo $button_name; ?></button>
                         </fieldset>

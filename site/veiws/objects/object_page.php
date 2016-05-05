@@ -154,7 +154,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
             <div class="my-page-breadcrumb">
                 <ul>
                     <li>
-                        <a href="/objects/">Объекты и вакансии</a>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Объекты и вакансии</a>
                     </li>
                     <li>
                         <a href="#"><?php echo $object['name']; ?></a>

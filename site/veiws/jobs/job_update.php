@@ -30,10 +30,11 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название',/* 'require' => 'Требования'*/];
+        $rows_to_check = [/*'description' => 'Обязанности', 'house' => 'Номер дома',*/ 'name' => 'Название',/* 'require' => 'Требования'*/];
         if(empty($_POST['bargain'])) $_POST['bargain'] = 'off';
         if(empty($_POST['require'])) $_POST['require'] = '';
         if(empty($_POST['conditions'])) $_POST['conditions'] = '';
+        if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
         $errors = [];
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -62,7 +63,8 @@ if($applicationURL['2'] === 'add'){
                     foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
                 $error = '<div style="color: red;">Вакансия создана.</div>';
-                echo '<meta http-equiv="refresh" content="1;URL=/jobs/'. $lastInsertId .'/">';
+                /*echo '<meta http-equiv="refresh" content="1;URL=/jobs/'. $lastInsertId .'/">';*/
+                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
             }
@@ -89,10 +91,11 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
-        $rows_to_check = ['description' => 'Обязанности', 'house' => 'Номер дома', 'name' => 'Название',/* 'require' => 'Требования'*/];
+        $rows_to_check = [/*'description' => 'Обязанности', 'house' => 'Номер дома',*/ 'name' => 'Название',/* 'require' => 'Требования'*/];
         if(empty($_POST['require'])) $_POST['require'] = '';
         if(empty($_POST['cpo'])) $_POST['cpo'] = 'off';
         if(empty($_POST['dateTo'])) $_POST['dateTo'] = '';
+        if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
         $errors = [];
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -124,6 +127,7 @@ if($applicationURL['2'] === 'add'){
                 $job = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
                 $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
                 $error = '<div style="color: red;">Вакансия отредактирована.</div>';
+                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
                 
                 // отправляем откликнувшимся пользователям сообщения
                 $submitUsers = $DB->query('SELECT uj.* FROM users_jobs uj WHERE uj."jobID"='. $applicationURL[2])->fetchAll();
@@ -273,7 +277,9 @@ if(!empty($job)){
                         <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                         <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null, $areas_for_job); ?></ul>
                         <div class="personal-form-recomendation">
-                            <div class="personal-form-recomendation-headline">Рекомендации</div><textarea name="recomendations" class="personal-form-textarea"><?php echo $job['recomendations']; ?></textarea></div>
+                            <div class="personal-form-recomendation-headline">Рекомендации</div>
+                            <div>Текст</div>
+                            <!--<textarea name="recomendations" class="personal-form-textarea"><?php echo $job['recomendations']; ?></textarea></div>-->
                         <button class="personal-data-form-submit" style="width: 100%;" type="submit"><?php if($applicationURL['2'] === 'add') echo 'Добавить вакансию'; else echo 'Редактировать вакансию'; ?></button>
                     </fieldset>
                 </form>
