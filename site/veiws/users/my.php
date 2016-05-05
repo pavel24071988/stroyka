@@ -36,6 +36,22 @@ foreach($objects_images as $image){
     $imgs[] = '<img width="100px" src="/images/objects/'. $image['objectID'] .'/'. $image['src'] .'" />';
 }
 $countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $user['id'] .'/\'')->fetch();
+
+$my_works_query = $DB->query('
+    SELECT DISTINCT ON (r.id) id,
+           r.*
+      FROM (
+        SELECT o.*,
+               oi.src
+          FROM objects o
+          LEFT JOIN objects_imgs oi ON o.id = oi."objectID"
+           ) as r
+        WHERE r."createrUserID"='. $user['id'])->fetchAll();
+$my_works = [];
+foreach($my_works_query as $my_work){
+    if(empty($my_work['src'])) continue;
+    $my_works[] = '<img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/>';
+}
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
 else echo '<h1>Страница пользователя</h1>';*/
@@ -307,6 +323,30 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
                                 <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
+                                <div class="photo-carousel-standart">
+                                <div id="jssor_1" class="rotator-holder">
+                                    <!-- Loading Screen -->
+                                    <div data-u="loading" class="rotator-inner">
+                                        <div class="rotator-inner-block"></div>
+                                        <div class="rotator-inner-load"></div>
+                                    </div>
+                                    <div data-u="slides" class="rotator-content">
+                                        <div style="display: none;">
+                                        <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                                        </div>
+                                    </div>
+                                    <!-- Bullet Navigator -->
+                                    <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
+                                        <!-- bullet navigator item prototype -->
+                                        <div data-u="prototype" style="width:21px;height:21px;">
+                                            <div data-u="numbertemplate"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Arrow Navigator -->
+                                    <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                                    <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                                </div>
+                            </div>
                             </div>
                         </div>
                         <div class="specialist-meta-block">

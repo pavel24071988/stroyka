@@ -16,6 +16,7 @@ $application = new Application;
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
         <script type="text/javascript" src="/site/js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/site/js/jquery.fancybox-1.3.4.pack.js"></script>
+        <script type="text/javascript" src="/site/js/jssor.slider.mini.js"></script>
         <script type="text/javascript" src="/site/js/jquery.main.js"></script>
 	<script type="text/javascript" src="/site/js/main.js"></script>
 
