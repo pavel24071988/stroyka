@@ -2059,6 +2059,34 @@ p {margin-bottom: 7px;}
 	font-weight: bold;
 	color: #ffcd00;
 }
+.add_photo_modal_text {
+	font-size: 14px;
+	line-height: 18px;
+}
+.add_photo_modal_text span.semi-red {color: #d73838;}
+.add_photo_modal_buttons {margin-top: 30px;}
+.add_photo_modal_buttons .tipical-button {
+	padding: 0 10px;
+	color: #636262;
+	font-size: 15px;
+	float: left;
+	margin-right: 30px;
+}
+.add_photo_modal_buttons .file_upload {float: left;}
+.add_photo_modal_buttons .tipical-button:hover {color: #fff;}
+.add_photo_modal_photo .tipical-button {
+	padding: 0 10px;
+	color: #636262;
+	font-size: 15px;
+	line-height: normal;
+}
+.add_photo_modal_photo .tipical-button:hover {color: #fff;}
+.add_photo_modal_photo .add_photo_modal_imgtext {
+	font-size: 12px;
+	line-height: 16px;
+	color: #636262;
+	margin: 20px 0;
+}
 /* page styles end */
 
 /* media query start */
