@@ -13,6 +13,17 @@ if(isset($_POST['changeStatus'])){
           VALUES(\''. $_POST['ownerUserID'] .'\', \''. $_POST['typeID'] .'\', \''. $_POST['type'] .'\', \''. $_POST['positive_description'] .'\', \''. $_POST['negative_description'] .'\', \''. $_POST['conclusion'] .'\', \''. $_POST['positive_negative'] .'\')
     ');
     $sql->execute();
+}elseif(!empty($_FILES['avatar']['tmp_name'])){
+    if(!file_exists("images/users/". $user['id'])) mkdir("images/users/". $user['id'], 0777);
+    if(copy($_FILES['avatar']['tmp_name'], "images/users/". $user['id'] ."/". $_FILES['avatar']['name'])){
+        $update_avatar = $DB->prepare('UPDATE users SET "avatar"=\''. $_FILES['avatar']['name'] .'\' WHERE "id"='. $user['id']);
+        if($update_avatar->execute() === true){
+            $error = 'Фотография загружена.';
+            $_SESSION['user']['avatar'] = $_FILES['avatar']['name'];
+            $user['avatar'] = $_FILES['avatar']['name'];
+        }
+        else $error = 'Не удалось загрузить фотография.';
+    }
 }
 
 $professions = $DB->query('
@@ -108,6 +119,44 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
                     </div>
                     <?php if($common_data['check_owner']){ ?>
+                    <a href="#add_my_photo" class="modal_on">окошечко</a>
+
+                    <div style="display: none;">
+                        <div id="add_my_photo" style="width: 684px;">
+                            <form class="modal_add_my_photo">
+                                <fieldset>
+                                    <div class="first-view">
+                                        <div class="modal-title">Загрузить фотографию</div>
+                                        <div class="add_photo_modal_text">
+                                            <br>
+                                            <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
+                                            <br>
+                                            <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
+                                            <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                        </div>
+                                        <div class="add_photo_modal_buttons clearfix">
+                                            <div class="file_upload">
+                                                <button type="button" class="tipical-button">Загрузить фото</button>
+                                                <input type="file">
+                                            </div>
+                                            <a href="#" class="tipical-button">Фото с веб-камеры</a>
+                                        </div>
+                                    </div>
+                                    <!-- Ниже идёт вид после загрузки фотографии -->
+                                    <!--<div class="add_photo_modal_photo">
+                                        <div class="modal-title">Ваша фотография</div>
+                                        <div class="add_photo_modal_img">
+                                            <img src="">
+                                            <div class="add_photo_modal_imgtext">
+                                                Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
+                                            </div>
+                                        </div> 
+                                        <input type="submit" class="tipical-button" value="Сохранить"> 
+                                    </div>-->
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                     <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Сделать фото</a>
                     <div class="file_upload">
                         <button type="button" class="tipical-button"><a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить с компьютера</a></button>
@@ -283,17 +332,54 @@ else echo '<h1>Страница пользователя</h1>';*/
             <div class="my-page-wrapper-content">
                 <div class="passport-main-holder clearfix">
                     <div class="passport-main-left">
-                        <a href="#" class="passport-avatar">
+                        <a href="#add_my_photo" class="passport-avatar modal_on">
                             <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
                         </a>
-                        <?php if($common_data['check_owner']){ ?><a href="#" class="tipical-button">Сделать фото</a><?php } ?>
                         <?php if($common_data['check_owner']){ ?>
+                        <a href="#add_my_photo" class="tipical-button modal_on">Сделать фото</a>
+
+                        <div style="display: none;">
+                            <div id="add_my_photo" style="width: 684px;">
+                                <form class="modal_add_my_photo" method="POST" enctype="multipart/form-data">
+                                    <fieldset>
+                                        <div class="first-view">
+                                            <div class="modal-title">Загрузить фотографию</div>
+                                            <div class="add_photo_modal_text">
+                                                <br>
+                                                <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
+                                                <br>
+                                                <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
+                                                <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                            </div>
+                                            <div class="add_photo_modal_buttons clearfix">
+                                                <div class="file_upload">
+                                                    <button type="button" class="tipical-button">Загрузить фото</button>
+                                                    <input type="file" name="avatar">
+                                                </div>
+                                                <a href="#" class="tipical-button">Фото с веб-камеры</a>
+                                            </div>
+                                        </div>
+                                        <!-- Ниже идёт вид после загрузки фотографии -->
+                                        <div class="add_photo_modal_photo">
+                                            <div class="modal-title">Ваша фотография</div>
+                                            <div class="add_photo_modal_img">
+                                                <img src="">
+                                                <div class="add_photo_modal_imgtext">
+                                                    Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
+                                                </div>
+                                            </div>
+                                            <input type="submit" class="tipical-button" value="Сохранить"> 
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                         <div class="file_upload">
-                            <button type="button" class="tipical-button"><a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить с компьютера</a></button>
-                            <input type="file">
+                            <a href="#add_my_photo" class="tipical-button modal_on">Загрузить с компьютера</a>
                         </div>
                         <?php } ?>
-                        <?php if(!$common_data['check_owner']){ ?><a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a><?php } ?>
+                        <?php if(!$common_data['check_owner']){ ?>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a><?php } ?>
                     </div>
                     <div class="passport-main-right">
                         <div class="specialist-holder clearfix">

@@ -169,44 +169,4 @@ foreach($area_of_jobs as $area_of_job){
         <?php } ?>
         <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
     </div>
-
-    <a href="#add_my_photo" class="modal_on">окошечко</a>
-
-    <div style="display: none;">
-        <div id="add_my_photo" style="width: 684px;">
-            <form class="modal_add_my_photo">
-                <fieldset>
-                    <div class="first-view">
-                        <div class="modal-title">Загрузить фотографию</div>
-                        <div class="add_photo_modal_text">
-                            <br>
-                            <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
-                            <br>
-                            <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
-                            <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
-                        </div>
-                        <div class="add_photo_modal_buttons clearfix">
-                            <div class="file_upload">
-                                <button type="button" class="tipical-button">Загрузить фото</button>
-                                <input type="file">
-                            </div>
-                            <a href="#" class="tipical-button">Фото с веб-камеры</a>
-                        </div>
-                    </div>
-                    <!-- Ниже идёт вид после загрузки фотографии -->
-                    <!--<div class="add_photo_modal_photo">
-                        <div class="modal-title">Ваша фотография</div>
-                        <div class="add_photo_modal_img">
-                            <img src="">
-                            <div class="add_photo_modal_imgtext">
-                                Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
-                            </div>
-                        </div> 
-                        <input type="submit" class="tipical-button" value="Сохранить"> 
-                    </div>-->
-                </fieldset>
-            </form>
-        </div>
-    </div>
-
 </div>

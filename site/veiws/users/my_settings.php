@@ -29,14 +29,6 @@ if(!empty($_POST)){
             }
         }
     }elseif(isset($_POST['personal_data'])){
-        // обработаем картинку
-        $avatar_update_str = '';
-        if(!empty($_FILES['avatar']['tmp_name'])){
-            if(!file_exists("images/users/". $user['id'])) mkdir("images/users/". $user['id'], 0777);
-            if(copy($_FILES['avatar']['tmp_name'], "images/users/". $user['id'] ."/". $_FILES['avatar']['name'])){
-                $avatar_update_str = ', "avatar"=\''. $_FILES['avatar']['name'] .'\'';
-            }
-        }
         
         $city = $DB->query('SELECT c.id FROM cities c WHERE c.name=\''. $_POST['city_name'] .'\'')->fetch();
         if(empty($cities)){
@@ -54,7 +46,6 @@ if(!empty($_POST)){
                   "second_name"=\''. $_POST['second_name'] .'\',
                   "experience"=\''. $_POST['experience'] .'\',
                   "cityID"=\''. $cityID .'\'
-                  '. $avatar_update_str .'
                 WHERE "id"='. $user['id']);
         if($update_check->execute() === true){
             $error = 'Данные отредактированы.';
@@ -115,8 +106,6 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                     
                     <fieldset>
                         <div class="personal-data-form-headline">Личные данные:</div>
-                        <!--<p>Фотография</p>
-                        <input type="file" name="avatar" />-->
                         <div class="personal-data-row clearfix">
                             <div class="personal-data-row-cell">
                                 <label>Фамилия:</label><input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
