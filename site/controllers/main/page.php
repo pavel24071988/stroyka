@@ -3,7 +3,7 @@
 $DB = Application::$DB;
 $masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->fetch();
 $jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs WHERE status<>\'archive\'')->fetch();
-$companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 0')->fetch();
+$companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 2')->fetch();
 
 if(isset($_GET['search'])){
     $href = "/". $_GET['type'] .'/?search=true&cityID='. $_GET['cityID'] .'&search_str='. $_GET['search_str'] .'&areaJID='. $_GET['areaJID'];

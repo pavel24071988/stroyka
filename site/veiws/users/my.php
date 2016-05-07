@@ -49,15 +49,9 @@ foreach($objects_images as $image){
 $countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $user['id'] .'/\'')->fetch();
 
 $my_works_query = $DB->query('
-    SELECT DISTINCT ON (r.id) id,
-           r.*
-      FROM (
-        SELECT o.*,
-               oi.src
-          FROM objects o
-          LEFT JOIN objects_imgs oi ON o.id = oi."objectID"
-           ) as r
-        WHERE r."createrUserID"='. $user['id'])->fetchAll();
+    SELECT DISTINCT ON (r.id) id, r.*
+      FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
+        WHERE r.src IS NOT NULL AND r."createrUserID"='. $user['id'])->fetchAll();
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
@@ -99,7 +93,7 @@ else echo '<h1>Страница пользователя</h1>';*/
     <div>Специализации: <?php //echo implode(', ', $professions_str); ?></div>
 </div>
 -->
-<?php if($user['type_of_registration'] === '0'){ ?>
+<?php if($user['type_of_registration'] === 2){ ?>
 <div class="content">
     <div class="my-page-content clearfix">
         <?php if($common_data['check_owner']) echo Application::getLeftMenu(); ?>
@@ -115,15 +109,15 @@ else echo '<h1>Страница пользователя</h1>';*/
             <div class="my-page-wrapper-content clearfix">
 
                 <div class="company-passport-left">
-                    <div class="company-passport-avatar">
+                    <a href="#add_my_photo" class="passport-avatar modal_on">
                         <?php if(!empty($user['avatar'])) echo '<img width="200px" src="/images/users/'. $user['id'] .'/'. $user['avatar'] .'"/>'; else echo '<img src="/images/img1.jpg">'; ?>
-                    </div>
+                    </a>
                     <?php if($common_data['check_owner']){ ?>
-                    <a href="#add_my_photo" class="modal_on">окошечко</a>
+                    <a href="#add_my_photo" class="tipical-button modal_on">Сделать фото</a>
 
                     <div style="display: none;">
                         <div id="add_my_photo" style="width: 684px;">
-                            <form class="modal_add_my_photo">
+                            <form class="modal_add_my_photo" method="POST" enctype="multipart/form-data">
                                 <fieldset>
                                     <div class="first-view">
                                         <div class="modal-title">Загрузить фотографию</div>
@@ -137,33 +131,33 @@ else echo '<h1>Страница пользователя</h1>';*/
                                         <div class="add_photo_modal_buttons clearfix">
                                             <div class="file_upload">
                                                 <button type="button" class="tipical-button">Загрузить фото</button>
-                                                <input type="file">
+                                                <input type="file" name="avatar">
                                             </div>
                                             <a href="#" class="tipical-button">Фото с веб-камеры</a>
                                         </div>
                                     </div>
                                     <!-- Ниже идёт вид после загрузки фотографии -->
-                                    <!--<div class="add_photo_modal_photo">
+                                    <div class="add_photo_modal_photo">
                                         <div class="modal-title">Ваша фотография</div>
                                         <div class="add_photo_modal_img">
                                             <img src="">
                                             <div class="add_photo_modal_imgtext">
                                                 Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
                                             </div>
-                                        </div> 
+                                        </div>
                                         <input type="submit" class="tipical-button" value="Сохранить"> 
-                                    </div>-->
+                                    </div>
                                 </fieldset>
                             </form>
                         </div>
                     </div>
-                    <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="tipical-button">Сделать фото</a>
                     <div class="file_upload">
-                        <button type="button" class="tipical-button"><a href="/users/<?php echo $user['id']; ?>/my_settings/">Загрузить с компьютера</a></button>
-                        <input type="file">
+                        <a href="#add_my_photo" class="tipical-button modal_on">Загрузить с компьютера</a>
                     </div>
                     <?php } ?>
+                    <?php if(!$common_data['check_owner']){ ?>
                     <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
+                    <?php } ?>
                 </div>
                 <div class="company-passport-right">
                     <div class="company-passport-title"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></div>
@@ -172,7 +166,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>Виды деятельности:</b> <?php echo implode(', ', $professions_str); ?></p>
                         <br>
                         <p><b>Стаж работы:</b> <?php echo $user['age']; ?> лет</p>
-                        <p><b>Место работы:</b> г. <?php echo $user['work_city']; ?></p>
+                        <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
                         <br>
                         <p>Наличие СРО и сертификатов</p>
                         <br>
@@ -188,7 +182,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 
 
                     <!-- Понятия не имею на какую кнопку должны вызываться эти окна. Поэтому тупо добавил эти ссылки -->
-                    <!-- Удалить к хуям отсюда-->
+                    <!--
                     <br><br><br><br>
                     <a href="#write-message" class="modal_on">Написать быстрое сообщение</a>
                     <br>
@@ -198,8 +192,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <br>
                     <a href="#cancel-application" class="modal_on">Отмена заявки</a>
                     <br><br><br><br>
-                    <!-- Удалить к хуям до сюда-->
-
+                    -->
                 </div>
 
             </div>

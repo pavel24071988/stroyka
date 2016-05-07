@@ -46,11 +46,36 @@ if(!empty($_POST)){
     $cityID = $city['id'];
     
     // начинаем регистрировать
-    if(empty($error)){
+    if(empty($error)){        
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password)
               VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\')');
         if($registration_check->execute() === true){
+            
+            $newUserID = $DB->lastInsertId('users_id_seq');
+            
+            if(!empty($_FILES['avatar']['tmp_name'])){
+                if(!file_exists("images/users/". $newUserID)) mkdir("images/users/". $newUserID, 0777);
+                if(copy($_FILES['avatar']['tmp_name'], "images/users/". $newUserID ."/". $_FILES['avatar']['name'])){
+                    $update_avatar = $DB->prepare('UPDATE users SET "avatar"=\''. $_FILES['avatar']['name'] .'\' WHERE "id"='. $newUserID);
+                    if($update_avatar->execute() === true){
+                        $error = 'Фотография загружена.';
+                        $_SESSION['user']['avatar'] = $_FILES['avatar']['name'];
+                        $user['avatar'] = $_FILES['avatar']['name'];
+                    }
+                    else $error = 'Не удалось загрузить фотография.';
+                }
+            }
+            
+            // записываем виды сфер деятильностей пользователя
+            if(!empty($_POST['areas_for_user'])){
+                $DB->prepare('DELETE FROM users_kinds_of_jobs WHERE "userID"='. $newUserID)->execute();
+                foreach($_POST['areas_for_user'] as $kind_of_job_id){
+                    $DB->prepare('INSERT INTO users_kinds_of_jobs ("userID", "kind_of_job_id") VALUES('. $newUserID .', '. $kind_of_job_id .')')->execute();
+                }
+            }
+            
+            
             $user = $DB->query('
                 SELECT u.*,
                        (SELECT COUNT(c.id) FROM comments c WHERE c."typeID" = u.id AND c."type"=\'user_comment\') as comment_count,
@@ -59,7 +84,7 @@ if(!empty($_POST)){
                   FROM users u
                   LEFT JOIN cities c ON u."cityID" = c."id"
                   LEFT JOIN areas a ON u."areaID" = a."id"
-                    WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'
+                    WHERE u."id"=\''. $newUserID .'\'
             ')->fetch();
             unset($_SESSION['user']);
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
@@ -143,7 +168,7 @@ if(!empty($_POST)){
             <div class="registration-breadcrumb-break">шаг</div>
             <a href="#" class="registration-breadcrumb-step" data-id="step2">2</a>
         </div>
-        <form class="registration-form" action="/registration/" method="POST" enctype="form-data">
+        <form class="registration-form" action="/registration/" method="POST" enctype="multipart/form-data">
             <div style="color: red;"><?php echo $error; ?></div>
             <fieldset id="step1">
                 <div class="registration-form-headline">Ваши данные будут проверяться! Не указывайте недостоверную информацию!</div>
