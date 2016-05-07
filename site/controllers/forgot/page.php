@@ -25,9 +25,24 @@ if(!empty($_POST['email'])){
     echo '<div style="color: red;">'. $error .'</div>';
 }
 ?>
-<h1>Форма восстановления пароля</h1>
+<!--<h1>Форма восстановления пароля</h1>
 <form method="POST">
     Укажите адрес электронный почты аккаунта:<br/>
     <input type="text" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>"/><br />
     <input type="submit" name="Восстановить"/>
-</form>
+</form>-->
+
+
+<div class="content">
+    <div class="simple-headline">Форма восстановления пароля</div>
+    <div class="authorization-block">
+        <p style="color: #1c2f3b;">Для восстановления доступа к аккаунту заполните форму ниже. Пароль будет выслан на почту.</p>
+        <form class="authorization-form" method="POST">
+            <fieldset>
+                <label class="frgt-label">Введите почту</label>
+                <input type="email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>"/><br />
+                <input class="tipical-button frgt" value="Отправить" type="submit" name="Восстановить"/>
+            </fieldset>
+        </form>
+    </div>
+</div>

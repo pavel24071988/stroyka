@@ -406,7 +406,8 @@ p {margin-bottom: 7px;}
 	line-height: 22px;
 	width: 266px;
 }
-.authorization-form input {
+.authorization-form input[type="text"],
+.authorization-form input[type="password"] {
 	width: 224px;
 	height: 31px;
 	margin-bottom: 15px;
@@ -2086,6 +2087,30 @@ p {margin-bottom: 7px;}
 	line-height: 16px;
 	color: #636262;
 	margin: 20px 0;
+}
+.authorization-form input[type="email"] {
+	width: 250px;
+	height: 31px;
+	margin-bottom: 15px;
+	border: 1px solid #cfdce0;
+	transition: all .3s ease-in-out;
+	padding: 0 7px;
+	font-size: 15px;
+	color: #888;
+}
+.authorization-form input:focus {border: 1px solid #82b5c8;}
+.authorization-form .frgt {
+	padding: 0 10px;
+	color: #636262;
+	font-size: 15px;
+	line-height: normal;
+}
+.authorization-form .frgt:hover {color: #fff;}
+.frgt-label {
+	font-size: 14px;
+	display: block;
+	margin: 85px 0 5px;
+	color: #1c2f3b;
 }
 /* page styles end */
 
