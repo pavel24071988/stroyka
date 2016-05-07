@@ -46,7 +46,12 @@ if(!empty($_POST)){
     $cityID = $city['id'];
     
     // начинаем регистрировать
-    if(empty($error)){        
+    if(empty($error)){
+        $user_check = $DB->query('SELECT * FROM users WHERE email=\''. $_POST['email'] .'\'')->fetch();
+        if(!empty($user_check)){
+            $error .= 'Данный адрес уже зарегистрирован. ';
+        }
+        
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password)
               VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\')');
@@ -95,7 +100,7 @@ if(!empty($_POST)){
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
             echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user['id'] .'/">';
         }else{
-            $error .= 'Регистрация не удалась. Попробуйте позже.';
+            $error .= 'Регистрация не удалась. Попробуйте позже. ';
         }
     }
 }
