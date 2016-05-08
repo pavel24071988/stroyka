@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $error = '';
 if(!empty($_POST)){
     // пытаемся зарегистрировать пользователя
@@ -28,9 +28,9 @@ if(!empty($_POST)){
 }
 ?>
 <div class="content">
-    <div class="simple-headline">Текст о регистрации</div>
+    <div class="simple-headline">Регистрация</div>
     <div class="authorization-block">
-        <p>Вселенная коаксиально сжимает векторный гамма-квант. Сверхпроводник ненаблюдаемо заряжает спиральный погранслой. При погружении в жидкий кислород гетерогенная структура индуцирует кристалл.</p>
+        <p>Для того чтобы пользоваться дополнительными услугами сайта, вам необходимо зарегистрироваться.</p>
         <form class="authorization-form" action="/login/" method="POST">
             <fieldset>
                 <input type="text" name="email" value="<?php if(!empty($_POST['email'])) echo($_POST['email']); ?>" placeholder="Имя пользователя">
