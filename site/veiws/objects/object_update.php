@@ -148,9 +148,11 @@ if(!empty($_FILES['object_img'])){
     // обработаем картинку
     if(!empty($_FILES['object_img']['tmp_name'])){
         if(!file_exists("images/objects/". $common_data['object']['id'])) mkdir("images/objects/". $common_data['object']['id'], 0777);
-        if(copy($_FILES['object_img']['tmp_name'], "images/objects/". $common_data['object']['id'] ."/". $_FILES['object_img']['name'])){
-            $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $common_data['object']['id'] .'\', \''. $_FILES['object_img']['name'] .'\')');
-            $create_sql->execute();
+        foreach($_FILES['object_img']['name'] as $key => $img){
+            if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $common_data['object']['id'] ."/". $_FILES['object_img']['name'][$key])){
+                $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $common_data['object']['id'] .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
+                $create_sql->execute();
+            }
         }
     }
 }
@@ -372,7 +374,7 @@ if(!empty($object)){
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file" name="object_img">
+                                <input type="file" name="object_img[]"  multiple='true'>
                             </div>
                             <div><?php echo implode(' ', $object_imgs_arr);?></div>
                             <br>

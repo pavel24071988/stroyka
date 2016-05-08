@@ -60,8 +60,16 @@ $object_imgs = $DB->query('
       FROM objects_imgs oi
         WHERE oi."objectID"='. $object['id'])->fetchAll();
 $object_imgs_arr = [];
-foreach($object_imgs as $object_img){
-    $object_imgs_arr[] = '<img width="100px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+foreach($object_imgs as $key => $object_img){
+    $object_imgs_arr[] = '
+        <div class="product-photo-item">
+            <a href="#work1" class="modal_on product-photo">
+                <div class="product-photo-scope"></div>
+                <img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'">
+            </a>
+            <div class="product-photo-name">Фото '. ($key+1) .'</div>
+        </div>
+    ';
 }
 $object_docs = $DB->query('
     SELECT *
@@ -191,7 +199,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
                     <?php echo $object['description'];?><br/><br/>
                     <div class="product-sub-meta-headline">Фото работ</div>
                     <div class="product-photo-holder clearfix">
-
+                        <?php echo implode(' ', $object_imgs_arr); ?>
                     </div>
                     <div class="product-theme">
                         <div class="product-theme-headline">

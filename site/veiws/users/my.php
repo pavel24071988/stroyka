@@ -8,6 +8,8 @@ if(isset($_POST['changeStatus'])){
     $DB->prepare('UPDATE users SET "status"='. $newValue .' WHERE "id"='. $user['id'])->execute();
     $user['status'] = $newValue;
 }elseif(isset($_POST['positive_negative'])){
+    if($_POST['positive_negative'] === 'Плохо') $_POST['positive_negative'] = 'off';
+    elseif($_POST['positive_negative'] === 'Хорошо') $_POST['positive_negative'] = 'on';
     $sql = $DB->prepare('
         INSERT INTO comments ("ownerUserID", "typeID", type, positive_description, negative_description, conclusion, positive_negative)
           VALUES(\''. $_POST['ownerUserID'] .'\', \''. $_POST['typeID'] .'\', \''. $_POST['type'] .'\', \''. $_POST['positive_description'] .'\', \''. $_POST['negative_description'] .'\', \''. $_POST['conclusion'] .'\', \''. $_POST['positive_negative'] .'\')
@@ -384,7 +386,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
-                                    <p><b>Место работы:</b> г. <?php echo $user['cityID']; ?></p>
+                                    <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
                                     <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
@@ -480,12 +482,40 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <div class="specialist-block-title">
                         <span>Отзывы</span>
                     </div>
-                    <div class="feedback-counter clearfix">
-                        <a href="#">10 положительных</a>
-                        <span>|</span>
-                        <a href="#">0 отрицательных</a>
-                    </div>
                     <?php
+                    $positive_negative = $DB->query('
+                        SELECT r.* FROM (
+                            SELECT c.id, c.positive_negative
+                              FROM jobs j
+                              LEFT JOIN comments c ON j.id = c."typeID"
+                              LEFT JOIN users u ON u.id = c."ownerUserID"
+                                WHERE j."workerID" = '. $user['id'] .' AND c.type = \'job_comment\'
+                            UNION ALL
+                            SELECT c.id, c.positive_negative
+                              FROM objects o
+                              LEFT JOIN comments c ON o.id = c."typeID"
+                              LEFT JOIN users u ON u.id = c."ownerUserID"
+                                WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\'
+                            UNION ALL
+                            SELECT c.id, c.positive_negative
+                              FROM comments c
+                                WHERE c."typeID" = '. $user['id'] .' AND c.type = \'user_comment\'
+                        ) as r
+                    ')->fetchAll();
+                    
+                    $positive = 0;
+                    $negative = 0;
+                    foreach($positive_negative as $comment){
+                        if($comment['positive_negative'] === true) $positive++;
+                        else $negative++;
+                    }
+                    
+                    echo '<div class="feedback-counter clearfix">
+                        <a href="#">'. $positive .' положительных</a>
+                        <span>|</span>
+                        <a href="#">'. $negative .' отрицательных</a>
+                    </div>';
+                    
                     $comments = $DB->query('
                         SELECT c.*,
                                j.name as type_name,
