@@ -349,21 +349,18 @@ else echo '<h1>Страница пользователя</h1>';*/
                                             <div class="add_photo_modal_buttons clearfix">
                                                 <div class="file_upload">
                                                     <button type="button" class="tipical-button">Загрузить фото</button>
-                                                    <input type="file" name="avatar">
+                                                    <input type="file" id="ava-files" name="files[]" multiple>
                                                 </div>
                                                 <a href="#" class="tipical-button">Фото с веб-камеры</a>
                                             </div>
                                         </div>
                                         <!-- Ниже идёт вид после загрузки фотографии -->
                                         <div class="add_photo_modal_photo">
-                                            <div class="modal-title">Ваша фотография</div>
+                                            <!-- <div class="modal-title">Ваша фотография</div> -->
                                             <div class="add_photo_modal_img">
-                                                <img src="">
-                                                <div class="add_photo_modal_imgtext">
-                                                    Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
-                                                </div>
+                                                <output id="ava-photo"></output>
                                             </div>
-                                            <input type="submit" class="tipical-button" value="Сохранить"> 
+                                            <input style="display: none;" type="submit" id="add_photo_save" class="tipical-button" value="Сохранить"> 
                                         </div>
                                     </fieldset>
                                 </form>

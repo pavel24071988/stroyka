@@ -1672,7 +1672,7 @@ p {margin-bottom: 7px;}
 	display: block;
 }
 .passport-main-left .tipical-button {
-	width: 100%;
+	width: 99.3%;
 	margin-bottom: 8px;
 	font-size: 15px;
 	color: #636262;
@@ -1689,7 +1689,7 @@ p {margin-bottom: 7px;}
 	color: #054157;
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 50px;
 }
 .change-status {
 	display: inline-block;
@@ -2085,6 +2085,7 @@ p {margin-bottom: 7px;}
 	line-height: normal;
 }
 .add_photo_modal_photo .tipical-button:hover {color: #fff;}
+.add_photo_modal_img {margin: 20px 0;}
 .add_photo_modal_photo .add_photo_modal_imgtext {
 	font-size: 12px;
 	line-height: 16px;
