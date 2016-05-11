@@ -191,7 +191,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
                     </div>
                     <?php if(!empty($_SESSION['user'])){ ?>
                     <p class="product-meta-title place">Адрес: <?php echo $object['street'] .' '. $object['house'];?></p>
-                    <p class="product-meta-title phone">Тел. +8 987 456 45 45</p>
+                    <p class="product-meta-title phone">Тел. <?php echo $object['phone']; ?></p>
                     <?php } ?>
                 </div>
                 <div class="product-sub-meta">

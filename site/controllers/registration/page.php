@@ -182,14 +182,14 @@ if(!empty($_POST)){
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
                                 <select name="type_of_registration">
-                                    <option value="1">Физическое лицо</option>
-                                    <option value="2">Юридическое лицо</option>
+                                    <option value="1" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '1') echo 'selected'; ?>>Физическое лицо</option>
+                                    <option value="2" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '2') echo 'selected'; ?>>Юридическое лицо</option>
                                 </select>    
                             </div>
                             <div class="registration-form-row-cell">
                                 <select name="type_of_kind">
-                                    <option value="1">Частный мастер</option>
-                                    <option value="2">Бригада</option>
+                                    <option value="1" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '1') echo 'selected'; ?>>Частный мастер</option>
+                                    <option value="2" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '2') echo 'selected'; ?>>Бригада</option>
                                 </select>
                             </div>
                         </div>
@@ -216,7 +216,7 @@ if(!empty($_POST)){
                                 <input type="text" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <label style="line-height: 35px;"><input type="checkbox"> Без отчества</label>
+                                <label style="line-height: 35px;"><input type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества</label>
                             </div>
                         </div>
                     </div>
@@ -246,7 +246,11 @@ if(!empty($_POST)){
                     <div class="main-place">
                         <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
                         <ul class="searcher-categories registr-type">
-                            <?php echo Application::getListOfAreas('user', null); ?>
+                            <?php
+                                $areas_for_user = [];
+                                if(isset($_POST['areas_for_user'])) $areas_for_user = ['areas_for_user' => $_POST['areas_for_user']];
+                                echo Application::getListOfAreas('user', null, $areas_for_user);
+                            ?>
                         </ul>
                     </div>
                     <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>

@@ -238,11 +238,11 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <br>
                     <div class="specialist-personal">
                         <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
-                        <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                        <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
                         <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                         <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
                         <?php if(!empty($_SESSION['user'])){ ?>
-                        <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                        <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
                         <?php } ?>
                         <p><b>Виды деятельности:</b></p>
                         <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
@@ -382,22 +382,26 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <a href="#" class="specialist-name">
                                     <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
                                     <span class="valid">(проверено)</span>
+                                    <span class="views"><b>Просмотров:</b> <?php echo $countOfViews['count']; ?></span>
                                 </a>
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
                                     <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
-                                    <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                                    <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
                                     <?php if(!empty($_SESSION['user'])){ ?>
-                                    <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                                    <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
                                     <?php } ?>
                                     <p><b>Виды деятельности:</b></p>
                                     <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                                 </div>
                             </div>
-                            <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a><?php } ?>
+                            <?php if($common_data['check_owner']){ ?>
+                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a>
+                                
+                            <?php } ?>
                         </div>
                         <?php if($common_data['check_owner']){ ?>
                         <div class="specialist-meta-block">

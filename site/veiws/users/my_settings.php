@@ -45,6 +45,7 @@ if(!empty($_POST)){
                   "surname"=\''. $_POST['surname'] .'\',
                   "second_name"=\''. $_POST['second_name'] .'\',
                   "experience"=\''. $_POST['experience'] .'\',
+                  "phone"=\''. $_POST['phone'] .'\',
                   "cityID"=\''. $cityID .'\'
                 WHERE "id"='. $user['id']);
         if($update_check->execute() === true){
@@ -125,6 +126,9 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                         <div class="personal-data-row clearfix">
                             <div class="personal-data-row-cell">
                                 <label>Отчество:</label><input type="text" value='<?php echo $user['second_name']; ?>' name="second_name" />
+                            </div>
+                            <div class="personal-data-row-cell">
+                                <label>Телефон:</label><input type="text" value='<?php if(!empty($user['phone'])) echo $user['phone']; ?>' name="phone" />
                             </div>
                         </div>
                         <br><br>
