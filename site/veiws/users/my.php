@@ -408,7 +408,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
                                 <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
-                                <div class="photo-carousel-standart">
+                            </div>
+                            <div class="photo-carousel-standart">
                                 <div id="jssor_1" class="rotator-holder">
                                     <!-- Loading Screen -->
                                     <div data-u="loading" class="rotator-inner">
@@ -431,7 +432,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
                                     <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
                                 </div>
-                            </div>
                             </div>
                         </div>
                         <div class="specialist-meta-block">

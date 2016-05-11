@@ -1890,7 +1890,10 @@ p {margin-bottom: 7px;}
 	margin-bottom: 10px;
 	position: relative;
 }
-.product-photo-item .product-photo img {height: 232px;}
+.product-photo-item .product-photo img {
+	min-height: 232px;
+	width: 100%;
+}
 .product-photo .product-photo-scope {
 	width: 100%;
 	height: 232px;
