@@ -213,3 +213,16 @@ $myArchiveJobs = $usersModel->getMyOwnerArchiveJobs($_SESSION['user']['id']);
         </div>
     </div>
 </div>
+<div style="display: none;">
+    <div id="work1" style="width: 820px;">
+        <div class="modal-title">Двухэтажный коттедж</div>
+        <img src="images/img2.jpg" class="modal-works-photo">
+        <div class="modal-photo-content">
+            <p><b>Стоимость:</b> 10 000 000 руб.</p>
+            <p><b>Сроки:</b> 8 месяцев</p>
+            <br>
+            <p><b>Комментарий.</b></p>
+            <p>Более того, интеграл Пуассона реально накладывает лист Мёбиуса, что и требовалось доказать. Двойной интеграл продуцирует возрастающий вектор.</p>
+        </div>
+    </div>
+</div>
