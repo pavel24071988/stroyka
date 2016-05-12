@@ -337,7 +337,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
 </div>
-<div class="product-photo-holder clearfix">
+<div style="display: none;">
 	<?php echo implode(' ', $object_imgs_arr_bg); ?>
 </div>
 <?php } ?>
