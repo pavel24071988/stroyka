@@ -291,6 +291,9 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
         </div>
     </div>
 </div>
+<div style="display: none;">
+	<?php echo implode(' ', $object_imgs_arr_bg); ?>
+</div>
 <!-- Не авторезированный пользователь -->
 <?php }else{ ?>
 <div class="content">
