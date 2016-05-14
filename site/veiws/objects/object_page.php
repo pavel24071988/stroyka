@@ -75,7 +75,7 @@ foreach($object_imgs as $key => $object_img){
 
     $object_imgs_arr_bg[] = '
 	    <div id="work'. ($key+1) .'" style="width: 820px;">
-		<div class="modal-title">Двухэтажный коттедж</div>
+		<div class="modal-title">'. $object_img['src'] .'</div>
 		<img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'" class="modal-works-photo">
 		<div class="modal-photo-content">
 		    <p><b>Стоимость:</b> '. $object_img['amount'] .' руб.</p>
@@ -93,7 +93,7 @@ $object_docs = $DB->query('
         WHERE oi."objectID"='. $object['id'])->fetchAll();
 $object_docs_arr = [];
 foreach($object_docs as $key => $object_doc){
-    $object_docs_arr[] = $key. '. <a href="'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a>';
+    $object_docs_arr[] = $key. '. <a href="/data/objects/'. $object_doc['objectID'] .'/'. $object_doc['src'] .'" type="application/file" target="_blank" download>'. $object_doc['name'] .'</a>';
 }
 $answers = $DB->query('
     SELECT u.*,

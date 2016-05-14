@@ -63,9 +63,40 @@ if($applicationURL['2'] === 'add'){
                 if(!empty($_POST['areas_for_object'])){
                     foreach($_POST['areas_for_object'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_objects ("objectID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
-                $error = '<div style="color: red;">Объект создан.</div>';
-                /*echo '<meta http-equiv="refresh" content="1;URL=/objects/'. $lastInsertId .'/">';*/
-                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
+                
+                if($_FILES['object_img']['error'][0] !== 4){
+                    // обработаем картинку
+                    if(!file_exists("images/objects/". $lastInsertId)) mkdir("images/objects/". $lastInsertId, 0777);
+                    foreach($_FILES['object_img']['name'] as $key => $img){
+                        $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
+                        if($_FILES['object_img']['size'][$key] / 1000000 > 3){
+                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            continue;
+                        }
+                        if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $lastInsertId ."/". $filename)){
+                            $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $lastInsertId .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
+                            $create_sql->execute();
+                        }
+                    }
+                }
+                
+                if($_FILES['object_doc']['error'][0] !== 4){
+                    // обработаем картинку
+                    if(!file_exists("data/objects/". $lastInsertId)) mkdir("data/objects/". $lastInsertId, 0777);
+                    foreach($_FILES['object_doc']['name'] as $key => $img){
+                        $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_doc']['name'][$key]);
+                        if($_FILES['object_doc']['size'][$key] / 1000000 > 3){
+                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            continue;
+                        }
+                        if(copy($_FILES['object_doc']['tmp_name'][$key], "data/objects/". $lastInsertId ."/". $filename)){
+                            $create_sql = $DB->prepare('INSERT INTO objects_docs ("objectID", "src", "name") VALUES(\''. $lastInsertId .'\', \''. $_FILES['object_doc']['name'][$key] .'\', \''. $_FILES['object_doc']['name'][$key] .'\')');
+                            $create_sql->execute();
+                        }
+                    }
+                }
+                
+                if(empty($error)) echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
             }else{
                 $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
             }
@@ -94,6 +125,7 @@ if($applicationURL['2'] === 'add'){
     if(!empty($_POST)){
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
+        $error = '';
         if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
         foreach($rows_to_check as $key => $row_to_check){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
@@ -128,8 +160,40 @@ if($applicationURL['2'] === 'add'){
                 }
                 
                 $common_data['object'] = $DB->query('SELECT o.* FROM objects o WHERE o."id"='. $applicationURL[2])->fetch();
-                $error = '<div style="color: red;">Объект отредактирован.</div>';
-                echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
+                
+                if($_FILES['object_img']['error'][0] !== 4){
+                    // обработаем картинку
+                    if(!file_exists("images/objects/". $applicationURL[2])) mkdir("images/objects/". $applicationURL[2], 0777);
+                    foreach($_FILES['object_img']['name'] as $key => $img){
+                        $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
+                        if($_FILES['object_img']['size'][$key] / 1000000 > 3){
+                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            continue;
+                        }
+                        if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $applicationURL[2] ."/". $filename)){
+                            $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $applicationURL[2] .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
+                            $create_sql->execute();
+                        }
+                    }
+                }
+                
+                if($_FILES['object_doc']['error'][0] !== 4){
+                    // обработаем картинку
+                    if(!file_exists("data/objects/". $applicationURL[2])) mkdir("data/objects/". $applicationURL[2], 0777);
+                    foreach($_FILES['object_doc']['name'] as $key => $img){
+                        $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_doc']['name'][$key]);
+                        if($_FILES['object_doc']['size'][$key] / 1000000 > 3){
+                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            continue;
+                        }
+                        if(copy($_FILES['object_doc']['tmp_name'][$key], "data/objects/". $applicationURL[2] ."/". $filename)){
+                            $create_sql = $DB->prepare('INSERT INTO objects_docs ("objectID", "src", "name") VALUES(\''. $applicationURL[2] .'\', \''. $_FILES['object_doc']['name'][$key] .'\', \''. $_FILES['object_doc']['name'][$key] .'\')');
+                            $create_sql->execute();
+                        }
+                    }
+                }
+                
+                if(empty($error)) echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
                 
                 // отправляем откликнувшимся пользователям сообщения
                 $submitUsers = $DB->query('SELECT uo.* FROM users_objects uo WHERE uo."objectID"='. $applicationURL[2])->fetchAll();
@@ -140,18 +204,6 @@ if($applicationURL['2'] === 'add'){
                     ')->execute();
             }else{
                 $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
-            }
-        }
-    }
-}
-if(!empty($_FILES['object_img'])){
-    // обработаем картинку
-    if(!empty($_FILES['object_img']['tmp_name'])){
-        if(!file_exists("images/objects/". $common_data['object']['id'])) mkdir("images/objects/". $common_data['object']['id'], 0777);
-        foreach($_FILES['object_img']['name'] as $key => $img){
-            if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $common_data['object']['id'] ."/". $_FILES['object_img']['name'][$key])){
-                $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $common_data['object']['id'] .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
-                $create_sql->execute();
             }
         }
     }
@@ -191,7 +243,7 @@ if(!empty($object)){
           FROM objects_docs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_docs as $object_doc){
-        $object_docs_arr[] = '<a href="'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a>';
+        $object_docs_arr[] = '<a href="/data/objects/'. $object_doc['objectID'] .'/'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a><br/>';
     }
 }
 ?>
@@ -382,9 +434,9 @@ if(!empty($object)){
                             <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file">
+                                <input type="file" name="object_doc[]"  multiple='true'>
                             </div>
-                            <div><?php echo implode('<br/>', $object_docs_arr);?></div>
+                            <div><?php echo implode(' ', $object_docs_arr);?></div>
                             <br><br>
                             <div class="personal-form-recomendation">
                                 <div class="personal-form-recomendation-headline">Рекомендации</div>
