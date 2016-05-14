@@ -181,42 +181,63 @@ if(!empty($_POST)){
                     <div class="registration-form-column1">
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <select name="type_of_registration">
+                                <select id="facetype" name="type_of_registration">
                                     <option value="1" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '1') echo 'selected'; ?>>Физическое лицо</option>
                                     <option value="2" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '2') echo 'selected'; ?>>Юридическое лицо</option>
                                 </select>    
                             </div>
                             <div class="registration-form-row-cell">
-                                <select name="type_of_kind">
+                                <select name="type_of_kind" class="fiz-facetype">
                                     <option value="1" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '1') echo 'selected'; ?>>Частный мастер</option>
                                     <option value="2" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '2') echo 'selected'; ?>>Бригада</option>
+                                </select>
+                                <select class="ur-facetype" style="display: none;">
+                                    <option>Наличие СРО и лицензий</option>
+                                    <option>Да</option>
+                                    <option>Нет</option>
                                 </select>
                             </div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Наименование организации" name="" value="" style="display: none;" />
+                            </div>
+                            <div class="registration-form-row-cell">
+                                <select class="ur-facetype" style="display: none;">
+                                    <option>Опыт работы (лет)</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" class="fiz-facetype" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Адрес организации" name="" value="" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Контактное лицо" name="" value="" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
-                            </div>
-                            <div class="registration-form-row-cell"></div>
-                        </div>
-                        <div class="registration-form-row clearfix">
-                            <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Номер телефона" name="" value="" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <label style="line-height: 35px;"><input type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества</label>
+                                <label class="fiz-facetype" style="line-height: 35px;"><input type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества</label>
                             </div>
                         </div>
                     </div>
@@ -260,3 +281,4 @@ if(!empty($_POST)){
         </form>
     </div>
 </div>
+<span id="ava-files"></span>
