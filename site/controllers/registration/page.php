@@ -61,7 +61,6 @@ if(!empty($_POST)){
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person, adress_of_organization, phone, experience)
               VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\')');
-var_dump($registration_check);
         if($registration_check->execute() === true){
             
             $newUserID = $DB->lastInsertId('users_id_seq');
@@ -199,7 +198,7 @@ var_dump($registration_check);
                                     <option value="2" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '2') echo 'selected'; ?>>Бригада</option>
                                 </select>
                                 <select name="cpo" class="ur-facetype" style="display: none;">
-                                    <option>Наличие СРО и лицензий</option>
+                                    <option value="false">Наличие СРО и лицензий</option>
                                     <option value="true" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'true') echo 'selected'; ?>>Да</option>
                                     <option value="false" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'false') echo 'selected'; ?>>Нет</option>
                                 </select>
@@ -212,7 +211,7 @@ var_dump($registration_check);
                             </div>
                             <div class="registration-form-row-cell">
                                 <select name="experience" class="ur-facetype" style="display: none;">
-                                    <option>Опыт работы (лет)</option>
+                                    <option value="1">Опыт работы (лет)</option>
                                     <option value="1" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '1') echo 'selected'; ?>>1</option>
                                     <option value="2" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '2') echo 'selected'; ?>>2</option>
                                     <option value="3" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '3') echo 'selected'; ?>>3</option>
