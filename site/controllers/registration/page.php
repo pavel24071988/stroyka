@@ -201,7 +201,7 @@ if(!empty($_POST)){
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
                                 <input type="text" class="fiz-facetype" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
-                                <input type="text" class="ur-facetype" placeholder="Наименование организации" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" style="display: none;" />
+                                <input type="text" class="ur-facetype" placeholder="Наименование организации" name="name_of_organization" value="<?php if(!empty($_POST['name_of_organization'])) echo $_POST['name_of_organization']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
                                 <select name="experience" class="ur-facetype" style="display: none;">
@@ -220,7 +220,7 @@ if(!empty($_POST)){
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
                                 <input type="text" class="fiz-facetype" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
-                                <input type="text" class="ur-facetype" placeholder="Адрес организации" name="" value="" style="display: none;" />
+                                <input type="text" class="ur-facetype" placeholder="Адрес организации" name="adress_of_organization" value="<?php if(!empty($_POST['adress_of_organization'])) echo $_POST['adress_of_organization']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
