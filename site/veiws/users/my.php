@@ -171,6 +171,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
                         <br>
                         <p>Наличие СРО и сертификатов</p>
+			<?php if($user['cpo']) echo 'СРО есть'; ?>
                         <br>
                         <?php if(!empty($_SESSION['user'])){ ?>
                         <p><span style="color: #054157;">Контактная информация:</span><br>
