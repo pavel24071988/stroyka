@@ -56,6 +56,7 @@ if(!empty($_POST)){
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person)
               VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\')');
+var_dump($registration_check);
         if($registration_check->execute() === true){
             
             $newUserID = $DB->lastInsertId('users_id_seq');

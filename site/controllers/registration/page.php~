@@ -19,7 +19,7 @@ $list_of_areas .= '</ul>';
 // регистрируем пользователя
 $error = '';
 if(!empty($_POST)){
-    $array_of_check = ['email' => 'Почта(логин)', 'surname' => 'Фамилия', 'name' => 'Имя', 'work_city' => 'Основное место работы (город или область)'];
+    $array_of_check = ['work_city' => 'Основное место работы (город или область)'];
     foreach($_POST as $key => $row){
         if(isset($array_of_check[$key])){
             if(empty($row)) $error .= 'Не заполнено поле: '. $array_of_check[$key] .'<br/>';
