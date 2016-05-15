@@ -227,7 +227,7 @@ if(!empty($_POST)){
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
                                 <input type="text" class="fiz-facetype" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
-                                <input type="text" class="ur-facetype" placeholder="Контактное лицо" name="<?php if(!empty($_POST['contact_person'])) echo $_POST['contact_person']; ?>" value="" style="display: none;" />
+                                <input type="text" class="ur-facetype" placeholder="Контактное лицо" name="contact_person" value="<?php if(!empty($_POST['contact_person'])) echo $_POST['contact_person']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
