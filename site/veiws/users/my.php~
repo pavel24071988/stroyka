@@ -174,8 +174,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <br>
                         <?php if(!empty($_SESSION['user'])){ ?>
                         <p><span style="color: #054157;">Контактная информация:</span><br>
-                        <?php echo $user['adress_of_organization']; ?><br>
-                        <?php echo $user['phone']; ?></p>
+                        г. Воронеж, ул. Артамонова, оф. 12<br>
+                        +7 (473) 2-232-322</p>
                         <?php } ?>
                     </div>
                     <div class="company-passport-map">
