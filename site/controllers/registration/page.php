@@ -19,7 +19,7 @@ $list_of_areas .= '</ul>';
 // регистрируем пользователя
 $error = '';
 if(!empty($_POST)){
-    $array_of_check = ['email' => 'Почта(логин)', 'surname' => 'Фамилия', 'name' => 'Имя', 'work_city' => 'Основное место работы (город или область)'];
+    $array_of_check = ['work_city' => 'Основное место работы (город или область)'];
     foreach($_POST as $key => $row){
         if(isset($array_of_check[$key])){
             if(empty($row)) $error .= 'Не заполнено поле: '. $array_of_check[$key] .'<br/>';
@@ -48,8 +48,9 @@ if(!empty($_POST)){
     // начинаем регистрировать
     if(empty($error)){
         $user_check = $DB->query('SELECT * FROM users WHERE email=\''. $_POST['email'] .'\'')->fetch();
+	if($_POST['type_of_registration'] === '2') $user_check = $DB->query('SELECT * FROM users WHERE name=\''. $_POST['name_of_organization'] .'\'')->fetch();
         if(!empty($user_check)){
-            $error .= 'Данный адрес уже зарегистрирован. ';
+            $error .= 'Данный пользователь уже зарегистрирован. ';
         }
         
         $registration_check = $DB->prepare('
