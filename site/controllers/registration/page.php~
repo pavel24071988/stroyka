@@ -193,8 +193,8 @@ if(!empty($_POST)){
                                 </select>
                                 <select name="cpo" class="ur-facetype" style="display: none;">
                                     <option>Наличие СРО и лицензий</option>
-                                    <option value="true" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'on') echo 'selected'; ?>>Да</option>
-                                    <option value="false" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'off') echo 'selected'; ?>>Нет</option>
+                                    <option value="true" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === true) echo 'selected'; ?>>Да</option>
+                                    <option value="false" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === false) echo 'selected'; ?>>Нет</option>
                                 </select>
                             </div>
                         </div>
