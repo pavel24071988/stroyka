@@ -53,7 +53,9 @@ $countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $us
 $my_works_query = $DB->query('
     SELECT DISTINCT ON (r.id) id, r.*
       FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
-        WHERE r.src IS NOT NULL AND r."createrUserID"='. $user['id'])->fetchAll();
+        WHERE r.src IS NOT NULL AND
+              r."createrUserID"='. $user['id'] .' AND
+              r."type_of_kind"=2')->fetchAll();
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;

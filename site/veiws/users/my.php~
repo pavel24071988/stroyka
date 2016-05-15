@@ -53,7 +53,7 @@ $countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $us
 $my_works_query = $DB->query('
     SELECT DISTINCT ON (r.id) id, r.*
       FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
-        WHERE r.src IS NOT NULL AND r."createrUserID"='. $user['id'])->fetchAll();
+        WHERE r.src IS NOT NULL AND r."createrUserID"='. $user['id'] .' AND r."type_of_kind"=2')->fetchAll();
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
@@ -170,9 +170,10 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>Стаж работы:</b> <?php echo $user['age']; ?> лет</p>
                         <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
                         <br>
-                        <p>Наличие СРО и сертификатов</p>
+                        <p>Наличие СРО и сертификатов:
 			<?php if($user['cpo']) echo 'СРО есть'; ?>
-                        <br>
+			</p>
+			<br>
                         <?php if(!empty($_SESSION['user'])){ ?>
                         <p><span style="color: #054157;">Контактная информация:</span><br>
                         <?php echo $user['adress_of_organization']; ?><br>
