@@ -280,7 +280,7 @@ if(!empty($_POST)){
                             ?>
                         </ul>
                     </div>
-                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>
+                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a target="_blank" href="/soglashenie.docx">пользовательским соглашением</a></label>
                 </div>
                 <input class="tipical-button forward" style="width: 180px;" type="submit" value="Зарегистрироваться" />
             </fieldset>

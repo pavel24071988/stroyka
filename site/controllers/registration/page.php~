@@ -61,7 +61,6 @@ if(!empty($_POST)){
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person, adress_of_organization, phone, experience)
               VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\')');
-var_dump($registration_check);
         if($registration_check->execute() === true){
             
             $newUserID = $DB->lastInsertId('users_id_seq');
@@ -281,7 +280,7 @@ var_dump($registration_check);
                             ?>
                         </ul>
                     </div>
-                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>
+                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="/soglashenie.docx">пользовательским соглашением</a></label>
                 </div>
                 <input class="tipical-button forward" style="width: 180px;" type="submit" value="Зарегистрироваться" />
             </fieldset>
