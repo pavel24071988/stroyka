@@ -21,9 +21,7 @@ if(!empty($_POST)){
             DELETE FROM objects_imgs
                 WHERE "objectID"='. $applicationURL[2] .' AND
                       "src" ILIKE \''. $_POST['del_photo'] .'\'');
-        if($del_photo->execute()){
-            var_dump($common_data['object']);
-        }
+        $del_photo->execute();
     }
 }
 
