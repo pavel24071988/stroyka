@@ -15,6 +15,18 @@ $cities_options = '';
 $areas_options = '';
 $areas_for_object = [];
 
+if(!empty($_POST)){
+    if(!empty($_POST['del_photo'])){
+        $del_photo = $DB->prepare('
+            DELETE FROM objects_imgs
+                WHERE "objectID"='. $applicationURL[2] .' AND
+                      "src" ILIKE \''. $_POST['del_photo'] .'\'');
+        if($del_photo->execute()){
+            var_dump($common_data['object']);
+        }
+    }
+}
+
 if($applicationURL['2'] === 'add'){
     $main_title = 'Формирование объекта';
     $button_name = 'ВЫСТАВИТЬ ОБЪЕКТ';
@@ -123,6 +135,7 @@ if($applicationURL['2'] === 'add'){
     
     // обрабатываем пост здесь
     if(!empty($_POST)){
+        
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         $error = '';
@@ -236,7 +249,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><form action="POST"><input type="hidden" name="del_photo" value="'. $object_img['src'] .'"/><input type="submit" value="Удалить изображение"/></form>';
     }
     $object_docs = $DB->query('
         SELECT *
@@ -436,6 +449,7 @@ if(!empty($object)){
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_doc[]"  multiple='true'>
                             </div>
+                            <br>
                             <div><?php echo implode(' ', $object_docs_arr);?></div>
                             <br><br>
                             <div class="personal-form-recomendation">
