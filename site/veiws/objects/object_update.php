@@ -439,6 +439,7 @@ if(!empty($object)){
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_img[]"  multiple='true'>
                             </div>
+                            <br>
                             <div><?php echo implode(' ', $object_imgs_arr);?></div>
                             <br>
                             <div class="personal-data-form-headline">Прикрепить документы:</div>
