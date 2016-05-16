@@ -16,7 +16,7 @@ $areas_options = '';
 $areas_for_object = [];
 
 if(!empty($_POST)){
-    if(!empty($_POST['del_photo'])){
+    if(!empty($_POST['del_photo']) && empty($_POST['name'])){
         $del_photo = $DB->prepare('
             DELETE FROM objects_imgs
                 WHERE "objectID"='. $applicationURL[2] .' AND
