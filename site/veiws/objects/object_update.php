@@ -16,7 +16,7 @@ $areas_options = '';
 $areas_for_object = [];
 
 if(!empty($_POST)){
-    if(!empty($_POST['del_photo']) && empty($_POST['name'])){
+    if(!empty($_POST['src']) && !empty($_POST['del_photo'])){
         $del_photo = $DB->prepare('
             DELETE FROM objects_imgs
                 WHERE "objectID"='. $applicationURL[2] .' AND
@@ -247,7 +247,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><br><form method="POST"><input type="hidden" name="del_photo" value="'. $object_img['src'] .'"/><input type="submit" value="Удалить изображение"/></form>';
+        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><br><form method="POST"><input type="hidden" name="src" value="'. $object_img['src'] .'"/><input type="submit" name="del_photo" value="Удалить изображение"/></form>';
     }
     $object_docs = $DB->query('
         SELECT *
@@ -456,7 +456,7 @@ if(!empty($object)){
                                 <div>Текст</div>
                                 <!--<textarea class="personal-form-textarea" name="recomendations"><?php echo $object['recomendations']; ?></textarea>-->
                             </div>
-                            <button class="personal-data-form-submit" style="width: 100%;" type="submit" value="<?php echo $button_name; ?>"><?php echo $button_name; ?></button>
+                            <button class="personal-data-form-submit" style="width: 100%;" type="submit" name="update" value="<?php echo $button_name; ?>"><?php echo $button_name; ?></button>
                         </fieldset>
                     </form>
                 </div>
