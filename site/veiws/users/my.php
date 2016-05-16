@@ -438,7 +438,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
-                                <a href="#" class="tipical-button">Редактировать</a>
+                                <a href="#user-about" class="modal_on tipical-button">Редактировать</a>
+                                <!-- <a href="#" class="tipical-button">Редактировать</a> -->
                             </div>
                             <?php echo $user['description']; ?>
                         </div>
@@ -568,6 +569,20 @@ else echo '<h1>Страница пользователя</h1>';*/
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="user-about" style="width: 620px;">
+        <div class="modal-title">Информация о себе</div>
+        <form class="user-about-form">
+            <fieldset>
+                <p>Пояснительный текст</p>
+                <br>
+                <textarea class="tipical-textarea"></textarea>
+                <input type="submit" value="Отправить" class="tipical-button">
+            </fieldset>
+        </form>
     </div>
 </div>
 <?php } ?>

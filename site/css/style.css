@@ -2121,6 +2121,18 @@ p {margin-bottom: 7px;}
 	min-width: 182px;
 	min-height: 190px;
 }
+.user-about-form .tipical-textarea {
+	width: 99%;
+	margin-bottom: 20px;
+}
+.user-about-form .tipical-button {
+	float: right;
+	line-height: normal;
+	padding: 0 10px;
+	font-size: 15px;
+	color: #636262;
+}
+.user-about-form .tipical-button:hover {color: #fff;}
 /* page styles end */
 
 /* media query start */
