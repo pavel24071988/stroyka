@@ -249,7 +249,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><form action="POST"><input type="hidden" name="del_photo" value="'. $object_img['src'] .'"/><input type="submit" value="Удалить изображение"/></form>';
+        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><form method="POST"><input type="hidden" name="del_photo" value="'. $object_img['src'] .'"/><input type="submit" value="Удалить изображение"/></form>';
     }
     $object_docs = $DB->query('
         SELECT *
