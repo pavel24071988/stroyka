@@ -15,6 +15,16 @@ $cities_options = '';
 $areas_options = '';
 $areas_for_object = [];
 
+if(!empty($_POST)){
+    if(!empty($_POST['src']) && !empty($_POST['del_photo'])){
+        $del_photo = $DB->prepare('
+            DELETE FROM objects_imgs
+                WHERE "objectID"='. $applicationURL[2] .' AND
+                      "src" ILIKE \''. $_POST['src'] .'\'');
+        $del_photo->execute();
+    }
+}
+
 if($applicationURL['2'] === 'add'){
     $main_title = 'Формирование объекта';
     $button_name = 'ВЫСТАВИТЬ ОБЪЕКТ';
@@ -30,7 +40,7 @@ if($applicationURL['2'] === 'add'){
     
     
     // обрабатываем пост здесь
-    if(!empty($_POST)){
+    if(!empty($_POST) && !empty($_POST['update'])){
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
@@ -122,7 +132,8 @@ if($applicationURL['2'] === 'add'){
     }
     
     // обрабатываем пост здесь
-    if(!empty($_POST)){
+    if(!empty($_POST) && !empty($_POST['update'])){
+        
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         $error = '';
@@ -236,7 +247,7 @@ if(!empty($object)){
           FROM objects_imgs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_imgs as $object_img){
-        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/>';
+        $object_imgs_arr[] = '<img width="200px" height="200px" src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'"/><br><form method="POST"><input type="hidden" name="src" value="'. $object_img['src'] .'"/><input type="submit" name="del_photo" value="Удалить изображение"/></form>';
     }
     $object_docs = $DB->query('
         SELECT *
@@ -428,6 +439,7 @@ if(!empty($object)){
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_img[]"  multiple='true'>
                             </div>
+                            <br>
                             <div><?php echo implode(' ', $object_imgs_arr);?></div>
                             <br>
                             <div class="personal-data-form-headline">Прикрепить документы:</div>
@@ -436,6 +448,7 @@ if(!empty($object)){
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_doc[]"  multiple='true'>
                             </div>
+                            <br>
                             <div><?php echo implode(' ', $object_docs_arr);?></div>
                             <br><br>
                             <div class="personal-form-recomendation">
@@ -443,7 +456,7 @@ if(!empty($object)){
                                 <div>Текст</div>
                                 <!--<textarea class="personal-form-textarea" name="recomendations"><?php echo $object['recomendations']; ?></textarea>-->
                             </div>
-                            <button class="personal-data-form-submit" style="width: 100%;" type="submit" value="<?php echo $button_name; ?>"><?php echo $button_name; ?></button>
+                            <button class="personal-data-form-submit" style="width: 100%;" type="submit" name="update" value="<?php echo $button_name; ?>"><?php echo $button_name; ?></button>
                         </fieldset>
                     </form>
                 </div>
