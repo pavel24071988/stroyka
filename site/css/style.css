@@ -2116,6 +2116,11 @@ p {margin-bottom: 7px;}
 	margin: 85px 0 5px;
 	color: #1c2f3b;
 }
+.user-avatar {overflow: hidden;}
+.user-avatar img.thumb {
+	min-width: 182px;
+	min-height: 190px;
+}
 /* page styles end */
 
 /* media query start */

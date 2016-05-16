@@ -114,7 +114,7 @@ $(document).ready(function() {
 				// Render thumbnail.
 					var span = document.createElement('span');
 					span.innerHTML = ['<img class="thumb" src="', e.target.result,
-					                '" title="', escape(theFile.name), '"/> <div class="add_photo_modal_imgtext"> Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.</div>'].join('');
+					                '" title="', escape(theFile.name), '"/>'].join('');
 					document.getElementById('ava-photo').insertBefore(span, null);
 					document.getElementById('add_photo_save').style.display="block";
 				};

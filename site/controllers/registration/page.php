@@ -248,15 +248,21 @@ if(!empty($_POST)){
                         </div>
                     </div>
                     <div class="registration-form-column2 clearfix">
-                        <a href="#" class="user-avatar"></a>
+                        <a href="#" class="user-avatar">
+                            <output id="ava-photo"></output>
+                        </a>
                         <div class="user-avatar-content">
                             <p><b>Фотография</b></p>
                             <p>- На фотографии должно быть видно лицо</p>
                             <p>- На фотографии должен быть владелец анкеты</p>
                             <a href="#" class="tipical-button">Сделать фото</a>
                             <div class="file_upload">
-                                <button type="button" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif">
+                                <div class="file_upload">
+                                    <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                                    <input type="file" id="ava-files" name="files[]" multiple>
+                                </div>
+                                <!-- <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                                <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif"> -->
                             </div>
                         </div>
                     </div>
@@ -287,4 +293,3 @@ if(!empty($_POST)){
         </form>
     </div>
 </div>
-<span id="ava-files"></span>
