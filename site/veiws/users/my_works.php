@@ -29,7 +29,8 @@ $my_works = $DB->query('
           LEFT JOIN objects_imgs oi ON o.id = oi."objectID"
            ) as r
         WHERE r."createrUserID"='. $_SESSION['user']['id'] .' AND
-	      r."type_of_kind"=2')->fetchAll();
+	      r."type_of_kind"=2 AND
+              r."status" <> \'archive\'')->fetchAll();
 ?>
 <div class="content">
     <div class="my-page-content clearfix">
