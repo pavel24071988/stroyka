@@ -20,7 +20,7 @@ if(!empty($_POST)){
         $del_photo = $DB->prepare('
             DELETE FROM objects_imgs
                 WHERE "objectID"='. $applicationURL[2] .' AND
-                      "src" ILIKE \''. $_POST['del_photo'] .'\'');
+                      "src" ILIKE \''. $_POST['src'] .'\'');
         $del_photo->execute();
     }
 }
@@ -40,7 +40,7 @@ if($applicationURL['2'] === 'add'){
     
     
     // обрабатываем пост здесь
-    if(!empty($_POST)){
+    if(!empty($_POST) && !empty($_POST['update'])){
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
         if(empty($_POST['recomendations'])) $_POST['recomendations'] = '';
@@ -132,7 +132,7 @@ if($applicationURL['2'] === 'add'){
     }
     
     // обрабатываем пост здесь
-    if(!empty($_POST)){
+    if(!empty($_POST) && !empty($_POST['update'])){
         
         $rows_to_check = [/*'amount' => 'Сумма', 'description' => 'Описание', 'house' => 'Номер дома',*/ 'name' => 'Название', /*'recomendations' => 'Рекомендации заказчику', 'require' => 'Требования'*/];
         $errors = [];
