@@ -101,7 +101,7 @@ if(!empty($_POST)){
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
             $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Регистрация на сайте стройка завершена.";
-            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена.";
+            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена. Ваш пароль ". $_POST['password'] .".";
             mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
             echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user['id'] .'/">';
