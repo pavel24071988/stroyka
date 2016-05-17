@@ -55,7 +55,8 @@ $my_works_query = $DB->query('
       FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
         WHERE r.src IS NOT NULL AND
               r."createrUserID"='. $user['id'] .' AND
-              r."type_of_kind"=2')->fetchAll();
+              r."type_of_kind"=2 AND
+              r."status" <> \'archive\'')->fetchAll();
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
