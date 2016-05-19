@@ -54,6 +54,7 @@ if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
 if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
 if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
 if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_str'] .'%\'';
+if(!empty($_GET['type']) && $_GET['type'] === 'companies') $dopSQL[] = 'r."type_of_registration"=2';
 if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
