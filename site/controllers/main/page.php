@@ -95,6 +95,7 @@ foreach($area_of_jobs as $area_of_job){
                     <div class="search-block-left">
                         <select id="masters-select" class="tipical-select" name="type">
                             <option value="masters">Мастера</option>
+                            <option value="companies">Компании</option>
                             <option value="objects">Заказы</option>
                             <option value="jobs">Вакансии</option>
                         </select>
