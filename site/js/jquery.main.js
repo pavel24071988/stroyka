@@ -86,7 +86,8 @@ $(document).ready(function() {
 	$('#masters-select').on('change', function(){
 		var act = $('#masters-select option:selected').val();
 		$(this).parents('form.search-block-form').attr("action", "/"+act+"/");
-		if ( act == 'masters' ) {
+                if(act === 'companies') $(this).parents('form.search-block-form').attr("action", "/masters/");
+		if ( act == 'masters' || act === 'companies' ) {
 			$('#jobs-select').attr('name', "areas_for_user[]");
 		} else if ( act == 'objects' ) {
 			$('#jobs-select').attr('name', "areas_for_object[]");
