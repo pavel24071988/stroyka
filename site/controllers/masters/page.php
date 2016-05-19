@@ -59,7 +59,6 @@ if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
 $sql .= ' ORDER BY sort DESC';
-var_dump($sql);
 $allUsers = Application::$DB->query($sql)->fetchAll();
 $offset = 0;
 if(!empty($_GET['pagination'])) $offset = ($_GET['pagination'] * 10) - 10;
