@@ -73,9 +73,10 @@ $my_works = $DB->query('
                                 </div>
                             </div>
                             <div class="add-myworks-right">
+                                <output id="ava-photo" class="add-work-photo"></output>
                                 <div class="file_upload">
                                     <button type="button" class="my-works-button">Загрузить изображение</button>
-                                    <input type="file" name="object_img">
+                                    <input type="file" id="ava-files" multiple name="object_img">
                                 </div>
                             </div>
                         </div>

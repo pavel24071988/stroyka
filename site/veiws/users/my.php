@@ -260,7 +260,39 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo $user['description']; ?>
             <br>
             <div class="product-sub-headline">Фото работ</div>
-            <?php echo implode(' ', $imgs); ?>
+
+                
+
+
+                <div class="photo-carousel-standart my-works-carousel">
+                    <div id="jssor_1" class="rotator-holder">
+                        <!-- Loading Screen -->
+                        <div data-u="loading" class="rotator-inner">
+                            <div class="rotator-inner-block"></div>
+                            <div class="rotator-inner-load"></div>
+                        </div>
+                        <div data-u="slides" class="rotator-content">
+                            <div style="display: none;">
+                                <a href="" rel="my_photo">
+                                    <?php echo implode(' ', $imgs); ?>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Bullet Navigator -->
+                        <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
+                            <!-- bullet navigator item prototype -->
+                            <div data-u="prototype" style="width:21px;height:21px;">
+                                <div data-u="numbertemplate"></div>
+                            </div>
+                        </div>
+                        <!-- Arrow Navigator -->
+                        <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                        <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                    </div>
+                </div>
+
+
+
             <div class="product-sub-headline">Цены на услуги</div>
             <?php echo $user['price_description']; ?>
             <div class="product-sub-headline">Отзывы</div>
@@ -650,9 +682,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                 </div>
                 <div class="file_upload att-file">
                     <button type="button" class="tipical-button">Выбрать файл</button>
-                    <input type="file" name="avatar">
+                    <input id="name-files" multiple type="file" name="files[]">
                 </div>
-
+                <output id="names-list" class="names-list"></output>
                 <input type="submit" class="tipical-button" value="Сохранить услуги и цены">
             </fieldset>
         </form>

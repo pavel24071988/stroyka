@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$(".modal_on").fancybox();
 	//
-	$("a[rel=photo_group]").fancybox({
+	$("a[rel=photo_group], a[rel=my_photo]").fancybox({
 		'transitionIn'		: 'none',
 		'transitionOut'		: 'none'
 	});
@@ -135,6 +135,26 @@ $(document).ready(function() {
 		$('.simple-row').after(rowHTML);
 		return false;
 	});
+	//
+	var startftype = $('#facetype option:selected').val();
+	if ( startftype == '1' ) {
+		$('.fiz-facetype').show();
+		$('.ur-facetype').hide();
+	} else if ( startftype == '2' ) {
+		$('.fiz-facetype').hide();
+		$('.ur-facetype').show();
+	}
+	//
+	function handleFileSelectName(evt) {
+		var files = evt.target.files; // FileList object
+		// files is a FileList of File objects. List some properties.
+		var output = [];
+		for (var i = 0, f; f = files[i]; i++) {
+		  output.push('<li>', escape(f.name), '</li>');
+		}
+		document.getElementById('names-list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	}
+	document.getElementById('name-files').addEventListener('change', handleFileSelectName, false);
 });
 //
 jQuery(document).ready(function ($) {
