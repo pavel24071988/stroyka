@@ -60,7 +60,7 @@ $my_works_query = $DB->query('
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
-    $my_works[] = '<img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/>';
+    $my_works[] = '<a href="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'" rel="photo_group"><img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/></a>';
 }
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
