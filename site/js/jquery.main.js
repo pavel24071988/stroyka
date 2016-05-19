@@ -1,6 +1,11 @@
 $(document).ready(function() {
 	$(".modal_on").fancybox();
 	//
+	$("a[rel=photo_group]").fancybox({
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none'
+	});
+	//
 	var Hheader = $('.header').height(),
 		Hwrap = $(window).height()-Hheader+6;
 	$('.wrapper').css('min-height', Hwrap-Hheader);
@@ -124,6 +129,12 @@ $(document).ready(function() {
 	    }
 	}
 	document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
+	//
+	$('#add-pricerow').on('click', function(){
+		var rowHTML = $('.simple-row').html();
+		$('.simple-row').after(rowHTML);
+		return false;
+	});
 });
 //
 jQuery(document).ready(function ($) {

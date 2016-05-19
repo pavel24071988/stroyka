@@ -1999,7 +1999,7 @@ p {margin-bottom: 7px;}
     width: 55px;
     height: 55px;
     cursor: pointer;
-    background: url('../images/a03.png') no-repeat;
+    background: url('/images/a03.png') no-repeat;
     overflow: hidden;
 }
 .jssora03l { background-position: -3px -33px; }
@@ -2133,6 +2133,67 @@ p {margin-bottom: 7px;}
 	color: #636262;
 }
 .user-about-form .tipical-button:hover {color: #fff;}
+.add-price-table {margin-bottom: 35px;}
+.add-price-table .add-price-table-row {
+	margin-bottom: 20px;
+	font-size: 12px;
+	line-height: 18px;
+	color: #000;
+	font-style: italic;
+}
+.add-price-table-row span {
+	font-weight: bold;
+	font-style: normal;
+	font-size: 18px;
+}
+.add-price-table-row .add-price-name {
+	float: left;
+	width: 310px;
+}
+.add-price-table-row .add-price-price {
+	float: left;
+	width: 130px;
+	margin-left: 20px;
+}
+.add-price-table-row .add-price-value {
+	float: left;
+	width: 180px;
+	margin-left: 20px;
+}
+.add-price-table-row input {
+	width: 96%;
+	padding: 0 1.8%;
+	background: none;
+	outline: none;
+	border: 1px solid #dadada;
+	height: 32px;
+}
+#add-pricerow {
+	line-height: 30px;
+	float: none;
+}
+.attach-fileblock {margin-top: 50px;}
+.attach-fileblock .attach-fileblock-title {
+	line-height: 18px;
+	font-size: 12px;
+	font-style: italic;
+	margin-bottom: 20px;
+}
+.attach-fileblock-title span {
+	font-size: 18px;
+	font-weight: bold;
+	font-style: normal;
+}
+.attach-fileblock .attach-fileblock-format {
+	line-height: 18px;
+	font-size: 12px;
+	margin-bottom: 20px;
+}
+.attach-fileblock-format span {color: #d73838;}
+.att-file .tipical-button {
+	float: none;
+	line-height: 30px;
+}
 /* page styles end */
 
 /* media query start */

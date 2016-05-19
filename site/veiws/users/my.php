@@ -420,7 +420,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     </div>
                                     <div data-u="slides" class="rotator-content">
                                         <div style="display: none;">
-                                        <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                                            <a href="" rel="photo_group">
+                                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                                            </a>
                                         </div>
                                     </div>
                                     <!-- Bullet Navigator -->
@@ -447,7 +449,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Услуги и цены</span>
-                                <a href="#" class="tipical-button">Добавить</a>
+                                <a href="#prices" class="modal_on tipical-button">Добавить</a>
                             </div>
                             <?php echo $user['price_description']; ?>
                         </div>
@@ -582,6 +584,76 @@ else echo '<h1>Страница пользователя</h1>';*/
                 <br>
                 <textarea class="tipical-textarea"></textarea>
                 <input type="submit" value="Отправить" class="tipical-button">
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="prices" style="width: 728px;">
+        <div class="modal-title">Услуги и цены</div>
+        <form class="user-about-form clearfix">
+            <fieldset>
+                <p>Добавьте услуги или прикрепите файл.</p>
+                <br>
+                <div class="add-price-table">
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <span>Наименование услуги</span><br>
+                            Введите наименование своей услуги
+                        </div>
+                        <div class="add-price-price">
+                            <span>Цена</span><br>
+                            Стоимость в рублях.
+                        </div>
+                        <div class="add-price-value">
+                            <span>Единица измерения</span><br>
+                            Например, «м2»
+                        </div>
+                    </div>
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <input type="text">
+                        </div>
+                        <div class="add-price-price">
+                            <input type="text">
+                        </div>
+                        <div class="add-price-value">
+                            <input type="text">
+                        </div>
+                    </div>
+                    <div class="simple-row">
+                        <div class="add-price-table-row clearfix">
+                            <div class="add-price-name">
+                                <input type="text">
+                            </div>
+                            <div class="add-price-price">
+                                <input type="text">
+                            </div>
+                            <div class="add-price-value">
+                                <input type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
+                <div class="attach-fileblock">
+                    <p class="attach-fileblock-title">
+                        <span>Прикрепить файл</span><br>
+                        Вы можете прикрепить свой файл с ценами.
+                    </p>
+                    <p class="attach-fileblock-format">
+                        Допустимые форматы файла: <span>mpeg.</span>
+                        <br>
+                        Ограничение по размеру: <span>100 ТБ</span>
+                    </p>
+                </div>
+                <div class="file_upload att-file">
+                    <button type="button" class="tipical-button">Выбрать файл</button>
+                    <input type="file" name="avatar">
+                </div>
+
+                <input type="submit" class="tipical-button" value="Сохранить услуги и цены">
             </fieldset>
         </form>
     </div>
