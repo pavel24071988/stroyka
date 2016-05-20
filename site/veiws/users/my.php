@@ -30,9 +30,12 @@ if(isset($_POST['changeStatus'])){
     $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
     $update_about->execute();
 }elseif(!empty($_POST['price_service'])){
-    var_dump($_POST['name']);
-    var_dump($_POST['amount']);
-    var_dump($_POST['value']);
+    foreach($_POST['name'] as $key => $name){
+        $sql = $DB->prepare('
+            INSERT INTO users_prices (name, amount, value, "userID")
+              VALUES(\''. $name .'\', \''. $_POST['amount'][$key] .'\', \''. $_POST['value'][$key] .'\', '. $user['id']);
+        $sql->execute();
+    }
 }
 
 $prices_services = $DB->query('
