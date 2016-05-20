@@ -653,7 +653,20 @@ else echo '<h1>Страница пользователя</h1>';*/
                             Например, «м2»
                         </div>
                     </div>
-                    <!--<div class="add-price-table-row clearfix">
+                    <?php foreach($prices_services as $price_service){ ?>
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <input type="text" value="<?php echo $price_service['name']; ?>" name="name[]">
+                        </div>
+                        <div class="add-price-price">
+                            <input type="text" value="<?php echo $price_service['amount']; ?>" name="amount[]">
+                        </div>
+                        <div class="add-price-value">
+                            <input type="text" value="<?php echo $price_service['value']; ?>" name="value[]">
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
                             <input type="text">
                         </div>
@@ -677,7 +690,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                             </div>
                         </div>
                     </div>
-                    -->
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
