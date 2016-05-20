@@ -26,7 +26,7 @@ if($applicationURL[4] === 'dialogs'){
                 <div class="my-page-breadcrumb">
                     <ul>
                         <li>
-                            <a href="../">Диалоги</a>
+                            <a href="../../">Диалоги</a>
                         </li>
                         <li>
                             <a href="#"><?php echo $opponent[0]['name'] .' '. $opponent[0]['surname']; ?></a>
