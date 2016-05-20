@@ -108,8 +108,7 @@ class usersModel
                    m."read"
               FROM messages m
               JOIN users u ON m."fromUserID" = u."id"
-                WHERE m."toUserID"='. $userID .' OR
-                      m."fromUserID"='. $userID .'
+                WHERE m."toUserID"='. $userID .'
                   ORDER BY "id", m."read"')->fetchAll();
         return $messages;
     }
