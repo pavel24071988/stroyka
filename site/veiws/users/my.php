@@ -30,7 +30,7 @@ if(isset($_POST['changeStatus'])){
     $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
     $update_about->execute();
 }elseif(!empty($_POST['price_service'])){
-    
+    var_dump($_POST['price_service']);
 }
 
 $prices_services = $DB->query('
@@ -674,9 +674,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                         Вы можете прикрепить свой файл с ценами.
                     </p>
                     <p class="attach-fileblock-format">
-                        Допустимые форматы файла: <span>mpeg.</span>
+                        Допустимые форматы файла: <span>exel.word.docs</span>
                         <br>
-                        Ограничение по размеру: <span>100 ТБ</span>
+                        Ограничение по размеру: <span>3 Мб</span>
                     </p>
                 </div>
                 <div class="file_upload att-file">
