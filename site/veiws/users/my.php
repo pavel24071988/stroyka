@@ -666,6 +666,17 @@ else echo '<h1>Страница пользователя</h1>';*/
                         </div>
                     </div>
                     <?php } ?>
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <input type="text" value="" name="name[]">
+                        </div>
+                        <div class="add-price-price">
+                            <input type="text" value="" name="amount[]">
+                        </div>
+                        <div class="add-price-value">
+                            <input type="text" value="" name="value[]">
+                        </div>
+                    </div>
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
