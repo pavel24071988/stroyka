@@ -26,9 +26,12 @@ if(isset($_POST['changeStatus'])){
         }
         else $error = 'Не удалось загрузить фотография.';
     }
-}elseif(!empty($_POST['description'])){
+}elseif(!empty($_POST['about'])){
     $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
-    $update_about->execute();
+    if($update_about->execute()){
+        $_SESSION['user']['description'] = $_POST['description'];
+        $user['description'] = $_POST['description'];
+    }
 }elseif(!empty($_POST['price_service'])){
     $sql = $DB->prepare('DELETE FROM users_prices WHERE "userID"='. $user['id']);
     $sql->execute();
@@ -631,7 +634,7 @@ else echo '<h1>Страница пользователя</h1>';*/
             <fieldset>
                 <p>Пояснительный текст</p>
                 <br>
-                <textarea class="tipical-textarea" name="description"></textarea>
+                <textarea class="tipical-textarea" name="description"><?php echo $user['description']; ?></textarea>
                 <input type="submit" value="Отправить" name="about" class="tipical-button">
             </fieldset>
         </form>
