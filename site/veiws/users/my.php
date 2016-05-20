@@ -653,7 +653,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                             Например, «м2»
                         </div>
                     </div>
-                    <?php foreach($prices_services as $price_service){ ?>
+                    <?php /*foreach($prices_services as $price_service){ ?>
                     <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
                             <input type="text" value="<?php echo $price_service['name']; ?>" name="name[]">
@@ -665,16 +665,16 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <input type="text" value="<?php echo $price_service['value']; ?>" name="value[]">
                         </div>
                     </div>
-                    <?php } ?>
+                    <?php }*/ ?>
                     <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
-                            <input type="text" value="" name="name[]">
+                            <input type="text">
                         </div>
                         <div class="add-price-price">
-                            <input type="text" value="" name="amount[]">
+                            <input type="text">
                         </div>
                         <div class="add-price-value">
-                            <input type="text" value="" name="value[]">
+                            <input type="text">
                         </div>
                     </div>
                 </div>
