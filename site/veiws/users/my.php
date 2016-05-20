@@ -26,7 +26,17 @@ if(isset($_POST['changeStatus'])){
         }
         else $error = 'Не удалось загрузить фотография.';
     }
+}elseif(!empty($_POST['description'])){
+    $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
+    $update_about->execute();
+}elseif(!empty($_POST['price_service'])){
+    
 }
+
+$prices_services = $DB->query('
+    SELECT *
+      FROM users_prices up
+        WHERE up."userID"='. $user['id'])->fetchAll();
 
 $professions = $DB->query('
     SELECT *
@@ -610,12 +620,12 @@ else echo '<h1>Страница пользователя</h1>';*/
 <div style="display: none;">
     <div id="user-about" style="width: 620px;">
         <div class="modal-title">Информация о себе</div>
-        <form class="user-about-form">
+        <form class="user-about-form" method="POST">
             <fieldset>
                 <p>Пояснительный текст</p>
                 <br>
-                <textarea class="tipical-textarea"></textarea>
-                <input type="submit" value="Отправить" class="tipical-button">
+                <textarea class="tipical-textarea" name="description"></textarea>
+                <input type="submit" value="Отправить" name="about" class="tipical-button">
             </fieldset>
         </form>
     </div>
@@ -624,7 +634,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 <div style="display: none;">
     <div id="prices" style="width: 728px;">
         <div class="modal-title">Услуги и цены</div>
-        <form class="user-about-form clearfix">
+        <form class="user-about-form clearfix" method="POST">
             <fieldset>
                 <p>Добавьте услуги или прикрепите файл.</p>
                 <br>
@@ -643,30 +653,19 @@ else echo '<h1>Страница пользователя</h1>';*/
                             Например, «м2»
                         </div>
                     </div>
+                    <?php foreach($prices_services as $price_service){ ?>
                     <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
-                            <input type="text">
+                            <input type="text" value="<?php echo $price_service['name']; ?>" name="name[]">
                         </div>
                         <div class="add-price-price">
-                            <input type="text">
+                            <input type="text" value="<?php echo $price_service['amount']; ?>" name="amount[]">
                         </div>
                         <div class="add-price-value">
-                            <input type="text">
+                            <input type="text" value="<?php echo $price_service['value']; ?>" name="value[]">
                         </div>
                     </div>
-                    <div class="simple-row">
-                        <div class="add-price-table-row clearfix">
-                            <div class="add-price-name">
-                                <input type="text">
-                            </div>
-                            <div class="add-price-price">
-                                <input type="text">
-                            </div>
-                            <div class="add-price-value">
-                                <input type="text">
-                            </div>
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
@@ -685,7 +684,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <input id="name-files" multiple type="file" name="files[]">
                 </div>
                 <output id="names-list" class="names-list"></output>
-                <input type="submit" class="tipical-button" value="Сохранить услуги и цены">
+                <input type="submit" class="tipical-button" name="price_service" value="Сохранить услуги и цены">
             </fieldset>
         </form>
     </div>
