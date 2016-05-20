@@ -97,7 +97,7 @@ class usersModel
         return $jobs;
     }
     
-    public static function getIncomeMessages($userID){
+    public static function getMessages($userID){
         $messages = self::$DB->query('
             SELECT DISTINCT ON ("id") u."id",
                    u."avatar",
@@ -108,12 +108,13 @@ class usersModel
                    m."read"
               FROM messages m
               JOIN users u ON m."fromUserID" = u."id"
-                WHERE m."toUserID"='. $userID .'
+                WHERE m."toUserID"='. $userID .' OR
+                      m."fromUserID"='. $userID .'
                   ORDER BY "id", m."read"')->fetchAll();
         return $messages;
     }
     
-    public static function getOutcomeMessages($userID){
+    /*public static function getOutcomeMessages($userID){
         $messages = self::$DB->query('
             SELECT DISTINCT ON ("id") u."id",
                    u."avatar",
@@ -127,7 +128,7 @@ class usersModel
                 WHERE m."fromUserID"='. $userID .'
                   ORDER BY "id", m."read"')->fetchAll();
         return $messages;
-    }
+    }*/
     
     public static function getHistoryOfMessagesByUser($firstUser, $secondUser){
         $messages = self::$DB->query('

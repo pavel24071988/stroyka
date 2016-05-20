@@ -7,8 +7,9 @@ if($applicationURL[4] === 'dialogs' && isset($_POST['text'])){
     $error_write = $usersModel->setMessage($_SESSION['user']['id'], $applicationURL[5], $_POST['text']);
 }
 
-$incomeMessages = $usersModel->getIncomeMessages($_SESSION['user']['id']);
-$outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);
+$incomeMessages = $usersModel->getMessages($_SESSION['user']['id']);
+$outcomeMessages = [];
+/*$outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);*/
 ?>
 
 <?php
