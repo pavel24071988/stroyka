@@ -668,26 +668,13 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <?php } ?>
                     <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
-                            <input type="text">
+                            <input type="text" name="name[]">
                         </div>
                         <div class="add-price-price">
-                            <input type="text">
+                            <input type="text" name="amount[]">
                         </div>
                         <div class="add-price-value">
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div class="simple-row">
-                        <div class="add-price-table-row clearfix">
-                            <div class="add-price-name">
-                                <input type="text">
-                            </div>
-                            <div class="add-price-price">
-                                <input type="text">
-                            </div>
-                            <div class="add-price-value">
-                                <input type="text">
-                            </div>
+                            <input type="text" name="value[]">
                         </div>
                     </div>
                 </div>
