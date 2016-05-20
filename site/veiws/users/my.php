@@ -677,6 +677,17 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <input type="text">
                         </div>
                     </div>
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <input type="text">
+                        </div>
+                        <div class="add-price-price">
+                            <input type="text">
+                        </div>
+                        <div class="add-price-value">
+                            <input type="text">
+                        </div>
+                    </div>
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
