@@ -143,7 +143,7 @@ $(document).ready(function() {
                         '<input type="text" name="value[]">'+
                     '</div>'+
                 '</div>';
-            $('.add-price-table-row:last').after(rowHTML);
+            $('.add-price-table').append(rowHTML);
             return false;
 	});
 	//

@@ -634,7 +634,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 <div style="display: none;">
     <div id="prices" style="width: 728px;">
         <div class="modal-title">Услуги и цены</div>
-        <form class="user-about-form clearfix">
+        <form class="user-about-form clearfix" method="POST">
             <fieldset>
                 <p>Добавьте услуги или прикрепите файл.</p>
                 <br>
@@ -666,17 +666,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                         </div>
                     </div>
                     <?php } ?>
-                    <div class="add-price-table-row clearfix">
-                        <div class="add-price-name">
-                            <input type="text" name="name[]">
-                        </div>
-                        <div class="add-price-price">
-                            <input type="text" name="amount[]">
-                        </div>
-                        <div class="add-price-value">
-                            <input type="text" name="value[]">
-                        </div>
-                    </div>
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
@@ -695,7 +684,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <input id="name-files" multiple type="file" name="files[]">
                 </div>
                 <output id="names-list" class="names-list"></output>
-                <input type="submit" class="tipical-button" value="Сохранить услуги и цены">
+                <input type="submit" class="tipical-button" name="price_service" value="Сохранить услуги и цены">
             </fieldset>
         </form>
     </div>
