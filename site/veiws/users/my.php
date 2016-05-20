@@ -34,6 +34,7 @@ if(isset($_POST['changeStatus'])){
         $sql = $DB->prepare('
             INSERT INTO users_prices (name, amount, value, "userID")
               VALUES(\''. $name .'\', \''. $_POST['amount'][$key] .'\', \''. $_POST['value'][$key] .'\', '. $user['id']);
+        var_dump($sql);
         $sql->execute();
     }
 }
