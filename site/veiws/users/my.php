@@ -33,11 +33,6 @@ if(isset($_POST['changeStatus'])){
     
 }
 
-$prices_services = $DB->query('
-    SELECT *
-      FROM users_prices up
-        WHERE up."userID"='. $user['id'])->fetchAll();
-
 $professions = $DB->query('
     SELECT *
       FROM users_kinds_of_jobs ukj
@@ -634,7 +629,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 <div style="display: none;">
     <div id="prices" style="width: 728px;">
         <div class="modal-title">Услуги и цены</div>
-        <form class="user-about-form clearfix" method="POST">
+        <form class="user-about-form clearfix">
             <fieldset>
                 <p>Добавьте услуги или прикрепите файл.</p>
                 <br>
@@ -653,19 +648,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                             Например, «м2»
                         </div>
                     </div>
-                    <?php /*foreach($prices_services as $price_service){ ?>
-                    <div class="add-price-table-row clearfix">
-                        <div class="add-price-name">
-                            <input type="text" value="<?php echo $price_service['name']; ?>" name="name[]">
-                        </div>
-                        <div class="add-price-price">
-                            <input type="text" value="<?php echo $price_service['amount']; ?>" name="amount[]">
-                        </div>
-                        <div class="add-price-value">
-                            <input type="text" value="<?php echo $price_service['value']; ?>" name="value[]">
-                        </div>
-                    </div>
-                    <?php }*/ ?>
                     <div class="add-price-table-row clearfix">
                         <div class="add-price-name">
                             <input type="text">
@@ -677,15 +659,17 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <input type="text">
                         </div>
                     </div>
-                    <div class="add-price-table-row clearfix">
-                        <div class="add-price-name">
-                            <input type="text">
-                        </div>
-                        <div class="add-price-price">
-                            <input type="text">
-                        </div>
-                        <div class="add-price-value">
-                            <input type="text">
+                    <div class="simple-row">
+                        <div class="add-price-table-row clearfix">
+                            <div class="add-price-name">
+                                <input type="text">
+                            </div>
+                            <div class="add-price-price">
+                                <input type="text">
+                            </div>
+                            <div class="add-price-value">
+                                <input type="text">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -706,7 +690,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <input id="name-files" multiple type="file" name="files[]">
                 </div>
                 <output id="names-list" class="names-list"></output>
-                <input type="submit" class="tipical-button" name="price_service" value="Сохранить услуги и цены">
+                <input type="submit" class="tipical-button" value="Сохранить услуги и цены">
             </fieldset>
         </form>
     </div>
