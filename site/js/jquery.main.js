@@ -132,19 +132,19 @@ $(document).ready(function() {
 	document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
 	//
 	$('#add-pricerow').on('click', function(){
-		var rowHTML = '<div class="add-price-table-row clearfix">'+
-                        '<div class="add-price-name">'+
-                            '<input type="text" name="name[]">'+
-                        '</div>'+
-                        '<div class="add-price-price">'+
-                            '<input type="text" name="amount[]">'+
-                        '</div>'+
-                        '<div class="add-price-value">'+
-                            '<input type="text" name="value[]">'+
-                        '</div>'+
-                    '</div>';
-		$('.simple-row').after(rowHTML);
-		return false;
+            var rowHTML = '<div class="add-price-table-row clearfix">'+
+                    '<div class="add-price-name">'+
+                        '<input type="text" name="name[]">'+
+                    '</div>'+
+                    '<div class="add-price-price">'+
+                        '<input type="text" name="amount[]">'+
+                    '</div>'+
+                    '<div class="add-price-value">'+
+                        '<input type="text" name="value[]">'+
+                    '</div>'+
+                '</div>';
+            $('.add-price-table-row:last').after(rowHTML);
+            return false;
 	});
 	//
 	var startftype = $('#facetype option:selected').val();
