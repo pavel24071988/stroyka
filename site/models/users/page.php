@@ -109,7 +109,7 @@ class usersModel
               FROM messages m
               JOIN users u ON m."fromUserID" = u."id"
                 WHERE m."toUserID"='. $userID .'
-                  ORDER BY "id", m."read", m."created"')->fetchAll();
+                  ORDER BY "id", m."read", m."created" DESC')->fetchAll();
         return $messages;
     }
     
