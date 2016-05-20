@@ -30,7 +30,9 @@ if(isset($_POST['changeStatus'])){
     $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
     $update_about->execute();
 }elseif(!empty($_POST['price_service'])){
-    var_dump($_POST['price_service']);
+    var_dump($_POST['name']);
+    var_dump($_POST['amount']);
+    var_dump($_POST['value']);
 }
 
 $prices_services = $DB->query('
