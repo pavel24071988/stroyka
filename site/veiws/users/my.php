@@ -36,7 +36,7 @@ if(isset($_POST['changeStatus'])){
 $prices_services = $DB->query('
     SELECT *
       FROM users_prices up
-        WHERE ukj."userID"='. $user['id'])->fetchAll();
+        WHERE up."userID"='. $user['id'])->fetchAll();
 
 $professions = $DB->query('
     SELECT *
