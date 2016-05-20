@@ -33,6 +33,11 @@ if(isset($_POST['changeStatus'])){
     
 }
 
+$prices_services = $DB->query('
+    SELECT *
+      FROM users_prices up
+        WHERE ukj."userID"='. $user['id'])->fetchAll();
+
 $professions = $DB->query('
     SELECT *
       FROM users_kinds_of_jobs ukj
@@ -648,7 +653,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                             Например, «м2»
                         </div>
                     </div>
-                    <div class="add-price-table-row clearfix">
+                    <!--<div class="add-price-table-row clearfix">
                         <div class="add-price-name">
                             <input type="text">
                         </div>
@@ -672,6 +677,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                             </div>
                         </div>
                     </div>
+                    -->
                 </div>
                 <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
                 <div class="attach-fileblock">
