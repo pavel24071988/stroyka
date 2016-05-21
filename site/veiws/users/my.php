@@ -41,6 +41,24 @@ if(isset($_POST['changeStatus'])){
               VALUES(\''. $name .'\', \''. $_POST['amount'][$key] .'\', \''. $_POST['value'][$key] .'\', '. $user['id'] .')');
         $sql->execute();
     }
+    
+    if(!empty($_FILES['price_doc'])){
+        if(!file_exists("data/users/". $user['id'])) mkdir("data/users/". $user['id'], 0777);
+        $filename = $_FILES['price_doc']['name'];
+        if($_FILES['price_doc']['size'][$key] / 1000000 > 3){
+            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+        }else{
+            if(copy($_FILES['price_doc']['tmp_name'], "data/users/". $user['id'] ."/". $filename)){
+                $update_avatar = $DB->prepare('UPDATE users SET "price_doc"=\''. $filename .'\' WHERE "id"='. $user['id']);
+                if($update_avatar->execute() === true){
+                    $error = 'Фотография загружена.';
+                    $_SESSION['user']['price_doc'] = $filename;
+                    $user['price_doc'] = $filename;
+                }
+                else $error = 'Не удалось загрузить фотография.';
+            }
+        }
+    }
 }
 
 $prices_services = $DB->query('
@@ -150,8 +168,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                                             <br>
                                             <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
                                             <br>
-                                            <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
-                                            <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                            <p>Допустимые форматы: <span class="semi-red">jpg, jpeg, png.</span></p>
+                                            <p>Ограничение по размеру: <span class="semi-red">3 Мб.</span></p>
                                         </div>
                                         <div class="add_photo_modal_buttons clearfix">
                                             <div class="file_upload">
@@ -180,8 +198,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <a href="#add_my_photo" class="tipical-button modal_on">Загрузить с компьютера</a>
                     </div>
                     <?php } ?>
-                    <?php if(!$common_data['check_owner']){ ?>
-                    <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
+                    <?php if(!$common_data['check_owner'] && !empty($_SESSION['user'])){ ?>
+                    <a href="<?php echo '/users/'. $user['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
                     <?php } ?>
                 </div>
                 <div class="company-passport-right">
@@ -314,7 +332,9 @@ else echo '<h1>Страница пользователя</h1>';*/
 
 
             <div class="product-sub-headline">Цены на услуги</div>
-            <?php echo $user['price_description']; ?>
+            <?php foreach($prices_services as $price_service){ ?>
+            <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
+            <?php } ?>
             <div class="product-sub-headline">Отзывы</div>
             <?php
             $comments = $DB->query('
@@ -400,8 +420,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                                                 <br>
                                                 <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
                                                 <br>
-                                                <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
-                                                <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                                <p>Допустимые форматы: <span class="semi-red">jpg, jpeg, png.</span></p>
+                                                <p>Ограничение по размеру: <span class="semi-red">3 Мб.</span></p>
                                             </div>
                                             <div class="add_photo_modal_buttons clearfix">
                                                 <div class="file_upload">
@@ -503,7 +523,10 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <span>Услуги и цены</span>
                                 <a href="#prices" class="modal_on tipical-button">Добавить</a>
                             </div>
-                            <?php echo $user['price_description']; ?>
+                            <?php foreach($prices_services as $price_service){ ?>
+                            <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
+                            <?php } ?>
+                            <a download="" target="_blank" type="application/file" href="/data/users/<?php echo $user['id']; ?>/<?php echo $user['price_doc']; ?>"><?php echo $user['price_doc']; ?></a>
                         </div>
                         <?php } ?>
                     </div>
@@ -644,7 +667,7 @@ else echo '<h1>Страница пользователя</h1>';*/
 <div style="display: none;">
     <div id="prices" style="width: 728px;">
         <div class="modal-title">Услуги и цены</div>
-        <form class="user-about-form clearfix" method="POST">
+        <form class="user-about-form clearfix" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <p>Добавьте услуги или прикрепите файл.</p>
                 <br>
@@ -691,7 +714,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                 </div>
                 <div class="file_upload att-file">
                     <button type="button" class="tipical-button">Выбрать файл</button>
-                    <input id="name-files" multiple type="file" name="files[]">
+                    <input id="name-files" type="file" name="price_doc">
                 </div>
                 <output id="names-list" class="names-list"></output>
                 <input type="submit" class="tipical-button" name="price_service" value="Сохранить услуги и цены">
