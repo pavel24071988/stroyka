@@ -426,7 +426,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                             <div class="add_photo_modal_buttons clearfix">
                                                 <div class="file_upload">
                                                     <button type="button" class="tipical-button">Загрузить фото</button>
-                                                    <input type="file" id="ava-files" name="files[]" multiple>
+                                                    <input type="file" id="ava-files" name="avatar" multiple>
                                                 </div>
                                                 <a href="#" class="tipical-button">Фото с веб-камеры</a>
                                             </div>
