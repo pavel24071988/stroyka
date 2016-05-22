@@ -622,20 +622,25 @@ else echo '<h1>Страница пользователя</h1>';*/
                     ')->fetchAll();
                     foreach($comments as $comment){
                     ?>
-                    <div class="feedback-passport-item">
+                    <div class="specialist-feedback">
+                        <div class="specialist-feedback-headline"><?php if($comment['type'] === 'object_comment') echo 'По заказу'; elseif($comment['type'] === 'job_comment') echo 'По вакансии'; ?> <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>"><?php echo $comment['type_name']; ?></a></div>
                         <p><b>Что понравилось</b><br>
-                        <?php echo $comment['positive_description']; ?>
+                        <?php echo $comment['negative_description']; ?>
                         </p>
                         <br>
                         <p><b>Что не понравилось</b><br>
-                        <?php echo $comment['negative_description']; ?>
+                        <?php echo $comment['positive_description']; ?>
                         </p>
                         <br>
                         <p><b>Общие выводы</b><br>
                         <?php echo $comment['conclusion']; ?>
                         </p>
+                        <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>" class="feedback-author"><?php echo $comment['type_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
                     </div>
                     <?php } ?>
+                    <div class="show-more-holder">
+                        <a href="#" class="show-more">Смотреть ещё отзывы</a>
+                    </div>
                 </div>
             </div>
         </div>
