@@ -1,6 +1,11 @@
 $(document).ready(function() {
 	$(".modal_on").fancybox();
 	//
+	$("a[rel=photo_group], a[rel=my_photo]").fancybox({
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none'
+	});
+	//
 	var Hheader = $('.header').height(),
 		Hwrap = $(window).height()-Hheader+6;
 	$('.wrapper').css('min-height', Hwrap-Hheader);
@@ -81,7 +86,8 @@ $(document).ready(function() {
 	$('#masters-select').on('change', function(){
 		var act = $('#masters-select option:selected').val();
 		$(this).parents('form.search-block-form').attr("action", "/"+act+"/");
-		if ( act == 'masters' ) {
+                if(act === 'companies') $(this).parents('form.search-block-form').attr("action", "/masters/");
+		if ( act == 'masters' || act === 'companies' ) {
 			$('#jobs-select').attr('name', "areas_for_user[]");
 		} else if ( act == 'objects' ) {
 			$('#jobs-select').attr('name', "areas_for_object[]");
@@ -89,6 +95,77 @@ $(document).ready(function() {
 			$('#jobs-select').attr('name', "areas_for_job[]");
 		}
 	});
+	//
+	$('#facetype').on('change', function() {
+		var ftype = $('#facetype option:selected').val();
+		if ( ftype == '1' ) {
+			$('.fiz-facetype').show();
+			$('.ur-facetype').hide();
+		} else if ( ftype == '2' ) {
+			$('.fiz-facetype').hide();
+			$('.ur-facetype').show();
+		}
+	});
+	//
+	function handleFileSelect(evt) {
+	    var files = evt.target.files; // FileList object
+	    // Loop through the FileList and render image files as thumbnails.
+	    for (var i = 0, f; f = files[i]; i++) {
+			// Only process image files.
+			if (!f.type.match('image.*')) {continue;}
+			var reader = new FileReader();
+			// Closure to capture the file information.
+			reader.onload = (function(theFile) {
+				return function(e) {
+				// Render thumbnail.
+					var span = document.createElement('span');
+					span.innerHTML = ['<img class="thumb" src="', e.target.result,
+					                '" title="', escape(theFile.name), '"/>'].join('');
+					document.getElementById('ava-photo').insertBefore(span, null);
+					document.getElementById('add_photo_save').style.display="block";
+				};
+			})(f);
+			// Read in the image file as a data URL.
+			reader.readAsDataURL(f);
+	    }
+	}
+        if(document.getElementById('ava-files') !== null) document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
+	//
+	$('#add-pricerow').on('click', function(){
+            var rowHTML = '<div class="add-price-table-row clearfix">'+
+                    '<div class="add-price-name">'+
+                        '<input type="text" name="name[]">'+
+                    '</div>'+
+                    '<div class="add-price-price">'+
+                        '<input type="text" name="amount[]">'+
+                    '</div>'+
+                    '<div class="add-price-value">'+
+                        '<input type="text" name="value[]">'+
+                    '</div>'+
+                '</div>';
+            $('.add-price-table').append(rowHTML);
+            return false;
+	});
+	//
+	var startftype = $('#facetype option:selected').val();
+	if ( startftype == '1' ) {
+		$('.fiz-facetype').show();
+		$('.ur-facetype').hide();
+	} else if ( startftype == '2' ) {
+		$('.fiz-facetype').hide();
+		$('.ur-facetype').show();
+	}
+	//
+	function handleFileSelectName(evt) {
+		var files = evt.target.files; // FileList object
+		// files is a FileList of File objects. List some properties.
+		var output = [];
+		for (var i = 0, f; f = files[i]; i++) {
+		  output.push('<li>', escape(f.name), '</li>');
+		}
+		document.getElementById('names-list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	}
+	if(document.getElementById('name-files') !== null) document.getElementById('name-files').addEventListener('change', handleFileSelectName, false);
 });
 //
 jQuery(document).ready(function ($) {

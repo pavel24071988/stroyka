@@ -54,6 +54,7 @@ if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
 if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
 if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
 if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_str'] .'%\'';
+if(!empty($_GET['type']) && $_GET['type'] === 'companies') $dopSQL[] = 'r."type_of_registration"=2';
 if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
@@ -125,9 +126,9 @@ foreach($users as $user){
             <?php foreach($users as $user){
                 $users_professions = $DB->query('
                 SELECT *
-                    FROM users_professions up
-                    JOIN professions p ON up."professionID" = p."id"
-                      WHERE up."userID"='. $user['id'])->fetchAll();
+                    FROM users_kinds_of_jobs ukj
+                    LEFT JOIN kinds_of_jobs kj ON ukj.kind_of_job_id = kj.id
+                      WHERE ukj."userID"='. $user['id'])->fetchAll();
                 $profession_arr = [];
                 foreach($users_professions as $profession){
                     $profession_arr[] = $profession['name'];

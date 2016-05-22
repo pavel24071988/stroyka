@@ -1672,7 +1672,7 @@ p {margin-bottom: 7px;}
 	display: block;
 }
 .passport-main-left .tipical-button {
-	width: 100%;
+	width: 99.3%;
 	margin-bottom: 8px;
 	font-size: 15px;
 	color: #636262;
@@ -1689,7 +1689,7 @@ p {margin-bottom: 7px;}
 	color: #054157;
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 50px;
 }
 .change-status {
 	display: inline-block;
@@ -1890,7 +1890,10 @@ p {margin-bottom: 7px;}
 	margin-bottom: 10px;
 	position: relative;
 }
-.product-photo-item .product-photo img {height: 232px;}
+.product-photo-item .product-photo img {
+	min-height: 232px;
+	width: 100%;
+}
 .product-photo .product-photo-scope {
 	width: 100%;
 	height: 232px;
@@ -1996,7 +1999,7 @@ p {margin-bottom: 7px;}
     width: 55px;
     height: 55px;
     cursor: pointer;
-    background: url('../images/a03.png') no-repeat;
+    background: url('/images/a03.png') no-repeat;
     overflow: hidden;
 }
 .jssora03l { background-position: -3px -33px; }
@@ -2082,6 +2085,7 @@ p {margin-bottom: 7px;}
 	line-height: normal;
 }
 .add_photo_modal_photo .tipical-button:hover {color: #fff;}
+.add_photo_modal_img {margin: 20px 0;}
 .add_photo_modal_photo .add_photo_modal_imgtext {
 	font-size: 12px;
 	line-height: 16px;
@@ -2111,6 +2115,110 @@ p {margin-bottom: 7px;}
 	display: block;
 	margin: 85px 0 5px;
 	color: #1c2f3b;
+}
+.user-avatar {overflow: hidden;}
+.user-avatar img.thumb {
+	min-width: 182px;
+	min-height: 190px;
+}
+.user-about-form .tipical-textarea {
+	width: 99%;
+	margin-bottom: 20px;
+}
+.user-about-form .tipical-button {
+	float: right;
+	line-height: normal;
+	padding: 0 10px;
+	font-size: 15px;
+	color: #636262;
+}
+.user-about-form .tipical-button:hover {color: #fff;}
+.add-price-table {margin-bottom: 35px;}
+.add-price-table .add-price-table-row {
+	margin-bottom: 20px;
+	font-size: 12px;
+	line-height: 18px;
+	color: #000;
+	font-style: italic;
+}
+.add-price-table-row span {
+	font-weight: bold;
+	font-style: normal;
+	font-size: 18px;
+}
+.add-price-table-row .add-price-name {
+	float: left;
+	width: 310px;
+}
+.add-price-table-row .add-price-price {
+	float: left;
+	width: 130px;
+	margin-left: 20px;
+}
+.add-price-table-row .add-price-value {
+	float: left;
+	width: 180px;
+	margin-left: 20px;
+}
+.add-price-table-row input {
+	width: 96%;
+	padding: 0 1.8%;
+	background: none;
+	outline: none;
+	border: 1px solid #dadada;
+	height: 32px;
+}
+#add-pricerow {
+	line-height: 30px;
+	float: none;
+}
+.attach-fileblock {margin-top: 50px;}
+.attach-fileblock .attach-fileblock-title {
+	line-height: 18px;
+	font-size: 12px;
+	font-style: italic;
+	margin-bottom: 20px;
+}
+.attach-fileblock-title span {
+	font-size: 18px;
+	font-weight: bold;
+	font-style: normal;
+}
+.attach-fileblock .attach-fileblock-format {
+	line-height: 18px;
+	font-size: 12px;
+	margin-bottom: 20px;
+}
+.attach-fileblock-format span {color: #d73838;}
+.att-file .tipical-button {
+	float: none;
+	line-height: 30px;
+}
+.add-work-photo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+.add-myworks .add-myworks-right {
+	position: relative;
+	overflow: hidden;
+	height: 214px;
+}
+.my-works-carousel {width: 800px;}
+.names-list {
+	margin-bottom: 20px;
+	display: block;
+}
+.names-list li {
+	margin-top: 10px;
+	font-size: 12px;
+	line-height: 24px;
+	padding: 0 8px 0 25px;
+	background: url(/images/file.png) no-repeat 6px center;
+	border: 1px solid #cdcdcd;
+	display: inline-block;
+	margin-right: 15px;
 }
 /* page styles end */
 

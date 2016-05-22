@@ -7,8 +7,9 @@ if($applicationURL[4] === 'dialogs' && isset($_POST['text'])){
     $error_write = $usersModel->setMessage($_SESSION['user']['id'], $applicationURL[5], $_POST['text']);
 }
 
-$incomeMessages = $usersModel->getIncomeMessages($_SESSION['user']['id']);
-$outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);
+$incomeMessages = $usersModel->getMessages($_SESSION['user']['id']);
+$outcomeMessages = [];
+/*$outcomeMessages = $usersModel->getOutcomeMessages($_SESSION['user']['id']);*/
 ?>
 
 <?php
@@ -26,7 +27,7 @@ if($applicationURL[4] === 'dialogs'){
                 <div class="my-page-breadcrumb">
                     <ul>
                         <li>
-                            <a href="#">Диалоги</a>
+                            <a href="../../">Диалоги</a>
                         </li>
                         <li>
                             <a href="#"><?php echo $opponent[0]['name'] .' '. $opponent[0]['surname']; ?></a>

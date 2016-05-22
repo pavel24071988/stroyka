@@ -56,19 +56,35 @@ foreach($kinds_of_jobs as $kind_of_job){
     $kinds_of_jobs_arr[] = $kind_of_job['name'];
 }
 $object_imgs = $DB->query('
-    SELECT *
+    SELECT oi.*, o.amount
       FROM objects_imgs oi
+      LEFT JOIN objects o ON oi."objectID" = o.id 
         WHERE oi."objectID"='. $object['id'])->fetchAll();
 $object_imgs_arr = [];
+$object_imgs_arr_bg = [];
 foreach($object_imgs as $key => $object_img){
     $object_imgs_arr[] = '
         <div class="product-photo-item">
-            <a href="#work1" class="modal_on product-photo">
+            <a href="#work'. ($key+1) .'" class="modal_on product-photo">
                 <div class="product-photo-scope"></div>
                 <img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'">
             </a>
             <div class="product-photo-name">Фото '. ($key+1) .'</div>
         </div>
+    ';
+
+    $object_imgs_arr_bg[] = '
+	    <div id="work'. ($key+1) .'" style="width: 820px;">
+		<div class="modal-title">'. $object_img['src'] .'</div>
+		<img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'" class="modal-works-photo">
+		<div class="modal-photo-content">
+		    <p><b>Стоимость:</b> '. $object_img['amount'] .' руб.</p>
+		    <!--<p><b>Сроки:</b> 8 месяцев</p>
+		    <br>
+		    <p><b>Комментарий.</b></p>
+		    <p>Более того, интеграл Пуассона реально накладывает лист Мёбиуса, что и требовалось доказать. Двойной интеграл продуцирует возрастающий вектор.</p>-->
+		</div>
+	    </div>
     ';
 }
 $object_docs = $DB->query('
@@ -77,7 +93,7 @@ $object_docs = $DB->query('
         WHERE oi."objectID"='. $object['id'])->fetchAll();
 $object_docs_arr = [];
 foreach($object_docs as $key => $object_doc){
-    $object_docs_arr[] = $key. '. <a href="'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a>';
+    $object_docs_arr[] = $key. '. <a href="/data/objects/'. $object_doc['objectID'] .'/'. $object_doc['src'] .'" type="application/file" target="_blank" download>'. $object_doc['name'] .'</a>';
 }
 $answers = $DB->query('
     SELECT u.*,
@@ -191,7 +207,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
                     </div>
                     <?php if(!empty($_SESSION['user'])){ ?>
                     <p class="product-meta-title place">Адрес: <?php echo $object['street'] .' '. $object['house'];?></p>
-                    <p class="product-meta-title phone">Тел. +8 987 456 45 45</p>
+                    <p class="product-meta-title phone">Тел. <?php echo $object['phone']; ?></p>
                     <?php } ?>
                 </div>
                 <div class="product-sub-meta">
@@ -275,6 +291,9 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
         </div>
     </div>
 </div>
+<div style="display: none;">
+	<?php echo implode(' ', $object_imgs_arr_bg); ?>
+</div>
 <!-- Не авторезированный пользователь -->
 <?php }else{ ?>
 <div class="content">
@@ -320,5 +339,8 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
         </div>
     </div>
     <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+</div>
+<div style="display: none;">
+	<?php echo implode(' ', $object_imgs_arr_bg); ?>
 </div>
 <?php } ?>

@@ -26,7 +26,45 @@ if(isset($_POST['changeStatus'])){
         }
         else $error = 'Не удалось загрузить фотография.';
     }
+}elseif(!empty($_POST['about'])){
+    $update_about = $DB->prepare('UPDATE users SET "description"=\''. $_POST['description'] .'\' WHERE "id"='. $user['id']);
+    if($update_about->execute()){
+        $_SESSION['user']['description'] = $_POST['description'];
+        $user['description'] = $_POST['description'];
+    }
+}elseif(!empty($_POST['price_service'])){
+    $sql = $DB->prepare('DELETE FROM users_prices WHERE "userID"='. $user['id']);
+    $sql->execute();
+    foreach($_POST['name'] as $key => $name){
+        $sql = $DB->prepare('
+            INSERT INTO users_prices (name, amount, value, "userID")
+              VALUES(\''. $name .'\', \''. $_POST['amount'][$key] .'\', \''. $_POST['value'][$key] .'\', '. $user['id'] .')');
+        $sql->execute();
+    }
+    
+    if(!empty($_FILES['price_doc'])){
+        if(!file_exists("data/users/". $user['id'])) mkdir("data/users/". $user['id'], 0777);
+        $filename = $_FILES['price_doc']['name'];
+        if($_FILES['price_doc']['size'][$key] / 1000000 > 3){
+            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+        }else{
+            if(copy($_FILES['price_doc']['tmp_name'], "data/users/". $user['id'] ."/". $filename)){
+                $update_avatar = $DB->prepare('UPDATE users SET "price_doc"=\''. $filename .'\' WHERE "id"='. $user['id']);
+                if($update_avatar->execute() === true){
+                    $error = 'Фотография загружена.';
+                    $_SESSION['user']['price_doc'] = $filename;
+                    $user['price_doc'] = $filename;
+                }
+                else $error = 'Не удалось загрузить фотография.';
+            }
+        }
+    }
 }
+
+$prices_services = $DB->query('
+    SELECT *
+      FROM users_prices up
+        WHERE up."userID"='. $user['id'])->fetchAll();
 
 $professions = $DB->query('
     SELECT *
@@ -53,11 +91,14 @@ $countOfViews = $DB->query('SELECT COUNT(id) FROM logs WHERE url=\'/users/'. $us
 $my_works_query = $DB->query('
     SELECT DISTINCT ON (r.id) id, r.*
       FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
-        WHERE r.src IS NOT NULL AND r."createrUserID"='. $user['id'])->fetchAll();
+        WHERE r.src IS NOT NULL AND
+              r."createrUserID"='. $user['id'] .' AND
+              r."type_of_kind"=2 AND
+              r."status" <> \'archive\'')->fetchAll();
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
-    $my_works[] = '<img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/>';
+    $my_works[] = '<a href="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'" rel="photo_group"><img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/></a>';
 }
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
@@ -127,8 +168,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                                             <br>
                                             <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
                                             <br>
-                                            <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
-                                            <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                            <p>Допустимые форматы: <span class="semi-red">jpg, jpeg, png.</span></p>
+                                            <p>Ограничение по размеру: <span class="semi-red">3 Мб.</span></p>
                                         </div>
                                         <div class="add_photo_modal_buttons clearfix">
                                             <div class="file_upload">
@@ -157,8 +198,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <a href="#add_my_photo" class="tipical-button modal_on">Загрузить с компьютера</a>
                     </div>
                     <?php } ?>
-                    <?php if(!$common_data['check_owner']){ ?>
-                    <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
+                    <?php if(!$common_data['check_owner'] && !empty($_SESSION['user'])){ ?>
+                    <a href="<?php echo '/users/'. $user['id'] .'/my_messages/dialogs/'. $user['id'] .'/'; ?>" class="tipical-button">Написать сообщение</a>
                     <?php } ?>
                 </div>
                 <div class="company-passport-right">
@@ -170,12 +211,14 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>Стаж работы:</b> <?php echo $user['age']; ?> лет</p>
                         <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
                         <br>
-                        <p>Наличие СРО и сертификатов</p>
-                        <br>
+                        <p>Наличие СРО и сертификатов:
+			<?php if($user['cpo']) echo 'СРО есть'; ?>
+			</p>
+			<br>
                         <?php if(!empty($_SESSION['user'])){ ?>
                         <p><span style="color: #054157;">Контактная информация:</span><br>
-                        г. Воронеж, ул. Артамонова, оф. 12<br>
-                        +7 (473) 2-232-322</p>
+                        <?php echo $user['adress_of_organization']; ?><br>
+                        <?php echo $user['phone']; ?></p>
                         <?php } ?>
                     </div>
                     <div class="company-passport-map">
@@ -209,13 +252,13 @@ else echo '<h1>Страница пользователя</h1>';*/
     <div class="breadcrumb">
         <ul class="clearfix">
             <li>
-                <a href="#">Главная</a>
+                <a href="/">Главная</a>
             </li>
             <li>
-                <a href="#">Исполнители</a>
+                <a href="/masters/">Исполнители</a>
             </li>
             <li>
-                <a href="#"><?php echo $user['city_name']; ?></a>
+                <a href="/masters/?cityID=<?php echo $user['cityID']; ?>&search=true"><?php echo $user['city_name']; ?></a>
             </li>
             <li>
                 <a href="#"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></a>
@@ -238,11 +281,11 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <br>
                     <div class="specialist-personal">
                         <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
-                        <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                        <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
                         <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                         <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
                         <?php if(!empty($_SESSION['user'])){ ?>
-                        <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                        <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
                         <?php } ?>
                         <p><b>Виды деятельности:</b></p>
                         <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
@@ -255,9 +298,36 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo $user['description']; ?>
             <br>
             <div class="product-sub-headline">Фото работ</div>
-            <?php echo implode(' ', $imgs); ?>
+            <div class="photo-carousel-standart">
+                <div id="jssor_1" class="rotator-holder">
+                    <!-- Loading Screen -->
+                    <div data-u="loading" class="rotator-inner">
+                        <div class="rotator-inner-block"></div>
+                        <div class="rotator-inner-load"></div>
+                    </div>
+                    <div data-u="slides" class="rotator-content">
+                        <div style="display: none;">
+                            <a href="" rel="photo_group">
+                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Bullet Navigator -->
+                    <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
+                        <!-- bullet navigator item prototype -->
+                        <div data-u="prototype" style="width:21px;height:21px;">
+                            <div data-u="numbertemplate"></div>
+                        </div>
+                    </div>
+                    <!-- Arrow Navigator -->
+                    <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                    <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                </div>
+            </div>
             <div class="product-sub-headline">Цены на услуги</div>
-            <?php echo $user['price_description']; ?>
+            <?php foreach($prices_services as $price_service){ ?>
+            <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
+            <?php } ?>
             <div class="product-sub-headline">Отзывы</div>
             <?php
             $comments = $DB->query('
@@ -301,8 +371,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                 </p>
                 <br>
                 <p><b>Общие выводы</b><br>
-                Быстро, качественно, в срок и не дорого.</p>
-                <a href="#" class="feedback-author"><?php echo $comment['user_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
+                <?php echo $comment['conclusion']; ?>
+                </p>
+                <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>" class="feedback-author"><?php echo $comment['type_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
             </div>
             <?php } ?>
             <div class="show-more-holder">
@@ -343,27 +414,24 @@ else echo '<h1>Страница пользователя</h1>';*/
                                                 <br>
                                                 <p>Вы можете загрузить фотографию с вашего компьютера или сделать при помощи веб-камеры.</p>
                                                 <br>
-                                                <p>Допустимые форматы: <span class="semi-red">jpg, mpeg, exe.</span></p>
-                                                <p>Ограничение по размеру: <span class="semi-red">2 ТБ.</span></p>
+                                                <p>Допустимые форматы: <span class="semi-red">jpg, jpeg, png.</span></p>
+                                                <p>Ограничение по размеру: <span class="semi-red">3 Мб.</span></p>
                                             </div>
                                             <div class="add_photo_modal_buttons clearfix">
                                                 <div class="file_upload">
                                                     <button type="button" class="tipical-button">Загрузить фото</button>
-                                                    <input type="file" name="avatar">
+                                                    <input type="file" id="ava-files" name="avatar" multiple>
                                                 </div>
                                                 <a href="#" class="tipical-button">Фото с веб-камеры</a>
                                             </div>
                                         </div>
                                         <!-- Ниже идёт вид после загрузки фотографии -->
                                         <div class="add_photo_modal_photo">
-                                            <div class="modal-title">Ваша фотография</div>
+                                            <!-- <div class="modal-title">Ваша фотография</div> -->
                                             <div class="add_photo_modal_img">
-                                                <img src="">
-                                                <div class="add_photo_modal_imgtext">
-                                                    Так будет выглядеть ваша фотография на сайте. Нажмите “Сохранить” и ваша страница обновится.
-                                                </div>
+                                                <output id="ava-photo"></output>
                                             </div>
-                                            <input type="submit" class="tipical-button" value="Сохранить"> 
+                                            <input style="display: none;" type="submit" id="add_photo_save" class="tipical-button" value="Сохранить"> 
                                         </div>
                                     </fieldset>
                                 </form>
@@ -382,29 +450,33 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <a href="#" class="specialist-name">
                                     <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?>
                                     <span class="valid">(проверено)</span>
+                                    <span class="views"><b>Просмотров:</b> <?php echo $countOfViews['count']; ?></span>
                                 </a>
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
                                     <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
-                                    <p><b>На сайте:</b> <?php echo ''; ?>2 года</p>
+                                    <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
                                     <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
                                     <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
                                     <?php if(!empty($_SESSION['user'])){ ?>
-                                    <p><b>Тел.</b> <?php echo ''; ?>+8 987 456 45 45</p>
+                                    <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
                                     <?php } ?>
                                     <p><b>Виды деятельности:</b></p>
                                     <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
                                 </div>
                             </div>
-                            <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a><?php } ?>
+                            <?php if($common_data['check_owner']){ ?>
+                                <a href="/users/<?php echo $user['id']; ?>/my_settings/" class="change-personal-data">Изменить личные данные</a>
+                                
+                            <?php } ?>
                         </div>
-                        <?php if($common_data['check_owner']){ ?>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
-                                <div class="photo-carousel-standart">
+                                <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a><?php } ?>
+                            </div>
+                            <div class="photo-carousel-standart">
                                 <div id="jssor_1" class="rotator-holder">
                                     <!-- Loading Screen -->
                                     <div data-u="loading" class="rotator-inner">
@@ -413,7 +485,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     </div>
                                     <div data-u="slides" class="rotator-content">
                                         <div style="display: none;">
-                                        <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                                            <a href="" rel="photo_group">
+                                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                                            </a>
                                         </div>
                                     </div>
                                     <!-- Bullet Navigator -->
@@ -428,23 +502,25 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
                                 </div>
                             </div>
-                            </div>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
-                                <a href="#" class="tipical-button">Редактировать</a>
+                                <?php if($common_data['check_owner']){ ?><a href="#user-about" class="modal_on tipical-button">Редактировать</a><?php } ?>
+                                <!-- <a href="#" class="tipical-button">Редактировать</a> -->
                             </div>
                             <?php echo $user['description']; ?>
                         </div>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Услуги и цены</span>
-                                <a href="#" class="tipical-button">Добавить</a>
+                                <?php if($common_data['check_owner']){ ?><a href="#prices" class="modal_on tipical-button">Добавить</a><?php } ?>
                             </div>
-                            <?php echo $user['price_description']; ?>
+                            <?php foreach($prices_services as $price_service){ ?>
+                            <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
+                            <?php } ?>
+                            <a download="" target="_blank" type="application/file" href="/data/users/<?php echo $user['id']; ?>/<?php echo $user['price_doc']; ?>"><?php echo $user['price_doc']; ?></a>
                         </div>
-                        <?php } ?>
                     </div>
                 </div>
                 <?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $user['id']){ ?>
@@ -547,6 +623,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                     foreach($comments as $comment){
                     ?>
                     <div class="feedback-passport-item">
+                        <?php if($comment['type'] === 'object_comment') echo 'По заказу'; elseif($comment['type'] === 'job_comment') echo 'По вакансии'; ?> <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>"><?php echo $comment['type_name']; ?></a>
                         <p><b>Что понравилось</b><br>
                         <?php echo $comment['positive_description']; ?>
                         </p>
@@ -558,11 +635,85 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <p><b>Общие выводы</b><br>
                         <?php echo $comment['conclusion']; ?>
                         </p>
+                        <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>" class="feedback-author"><?php echo $comment['type_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
                     </div>
                     <?php } ?>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="user-about" style="width: 620px;">
+        <div class="modal-title">Информация о себе</div>
+        <form class="user-about-form" method="POST">
+            <fieldset>
+                <p>Пояснительный текст</p>
+                <br>
+                <textarea class="tipical-textarea" name="description"><?php echo $user['description']; ?></textarea>
+                <input type="submit" value="Отправить" name="about" class="tipical-button">
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="prices" style="width: 728px;">
+        <div class="modal-title">Услуги и цены</div>
+        <form class="user-about-form clearfix" method="POST" enctype="multipart/form-data">
+            <fieldset>
+                <p>Добавьте услуги или прикрепите файл.</p>
+                <br>
+                <div class="add-price-table">
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <span>Наименование услуги</span><br>
+                            Введите наименование своей услуги
+                        </div>
+                        <div class="add-price-price">
+                            <span>Цена</span><br>
+                            Стоимость в рублях.
+                        </div>
+                        <div class="add-price-value">
+                            <span>Единица измерения</span><br>
+                            Например, «м2»
+                        </div>
+                    </div>
+                    <?php foreach($prices_services as $price_service){ ?>
+                    <div class="add-price-table-row clearfix">
+                        <div class="add-price-name">
+                            <input type="text" value="<?php echo $price_service['name']; ?>" name="name[]">
+                        </div>
+                        <div class="add-price-price">
+                            <input type="text" value="<?php echo $price_service['amount']; ?>" name="amount[]">
+                        </div>
+                        <div class="add-price-value">
+                            <input type="text" value="<?php echo $price_service['value']; ?>" name="value[]">
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+                <a href="#" id="add-pricerow" class="tipical-button">Добавить строку</a>
+                <div class="attach-fileblock">
+                    <p class="attach-fileblock-title">
+                        <span>Прикрепить файл</span><br>
+                        Вы можете прикрепить свой файл с ценами.
+                    </p>
+                    <p class="attach-fileblock-format">
+                        Допустимые форматы файла: <span>exel.word.docs</span>
+                        <br>
+                        Ограничение по размеру: <span>3 Мб</span>
+                    </p>
+                </div>
+                <div class="file_upload att-file">
+                    <button type="button" class="tipical-button">Выбрать файл</button>
+                    <input id="name-files" type="file" name="price_doc">
+                </div>
+                <output id="names-list" class="names-list"></output>
+                <input type="submit" class="tipical-button" name="price_service" value="Сохранить услуги и цены">
+            </fieldset>
+        </form>
     </div>
 </div>
 <?php } ?>

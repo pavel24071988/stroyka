@@ -19,7 +19,7 @@ $list_of_areas .= '</ul>';
 // регистрируем пользователя
 $error = '';
 if(!empty($_POST)){
-    $array_of_check = ['email' => 'Почта(логин)', 'surname' => 'Фамилия', 'name' => 'Имя', 'work_city' => 'Основное место работы (город или область)'];
+    $array_of_check = ['work_city' => 'Основное место работы (город или область)'];
     foreach($_POST as $key => $row){
         if(isset($array_of_check[$key])){
             if(empty($row)) $error .= 'Не заполнено поле: '. $array_of_check[$key] .'<br/>';
@@ -47,14 +47,20 @@ if(!empty($_POST)){
     
     // начинаем регистрировать
     if(empty($error)){
-        $user_check = $DB->query('SELECT * FROM users WHERE email=\''. $_POST['email'] .'\'')->fetch();
+	$email = $_POST['email'];
+	$name = $_POST['name'];
+	if($_POST['type_of_registration'] === '2'){
+		$email = $_POST['name_of_organization'];
+		$name = $_POST['name_of_organization'];
+	}
+        $user_check = $DB->query('SELECT * FROM users WHERE email=\''. $email .'\'')->fetch();
         if(!empty($user_check)){
-            $error .= 'Данный адрес уже зарегистрирован. ';
+            $error .= 'Данный пользователь уже зарегистрирован. ';
         }
         
         $registration_check = $DB->prepare('
-            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password)
-              VALUES(\''. $_POST['name'] .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $_POST['email'] .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\')');
+            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person, adress_of_organization, phone, experience, status)
+              VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)');
         if($registration_check->execute() === true){
             
             $newUserID = $DB->lastInsertId('users_id_seq');
@@ -95,7 +101,7 @@ if(!empty($_POST)){
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
             $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Регистрация на сайте стройка завершена.";
-            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена.";
+            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена. Ваш пароль ". $_POST['password'] .".";
             mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
             echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user['id'] .'/">';
@@ -181,55 +187,82 @@ if(!empty($_POST)){
                     <div class="registration-form-column1">
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <select name="type_of_registration">
-                                    <option value="1">Физическое лицо</option>
-                                    <option value="2">Юридическое лицо</option>
+                                <select id="facetype" name="type_of_registration">
+                                    <option value="1" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '1') echo 'selected'; ?>>Физическое лицо</option>
+                                    <option value="2" <?php if(!empty($_POST['type_of_registration']) && $_POST['type_of_registration'] === '2') echo 'selected'; ?>>Юридическое лицо</option>
                                 </select>    
                             </div>
                             <div class="registration-form-row-cell">
-                                <select name="type_of_kind">
-                                    <option value="1">Частный мастер</option>
-                                    <option value="2">Бригада</option>
+                                <select name="type_of_kind" class="fiz-facetype">
+                                    <option value="1" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '1') echo 'selected'; ?>>Частный мастер</option>
+                                    <option value="2" <?php if(!empty($_POST['type_of_kind']) && $_POST['type_of_kind'] === '2') echo 'selected'; ?>>Бригада</option>
+                                </select>
+                                <select name="cpo" class="ur-facetype" style="display: none;">
+                                    <option value="false">Наличие СРО и лицензий</option>
+                                    <option value="true" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'true') echo 'selected'; ?>>Да</option>
+                                    <option value="false" <?php if(!empty($_POST['cpo']) && $_POST['cpo'] === 'false') echo 'selected'; ?>>Нет</option>
                                 </select>
                             </div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Наименование организации" name="name_of_organization" value="<?php if(!empty($_POST['name_of_organization'])) echo $_POST['name_of_organization']; ?>" style="display: none;" />
+                            </div>
+                            <div class="registration-form-row-cell">
+                                <select name="experience" class="ur-facetype" style="display: none;">
+                                    <option value="1">Опыт работы (лет)</option>
+                                    <option value="1" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '1') echo 'selected'; ?>>1</option>
+                                    <option value="2" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '2') echo 'selected'; ?>>2</option>
+                                    <option value="3" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '3') echo 'selected'; ?>>3</option>
+                                    <option value="4" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '4') echo 'selected'; ?>>4</option>
+                                    <option value="5" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '5') echo 'selected'; ?>>5</option>
+                                    <option value="6" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '6') echo 'selected'; ?>>6</option>
+                                    <option value="7" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '7') echo 'selected'; ?>>7</option>
+                                    <option value="8" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '8') echo 'selected'; ?>>8</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="registration-form-row clearfix">
+                            <div class="registration-form-row-cell">
+                                <input type="text" class="fiz-facetype" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Адрес организации" name="adress_of_organization" value="<?php if(!empty($_POST['adress_of_organization'])) echo $_POST['adress_of_organization']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Контактное лицо" name="contact_person" value="<?php if(!empty($_POST['contact_person'])) echo $_POST['contact_person']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell"></div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Имя" name="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name']; ?>" />
-                            </div>
-                            <div class="registration-form-row-cell"></div>
-                        </div>
-                        <div class="registration-form-row clearfix">
-                            <div class="registration-form-row-cell">
-                                <input type="text" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                                <input type="text" class="fiz-facetype" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                                <input type="text" class="ur-facetype" placeholder="Номер телефона" name="phone" value="<?php if(!empty($_POST['phone'])) echo $_POST['phone']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <label style="line-height: 35px;"><input type="checkbox"> Без отчества</label>
+                                <label class="fiz-facetype" style="line-height: 35px;"><input type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества</label>
                             </div>
                         </div>
                     </div>
                     <div class="registration-form-column2 clearfix">
-                        <a href="#" class="user-avatar"></a>
+                        <a href="#" class="user-avatar">
+                            <output id="ava-photo"></output>
+                        </a>
                         <div class="user-avatar-content">
                             <p><b>Фотография</b></p>
                             <p>- На фотографии должно быть видно лицо</p>
                             <p>- На фотографии должен быть владелец анкеты</p>
                             <a href="#" class="tipical-button">Сделать фото</a>
                             <div class="file_upload">
-                                <button type="button" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif">
+                                <div class="file_upload">
+                                    <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                                    <input type="file" id="ava-files" name="files[]" multiple>
+                                </div>
+                                <!-- <button type="button" class="tipical-button">Загрузить с компьютера</button>
+                                <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif"> -->
                             </div>
                         </div>
                     </div>
@@ -246,10 +279,14 @@ if(!empty($_POST)){
                     <div class="main-place">
                         <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
                         <ul class="searcher-categories registr-type">
-                            <?php echo Application::getListOfAreas('user', null); ?>
+                            <?php
+                                $areas_for_user = [];
+                                if(isset($_POST['areas_for_user'])) $areas_for_user = ['areas_for_user' => $_POST['areas_for_user']];
+                                echo Application::getListOfAreas('user', null, $areas_for_user);
+                            ?>
                         </ul>
                     </div>
-                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a href="#">пользовательским соглашением</a></label>
+                    <label class="agree"><input type="checkbox" name="assignment"> Я согласен с <a target="_blank" href="/soglashenie.docx">пользовательским соглашением</a></label>
                 </div>
                 <input class="tipical-button forward" style="width: 180px;" type="submit" value="Зарегистрироваться" />
             </fieldset>

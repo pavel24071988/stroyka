@@ -28,7 +28,9 @@ $my_works = $DB->query('
           FROM objects o
           LEFT JOIN objects_imgs oi ON o.id = oi."objectID"
            ) as r
-        WHERE r."createrUserID"='. $_SESSION['user']['id'] .'')->fetchAll();
+        WHERE r."createrUserID"='. $_SESSION['user']['id'] .' AND
+	      r."type_of_kind"=2 AND
+              r."status" <> \'archive\'')->fetchAll();
 ?>
 <div class="content">
     <div class="my-page-content clearfix">
@@ -71,9 +73,10 @@ $my_works = $DB->query('
                                 </div>
                             </div>
                             <div class="add-myworks-right">
+                                <output id="ava-photo" class="add-work-photo"></output>
                                 <div class="file_upload">
                                     <button type="button" class="my-works-button">Загрузить изображение</button>
-                                    <input type="file" name="object_img">
+                                    <input type="file" id="ava-files" multiple name="object_img">
                                 </div>
                             </div>
                         </div>
