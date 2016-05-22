@@ -252,13 +252,13 @@ else echo '<h1>Страница пользователя</h1>';*/
     <div class="breadcrumb">
         <ul class="clearfix">
             <li>
-                <a href="#">Главная</a>
+                <a href="/">Главная</a>
             </li>
             <li>
-                <a href="#">Исполнители</a>
+                <a href="/masters/">Исполнители</a>
             </li>
             <li>
-                <a href="#"><?php echo $user['city_name']; ?></a>
+                <a href="/masters/?cityID=<?php echo $user['cityID']; ?>&search=true"><?php echo $user['city_name']; ?></a>
             </li>
             <li>
                 <a href="#"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></a>
@@ -298,39 +298,32 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php echo $user['description']; ?>
             <br>
             <div class="product-sub-headline">Фото работ</div>
-
-                
-
-
-                <div class="photo-carousel-standart my-works-carousel">
-                    <div id="jssor_1" class="rotator-holder">
-                        <!-- Loading Screen -->
-                        <div data-u="loading" class="rotator-inner">
-                            <div class="rotator-inner-block"></div>
-                            <div class="rotator-inner-load"></div>
-                        </div>
-                        <div data-u="slides" class="rotator-content">
-                            <div style="display: none;">
-                                <a href="" rel="my_photo">
-                                    <?php echo implode(' ', $imgs); ?>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- Bullet Navigator -->
-                        <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
-                            <!-- bullet navigator item prototype -->
-                            <div data-u="prototype" style="width:21px;height:21px;">
-                                <div data-u="numbertemplate"></div>
-                            </div>
-                        </div>
-                        <!-- Arrow Navigator -->
-                        <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
-                        <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
+            <div class="photo-carousel-standart">
+                <div id="jssor_1" class="rotator-holder">
+                    <!-- Loading Screen -->
+                    <div data-u="loading" class="rotator-inner">
+                        <div class="rotator-inner-block"></div>
+                        <div class="rotator-inner-load"></div>
                     </div>
+                    <div data-u="slides" class="rotator-content">
+                        <div style="display: none;">
+                            <a href="" rel="photo_group">
+                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Bullet Navigator -->
+                    <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
+                        <!-- bullet navigator item prototype -->
+                        <div data-u="prototype" style="width:21px;height:21px;">
+                            <div data-u="numbertemplate"></div>
+                        </div>
+                    </div>
+                    <!-- Arrow Navigator -->
+                    <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
+                    <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
                 </div>
-
-
-
+            </div>
             <div class="product-sub-headline">Цены на услуги</div>
             <?php foreach($prices_services as $price_service){ ?>
             <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
@@ -378,8 +371,9 @@ else echo '<h1>Страница пользователя</h1>';*/
                 </p>
                 <br>
                 <p><b>Общие выводы</b><br>
-                Быстро, качественно, в срок и не дорого.</p>
-                <a href="#" class="feedback-author"><?php echo $comment['user_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
+                <?php echo $comment['conclusion']; ?>
+                </p>
+                <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>" class="feedback-author"><?php echo $comment['type_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
             </div>
             <?php } ?>
             <div class="show-more-holder">
@@ -477,11 +471,10 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 
                             <?php } ?>
                         </div>
-                        <?php if($common_data['check_owner']){ ?>
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
-                                <a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a>
+                                <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a><?php } ?>
                             </div>
                             <div class="photo-carousel-standart">
                                 <div id="jssor_1" class="rotator-holder">
@@ -513,7 +506,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
-                                <a href="#user-about" class="modal_on tipical-button">Редактировать</a>
+                                <?php if($common_data['check_owner']){ ?><a href="#user-about" class="modal_on tipical-button">Редактировать</a><?php } ?>
                                 <!-- <a href="#" class="tipical-button">Редактировать</a> -->
                             </div>
                             <?php echo $user['description']; ?>
@@ -521,14 +514,13 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Услуги и цены</span>
-                                <a href="#prices" class="modal_on tipical-button">Добавить</a>
+                                <?php if($common_data['check_owner']){ ?><a href="#prices" class="modal_on tipical-button">Добавить</a><?php } ?>
                             </div>
                             <?php foreach($prices_services as $price_service){ ?>
                             <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
                             <?php } ?>
                             <a download="" target="_blank" type="application/file" href="/data/users/<?php echo $user['id']; ?>/<?php echo $user['price_doc']; ?>"><?php echo $user['price_doc']; ?></a>
                         </div>
-                        <?php } ?>
                     </div>
                 </div>
                 <?php if(!empty($_SESSION['user']) && $_SESSION['user']['id'] !== $user['id']){ ?>

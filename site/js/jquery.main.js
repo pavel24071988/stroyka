@@ -129,7 +129,7 @@ $(document).ready(function() {
 			reader.readAsDataURL(f);
 	    }
 	}
-	document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
+        if(document.getElementById('ava-files') !== null) document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
 	//
 	$('#add-pricerow').on('click', function(){
             var rowHTML = '<div class="add-price-table-row clearfix">'+
@@ -165,7 +165,7 @@ $(document).ready(function() {
 		}
 		document.getElementById('names-list').innerHTML = '<ul>' + output.join('') + '</ul>';
 	}
-	document.getElementById('name-files').addEventListener('change', handleFileSelectName, false);
+	if(document.getElementById('name-files') !== null) document.getElementById('name-files').addEventListener('change', handleFileSelectName, false);
 });
 //
 jQuery(document).ready(function ($) {
