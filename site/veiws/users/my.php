@@ -638,9 +638,6 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <a href="<?php echo '/'. $comment['href_name'] .'/'. $comment['typeID'] .'/' ?>" class="feedback-author"><?php echo $comment['type_name']; ?>, <?php echo date('m.Y', strtotime($comment['created'])); ?></a>
                     </div>
                     <?php } ?>
-                    <div class="show-more-holder">
-                        <a class="show-more" href="#">Смотреть ещё отзывы</a>
-                    </div>
                 </div>
             </div>
         </div>
