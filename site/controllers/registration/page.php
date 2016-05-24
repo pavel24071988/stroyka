@@ -259,7 +259,7 @@ if(!empty($_POST)){
                             <div class="file_upload">
                                 <div class="file_upload">
                                     <button type="button" class="tipical-button">Загрузить с компьютера</button>
-                                    <input type="file" id="ava-files" name="files[]" multiple>
+                                    <input type="file" id="ava-files" name="avatar">
                                 </div>
                                 <!-- <button type="button" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif"> -->
