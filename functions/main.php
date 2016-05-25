@@ -54,8 +54,8 @@ class Application
             $userID = 0;
             if(!empty($_SESSION['user'])) $userID = $_SESSION['user']['id'];
             $log_entrance = self::$DB->prepare('
-              INSERT INTO logs (userid, url)
-                VALUES('. $userID .', \''. implode('/', $newURL) .'\')');
+              INSERT INTO logs (userid, url, session_id)
+                VALUES('. $userID .', \''. implode('/', $newURL) .'\', \''. session_id() .'\')');
             $log_entrance->execute();
         }catch(Exception $ex){}
         
