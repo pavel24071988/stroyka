@@ -48,7 +48,7 @@ if(!empty($_POST)){
     </div>
 </div>
 
-<div class="footer">
+<!--<div class="footer">
     <div class="inner-wrapper clearfix">
         <div class="footer-left-column">
             <div class="footer-left-column-copyright">Copyright © 2016,  All Rights Reserved</div>
@@ -113,3 +113,4 @@ if(!empty($_POST)){
         </div>
     </div>
 </div>
+-->

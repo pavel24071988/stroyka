@@ -72,17 +72,19 @@ $application = new Application;
                 <div class="footer-links-column">
                     <ul class="footer-links">
                         <li>
-                            <a href="#">Пользовательское соглашение</a>
+                            <a href="/soglashenie.docx" target="_blank">Пользовательское соглашение</a>
+                        </li>
+                        <?php if(empty($_SESSION['user'])){ ?>
+                        <li>
+                            <a href="/login/">Вход</a>
                         </li>
                         <li>
-                            <a href="#">Вход</a>
+                            <a href="/registration/">Регистрация</a>
                         </li>
                         <li>
-                            <a href="#">Регистрация</a>
+                            <a href="/forgot/">Восстановление пароля</a>
                         </li>
-                        <li>
-                            <a href="#">Восстановление пароля</a>
-                        </li>
+                        <?php } ?>
                     </ul>
                 </div>
                 <div class="footer-mail-column">
