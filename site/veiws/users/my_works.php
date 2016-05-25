@@ -9,10 +9,12 @@ if(isset($_POST['uploadObject'])){
     
     if(!empty($_FILES['object_img'])){
         // обработаем картинку
-        if(!empty($_FILES['object_img']['tmp_name'])){
+        foreach($_FILES['object_img']['tmp_name'] as $key => $value){
+            $name = $_FILES['object_img']['name'][$key];
+            $tmp_name = $_FILES['object_img']['tmp_name'][$key];
             if(!file_exists("images/objects/". $objectID)) mkdir("images/objects/". $objectID, 0777);
-            if(copy($_FILES['object_img']['tmp_name'], "images/objects/". $objectID ."/". $_FILES['object_img']['name'])){
-                $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $objectID .'\', \''. $_FILES['object_img']['name'] .'\')');
+            if(copy($tmp_name, "images/objects/". $objectID ."/". $name)){
+                $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $objectID .'\', \''. $name .'\')');
                 if(!$create_sql->execute()) $error = 'Произошел сбой добавления изображения';
             }
         }
@@ -76,7 +78,7 @@ $my_works = $DB->query('
                                 <output id="ava-photo" class="add-work-photo"></output>
                                 <div class="file_upload">
                                     <button type="button" class="my-works-button">Загрузить изображение</button>
-                                    <input type="file" id="ava-files" multiple name="object_img">
+                                    <input type="file" id="ava-files" multiple name="object_img[]">
                                 </div>
                             </div>
                         </div>
