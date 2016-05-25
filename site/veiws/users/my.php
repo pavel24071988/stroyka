@@ -205,11 +205,11 @@ else echo '<h1>Страница пользователя</h1>';*/
                 <div class="company-passport-right">
                     <div class="company-passport-title"><?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></div>
                     <div class="company-passport-content">
-                        <p><b>Руководитель:</b> <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></p>
-                        <p><b>Виды деятельности:</b> <?php echo implode(', ', $professions_str); ?></p>
+                        <?php if(!empty($user['name'])){ ?><p><b>Руководитель:</b> <?php echo $user['surname'] .' '. $user['name'] .' '. $user['second_name']; ?></p><?php } ?>
+                        <?php if(!empty($professions_str)){ ?><p><b>Виды деятельности:</b> <?php echo implode(', ', $professions_str); ?></p><?php } ?>
                         <br>
-                        <p><b>Стаж работы:</b> <?php echo $user['age']; ?> лет</p>
-                        <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                        <?php if(!empty($user['age'])){ ?><p><b>Стаж работы:</b> <?php echo $user['age']; ?> лет</p><?php } ?>
+                        <?php if(!empty($user['city_name'])){ ?><p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p><?php } ?>
                         <br>
                         <p>Наличие СРО и сертификатов:
 			<?php if($user['cpo']) echo 'СРО есть'; ?>
@@ -280,23 +280,28 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b></p>
                     <br>
                     <div class="specialist-personal">
-                        <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                        <?php if(!empty($user['city_name'])){ ?><p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p><?php } ?>
                         <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
-                        <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
-                        <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                        <?php if(!empty($user['experience'])){ ?><p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p><?php } ?>
+                        <?php if(!empty($user['age'])){ ?><p><b>Возраст:</b> <?php echo $user['age']; ?> года</p><?php } ?>
                         <?php if(!empty($_SESSION['user'])){ ?>
-                        <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
+                        <?php if(!empty($user['phone'])){ ?><p><b>Тел.</b> <?php echo $user['phone']; ?></p><?php } ?>
                         <?php } ?>
+                        <?php if(!empty($professions_str)){ ?>
                         <p><b>Виды деятельности:</b></p>
                         <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
+                        <?php } ?>
                     </div>
                 </div>
                 <span class="star-master <!--active-->"></span>
-                <span class="last-time">Был 5 часов 11 минут назад</span>
+                <!--<span class="last-time">Был 5 часов 11 минут назад</span>-->
             </div>
+            <?php if(!empty($user['description'])){ ?>
             <div class="product-sub-headline">О себе</div>
             <?php echo $user['description']; ?>
             <br>
+            <?php } ?>
+            <?php if(!empty($my_works)){ ?>
             <div class="product-sub-headline">Фото работ</div>
             <div class="photo-carousel-standart">
                 <div id="jssor_1" class="rotator-holder">
@@ -324,11 +329,13 @@ else echo '<h1>Страница пользователя</h1>';*/
                     <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
                 </div>
             </div>
+            <?php } ?>
+            <?php if(!empty($prices_services)){ ?>
             <div class="product-sub-headline">Цены на услуги</div>
             <?php foreach($prices_services as $price_service){ ?>
             <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
             <?php } ?>
-            <div class="product-sub-headline">Отзывы</div>
+            <?php } ?>
             <?php
             $comments = $DB->query('
                 SELECT c.*,
@@ -358,6 +365,10 @@ else echo '<h1>Страница пользователя</h1>';*/
                   LEFT JOIN users u_new ON u_new.id = c."ownerUserID"
                     WHERE u."id" = '. $user['id'] .' AND c.type = \'user_comment\'
             ')->fetchAll();
+            if(!empty($comments)){
+            ?>
+            <div class="product-sub-headline">Отзывы</div>
+            <?php
             foreach($comments as $comment){
             ?>
             <div class="specialist-feedback">
@@ -379,6 +390,7 @@ else echo '<h1>Страница пользователя</h1>';*/
             <div class="show-more-holder">
                 <a href="#" class="show-more">Смотреть ещё отзывы</a>
             </div>
+            <?php } ?>
         </div>  
     </div>
 </div>
@@ -455,15 +467,17 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 <?php if($common_data['check_owner']){ ?><form method="POST"><p style="color: #054157;"><b><?php if($user['status'] === '1') echo 'занят'; else echo 'свободен'; ?></b><input type="hidden" value="<?php echo $user['status']; ?>" name="changeStatus"/> <input class="change-status" type="submit" value="изменить статус"/></form><?php } ?>
                                 <br>
                                 <div class="specialist-personal">
-                                    <p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p>
+                                    <?php if(!empty($user['city_name'])){ ?><p><b>Место работы:</b> г. <?php echo $user['city_name']; ?></p><?php } ?>
                                     <p><b>На сайте:</b> <?php echo ceil((strtotime("now") - strtotime($user['created'])) / 60 / 60 / 24) . ' день(ней)'; ?></p>
-                                    <p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p>
-                                    <p><b>Возраст:</b> <?php echo $user['age']; ?> года</p>
+                                    <?php if(!empty($user['experience'])){ ?><p><b>Стаж работы:</b> <?php echo $user['experience']; ?> лет</p><?php } ?>
+                                    <?php if(!empty($user['age'])){ ?><p><b>Возраст:</b> <?php echo $user['age']; ?> года</p><?php } ?>
                                     <?php if(!empty($_SESSION['user'])){ ?>
-                                    <p><b>Тел.</b> <?php echo $user['phone']; ?></p>
+                                    <?php if(!empty($user['phone'])){ ?><p><b>Тел.</b> <?php echo $user['phone']; ?></p><?php } ?>
                                     <?php } ?>
+                                    <?php if(!empty($professions_str)){ ?>
                                     <p><b>Виды деятельности:</b></p>
                                     <?php echo '<p>'. implode('</p><p>', $professions_str) .'</p>'; ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <?php if($common_data['check_owner']){ ?>
