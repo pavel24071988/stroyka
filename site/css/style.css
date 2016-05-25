@@ -274,7 +274,7 @@ p {margin-bottom: 7px;}
 }
 .footer-right-column .footer-links-column {
 	float: left;
-	width: 224px;
+	width: 260px;
 }
 .footer-links-column .footer-links-column-headline {margin-bottom: 22px;}
 .footer-links li {
@@ -1148,6 +1148,7 @@ p {margin-bottom: 7px;}
 .file_upload{
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 .file_upload > button {height: 100%;}
 .file_upload input[type=file]{
@@ -1829,7 +1830,7 @@ p {margin-bottom: 7px;}
 	color: #fff;
 	text-decoration: underline;
 	cursor: pointer;
-	background: #054157;
+	background: none;
 	text-transform: uppercase;
 	font-size: 24px;
 	text-align: center;
@@ -1947,6 +1948,7 @@ p {margin-bottom: 7px;}
 	float: right;
 	width: 76px;
 }
+.add-work-photo img {width: 50%;}
 /* page styles end */
 
 /* media query start */
@@ -2202,8 +2204,9 @@ p {margin-bottom: 7px;}
 }
 .add-myworks .add-myworks-right {
 	position: relative;
-	overflow: hidden;
-	height: 214px;
+	overflow-x: hidden;
+	/*height: 214px;*/
+	background: #054157;
 }
 .my-works-carousel {width: 800px;}
 .names-list {
@@ -2219,6 +2222,15 @@ p {margin-bottom: 7px;}
 	border: 1px solid #cdcdcd;
 	display: inline-block;
 	margin-right: 15px;
+}
+.footer-mail-column {
+	float: left;
+	margin-left: 170px;
+}
+.footer-mail-column p {margin-bottom: 15px;}
+.footer-mail-column a {
+	color: #fff;
+	font-weight: bold;
 }
 /* page styles end */
 

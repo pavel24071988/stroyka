@@ -70,8 +70,10 @@ $application = new Application;
             </div>
             <div class="footer-right-column clearfix">
                 <div class="footer-links-column">
-                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
                     <ul class="footer-links">
+                        <li>
+                            <a href="#">Пользовательское соглашение</a>
+                        </li>
                         <li>
                             <a href="#">Вход</a>
                         </li>
@@ -83,33 +85,9 @@ $application = new Application;
                         </li>
                     </ul>
                 </div>
-                <div class="footer-links-column">
-                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
-                    <ul class="footer-links">
-                        <li>
-                            <a href="#">Вход</a>
-                        </li>
-                        <li>
-                            <a href="#">Регистрация</a>
-                        </li>
-                        <li>
-                            <a href="#">Восстановление пароля</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer-links-column">
-                    <div class="footer-links-column-headline">Пользовательское соглашение</div>
-                    <ul class="footer-links">
-                        <li>
-                            <a href="#">Вход</a>
-                        </li>
-                        <li>
-                            <a href="#">Регистрация</a>
-                        </li>
-                        <li>
-                            <a href="#">Восстановление пароля</a>
-                        </li>
-                    </ul>
+                <div class="footer-mail-column">
+                    <p>Замечания по работе сайте и другие вопросы<br>отправляйте на почту</p>
+                    <a href="mailto:support@onobject.ru">support@onobject.ru</a>
                 </div>
             </div>
         </div>
