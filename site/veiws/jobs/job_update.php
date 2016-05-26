@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if(empty($_SESSION['user'])){
     echo 'Недостаточно прав для доступа к данной странице.';
     exit;
@@ -222,15 +222,15 @@ if(!empty($job)){
                     <fieldset>
                         <div class="personal-data-form-headline red">Обязательные параметры выделены красным</div>
                         <div class="personal-data-form-text">
-                            Лемма охватывает интеграл от функции, обращающейся в бесконечность вдоль линии. Векторное поле решительно уравновешивает Наибольший Общий Делитель (НОД). Дивергенция векторного поля переворачивает криволинейный интеграл. Бином Ньютона переворачивает эмпирический график функции многих переменных, при этом, вместо 13 можно взять любую другую константу.
+                            Пожалуйста заполните поля на странице согласно рекомендациям.
                         </div>
                         <div class="personal-data-form-headline red">Название</div>
-                        <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">Укажите название или место работы.</div>
                         <div class="personal-data-row clearfix">
                             <input type="text" name="name" value="<?php echo $job['name']; ?>"><label style="color: #010101; font-size: 14px;"></label>
                         </div>
                         <div class="personal-data-form-headline red">Место работы</div>
-                        <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">Заполните поля адреса места работы.</div>
                         <div class="personal-data-row clearfix">
                             <label class="red">область:</label>
                             <select name="areaID">
@@ -253,7 +253,7 @@ if(!empty($job)){
                         </div>
                         <br>
                         <div class="personal-data-form-headline red">Зарпата</div>
-                        <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">Укажите зарплату.</div>
                         <div class="personal-data-row clearfix">
                             <input type="text" name="amount" value="<?php echo $job['amount']; ?>"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
                         </div>
@@ -262,7 +262,7 @@ if(!empty($job)){
                         </div>
                         <br>
                         <div class="personal-data-form-headline red">График работы</div>
-                        <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">выберите необходимый пункт.</div>
                         <div class="personal-data-row clearfix">
                             <select name="scheduleID">
                             <?php echo implode(', ', $schedules_arr); ?>
@@ -270,11 +270,11 @@ if(!empty($job)){
                         </div>
                         <br>
                         <div class="personal-data-form-headline red">Описание вакансии</div>
-                        <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">Кратко опишите вакансию (какого рода специалиста ищите).</div>
                         <textarea class="personal-form-textarea" name="description"><?php echo $job['description']; ?></textarea>
                         <br>
                         <div class="personal-data-form-headline red">Сфера деятельности</div>
-                        <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                        <div class="personal-form-snippet">Выберите необходимый пункт.</div>
                         <ul class="searcher-categories"><?php echo Application::getListOfAreas('job', null, $areas_for_job); ?></ul>
                         <div class="personal-form-recomendation">
                             <div class="personal-form-recomendation-headline">Рекомендации</div>
