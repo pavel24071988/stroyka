@@ -90,7 +90,7 @@ foreach($objects_images as $image){
 $countOfViews = $DB->query('SELECT COUNT(DISTINCT(session_id)) FROM logs WHERE url=\'/users/'. $user['id'] .'/\'')->fetch();
 
 $my_works_query = $DB->query('
-    SELECT DISTINCT ON (r.id) id, r.*
+    SELECT r.*
       FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
         WHERE r.src IS NOT NULL AND
               r."createrUserID"='. $user['id'] .' AND
