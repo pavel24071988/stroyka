@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if(empty($_SESSION['user'])){
     echo 'Недостаточно прав для доступа к данной странице.';
     exit;
@@ -341,15 +341,15 @@ if(!empty($object)){
                         <input type="hidden" name="type_of_kind" value="0"/>
                         <fieldset>
                             <div class="personal-data-form-text">
-                                Лемма охватывает интеграл от функции, обращающейся в бесконечность вдоль линии. Векторное поле решительно уравновешивает Наибольший Общий Делитель (НОД). Дивергенция векторного поля переворачивает криволинейный интеграл. Бином Ньютона переворачивает эмпирический график функции многих переменных, при этом, вместо 13 можно взять любую другую константу.
+                                Пожалуйста заполните поля на странице согласно рекомендациям.
                             </div>
-                            <div class="personal-data-form-headline red">Название</div>
-                            <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-data-form-headline red">Название объекта</div>
+                            <div class="personal-form-snippet">Укажите название объекта.</div>
                             <div class="personal-data-row clearfix">
                                 <input type="text" name="name" value="<?php echo $object['name']; ?>"><label style="color: #010101; font-size: 14px;"></label>
                             </div>
-                            <div class="personal-data-form-headline red">Адрес стройплощадки:</div>
-                            <div class="personal-form-snippet">Примечание к адресу. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-data-form-headline red">Адрес объекта:</div>
+                            <div class="personal-form-snippet">Заполните поля адреса где находится объект.</div>
                             <div class="personal-data-row clearfix">
                                 <label class="red">область:</label>
                                 <select name="areaID">
@@ -372,7 +372,7 @@ if(!empty($object)){
                             </div>
                             <br>
                             <div class="personal-data-form-headline red">Бюджет проекта</div>
-                            <div class="personal-form-snippet">Примечание к бюджету. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">ПримечаниУкажите общую стоимость работ по проекту.</div>
                             <div class="personal-data-row clearfix">
                                 <input type="text" name="amount" value="<?php echo $object['amount']; ?>"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
                             </div>
@@ -381,15 +381,15 @@ if(!empty($object)){
                             </div>
                             <br>
                             <div class="personal-data-form-headline red">Описание объекта</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Кратко опишите объект (виды работ, общая площадь, требования к мастерам).</div>
                             <textarea class="personal-form-textarea" name="description"><?php echo $object['description']; ?></textarea>
                             <br>
                             <div class="personal-data-form-headline red">Сфера деятельности</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Выберите сферы деятельности согласно, работам по проекту. Это упростит поиск подрядчиков.</div>
                             <ul class="searcher-categories"><?php echo Application::getListOfAreas('object', null, $areas_for_object); ?></ul>
                             <br>
                             <div class="personal-data-form-headline">Сроки выполнения:</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Пожалуйста укажите необходимые сроки начала работ и сдачи объекта.</div>
                             <div class="personal-data-row clearfix">
                                 <div class="personal-data-row-cell calendar-cell clearfix">
                                     <label>с:</label><input id="from" type="text" name="dateFrom" value="<?php echo date('j.m.Y', strtotime($object['dateFrom'])); ?>"><span class="calendar"></span>
@@ -401,7 +401,7 @@ if(!empty($object)){
                             <!--
                             <br>
                             <div class="personal-data-form-headline">Требуемые рабочие:</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Укажите необходимых специалистов.</div>
                             <div class="worker-row clearfix">
                                 <div class="worker-row-cell">
                                     Маляр (1 чел.)
@@ -425,7 +425,7 @@ if(!empty($object)){
                             -->
                             <br>
                             <div class="personal-data-form-headline">Контактная информация:</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Если вы хотите самостоятельно выбрать из откликнувшихся подрядчиков на ваш объект, можете не заполнять поля контактной информации. Добавившиеся мастера будут видны в поле «Объекты и вакансии».</div>
                             <div class="personal-data-row clearfix">
                                 <label>телефон:</label><input name="phone" value="<?php echo $object['phone']; ?>" type="text">
                             </div>
@@ -434,7 +434,7 @@ if(!empty($object)){
                             </div>
                             <br>
                             <div class="personal-data-form-headline">Прикрепить изображение:</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">В этом поле можно добавить план, фотографии объекта.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_img[]"  multiple='true'>
@@ -443,7 +443,7 @@ if(!empty($object)){
                             <div><?php echo implode(' ', $object_imgs_arr);?></div>
                             <br>
                             <div class="personal-data-form-headline">Прикрепить документы:</div>
-                            <div class="personal-form-snippet">Примечание. Подынтегральное выражение синхронизирует положительный криволинейный интеграл.</div>
+                            <div class="personal-form-snippet">Добавьте смету если имеется.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
                                 <input type="file" name="object_doc[]"  multiple='true'>
