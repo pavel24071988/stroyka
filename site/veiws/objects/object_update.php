@@ -372,7 +372,7 @@ if(!empty($object)){
                             </div>
                             <br>
                             <div class="personal-data-form-headline red">Бюджет проекта</div>
-                            <div class="personal-form-snippet">ПримечаниУкажите общую стоимость работ по проекту.</div>
+                            <div class="personal-form-snippet">Укажите общую стоимость работ по проекту.</div>
                             <div class="personal-data-row clearfix">
                                 <input type="text" name="amount" value="<?php echo $object['amount']; ?>"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
                             </div>
