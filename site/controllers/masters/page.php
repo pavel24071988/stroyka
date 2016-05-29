@@ -181,7 +181,7 @@ foreach($users as $user){
                 <div class="product-sub-headline">Фото работ</div>
                 <?php echo implode(' ', $imgs); ?>
                 <?php } ?>
-                <?php if(!empty($user['price_description'])){ ?>
+                <?php if(!empty($prices_services)){ ?>
                 <div class="product-sub-headline">Цены на услуги</div>
                 <?php foreach($prices_services as $price_service){ ?>
                 <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
