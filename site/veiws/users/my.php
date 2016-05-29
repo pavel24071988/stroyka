@@ -42,7 +42,7 @@ if(isset($_POST['changeStatus'])){
         $sql->execute();
     }
     
-    if(!empty($_FILES['price_doc'])){
+    if(!empty($_FILES['price_doc']['tmp_name'])){
         if(!file_exists("data/users/". $user['id'])) mkdir("data/users/". $user['id'], 0777);
         $filename = $_FILES['price_doc']['name'];
         if($_FILES['price_doc']['size'][$key] / 1000000 > 3){
