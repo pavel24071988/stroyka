@@ -138,38 +138,55 @@ foreach($users as $user){
                     SELECT *
                         FROM objects o
                         LEFT JOIN objects_imgs oi ON o."id" = oi."objectID"
-                          WHERE o."createrUserID"='. $user['id'])->fetchAll();
+                          WHERE o."createrUserID"='. $user['id'] .' AND
+                                o."status" <> \'archive\' AND
+                                oi."src" IS NOT NULL')->fetchAll();
 
                 $imgs = [];
                 foreach($objects_images as $image){
                     $imgs[] = '<img width="100px" src="/images/objects/'. $image['objectID'] .'/'. $image['src'] .'" />';
                 }
+                
+                $prices_services = $DB->query('
+                    SELECT *
+                      FROM users_prices up
+                        WHERE up."userID"='. $user['id'])->fetchAll();
             ?>            
             <div class="column-product-item">
                 <div class="specialist-holder clearfix">
-                    <a href="#" class="specialist-avatar">
-                        <img src="/images/users/<?php echo $user['id']; ?>/<?php echo $user['avatar']; ?>" />
+                    <a href="/users/<?php echo $user['id']; ?>/" class="specialist-avatar">
+                        <img src="<?php if(!empty($user['avatar'])){ ?>/images/users/<?php echo $user['id']; ?>/<?php echo $user['avatar']; ?><?php }else{ ?>/images/img1.jpg<?php } ?>" />
                     </a>
                     <div class="specialist-meta">
                         <a href="/users/<?php echo $user['id']; ?>/" class="specialist-name">
                             <?php echo $user['name'] .' '. $user['surname']; ?>
                             <span class="valid">(проверено)</span>
                         </a>
-                        <p><b>Место работы:</b> <?php echo $user['city_name']; ?></p>
+                        <?php if(!empty($user['city_name'])){ ?><p><b>Место работы:</b> <?php echo $user['city_name']; ?></p><?php } ?>
                         <p><b>На сайте:</b> <?php echo floor((strtotime("now") - strtotime($user['created'])) / (60*60*24)) .' дней(я)'; ?></p>
-                        <p><b>Стаж работы:</b> <?php echo $user['experience']; ?></p>
+                        <?php if(!empty($user['experience'])){ ?><p><b>Стаж работы:</b> <?php echo $user['experience']; ?></p><?php } ?>
                         <br>
                         <p><b>Виды деятельности:</b></p>
-                        <?php echo '<p>'. implode('</p><p>', $profession_arr) .'</p>'; ?>
+                        <?php if(!empty($profession_arr)){
+                            echo '<p>'. implode('</p><p>', $profession_arr) .'</p>';
+                        }else{
+                            echo '<p><strong style="color: red;">Виды деятельности не могут быть пустыми!</strong></p>';
+                        } ?>
                         <br>
                         <a href="/users/<?php echo $user['id']; ?>/" class="specialist-feedbacks"><?php echo $user['comment_count']; ?> отзывов</a>
                     </div>
                     <span class="star-master <!--active-->"></span>
                 </div>
+                <?php if(!empty($imgs)){ ?>
                 <div class="product-sub-headline">Фото работ</div>
                 <?php echo implode(' ', $imgs); ?>
+                <?php } ?>
+                <?php if(!empty($user['price_description'])){ ?>
                 <div class="product-sub-headline">Цены на услуги</div>
-                <?php echo $user['price_description']; ?>
+                <?php foreach($prices_services as $price_service){ ?>
+                <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
+                <?php } ?>
+                <?php } ?>
             </div>
             <?php } ?>
         </div>

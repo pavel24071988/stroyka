@@ -7,7 +7,7 @@ if(isset($_POST['uploadObject'])){
     if(!$object->execute()) $error = 'Произошел сбой добавления объекта';
     $objectID = $DB->lastInsertId('objects_id_seq');
     
-    if(!empty($_FILES['object_img'])){
+    if(!empty($_FILES['object_img']['tmp_name'][0])){
         // обработаем картинку
         foreach($_FILES['object_img']['tmp_name'] as $key => $value){
             $name = $_FILES['object_img']['name'][$key];
