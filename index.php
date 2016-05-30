@@ -52,7 +52,7 @@ $application = new Application;
     <div class="footer">
         <div class="inner-wrapper clearfix">
             <div class="footer-left-column">
-                <div class="footer-left-column-copyright">© Сайт «На объетке», 2016.</div>
+                <div class="footer-left-column-copyright">© Сайт «На объекте», 2016.</div>
                 <ul class="footer-social-list clearfix">
                     <li class="footer-social-list-item">
                         <a href="#" class="social-list-item-link vk"></a>
