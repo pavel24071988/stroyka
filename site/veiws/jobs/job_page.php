@@ -242,7 +242,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
             <div class="product-sub-meta-item">Условия:<br><?php echo $job['conditions'];?></div>
         </div>
     </div>
-    <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+    <div class="please-login"><a href="/registration/"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</a></div>
 </div>
 <?php } ?>
 <?php

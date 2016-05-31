@@ -132,19 +132,19 @@ $(document).ready(function() {
         if(document.getElementById('ava-files') !== null) document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
 	//
 	$('#add-pricerow').on('click', function(){
-            var rowHTML = '<div class="add-price-table-row clearfix">'+
-                    '<div class="add-price-name">'+
-                        '<input type="text" name="name[]">'+
-                    '</div>'+
-                    '<div class="add-price-price">'+
-                        '<input type="text" name="amount[]">'+
-                    '</div>'+
-                    '<div class="add-price-value">'+
-                        '<input type="text" name="value[]">'+
-                    '</div>'+
-                '</div>';
-            $('.add-price-table').append(rowHTML);
-            return false;
+        var rowHTML = '<div class="add-price-table-row clearfix">'+
+                '<div class="add-price-name">'+
+                    '<input type="text" name="name[]">'+
+                '</div>'+
+                '<div class="add-price-price">'+
+                    '<input type="text" name="amount[]">'+
+                '</div>'+
+                '<div class="add-price-value">'+
+                    '<input type="text" name="value[]">'+
+                '</div>'+
+            '</div>';
+        $('.add-price-table').append(rowHTML);
+        return false;
 	});
 	//
 	var startftype = $('#facetype option:selected').val();
@@ -155,6 +155,15 @@ $(document).ready(function() {
 		$('.fiz-facetype').hide();
 		$('.ur-facetype').show();
 	}
+	//
+	$('#surname').on('click', function(){
+		if($("#surname").attr("checked") != 'checked') { 
+	        $('.sur-type').css('opacity', '1');
+	    } else {
+	    	$('.sur-type').css('opacity', '0');
+	    }
+	});
+	var sur = $('#surname').val();
 	//
 	function handleFileSelectName(evt) {
 		var files = evt.target.files; // FileList object

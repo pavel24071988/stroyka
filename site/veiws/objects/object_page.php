@@ -338,7 +338,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
             </div>
         </div>
     </div>
-    <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+    <div class="please-login"><a href="/registration/"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</a></div>
 </div>
 <div style="display: none;">
 	<?php echo implode(' ', $object_imgs_arr_bg); ?>

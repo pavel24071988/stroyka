@@ -239,11 +239,13 @@ if(!empty($_POST)){
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
-                                <input type="text" class="fiz-facetype" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
+                                <input type="text" class="fiz-facetype sur-type" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
                                 <input type="text" class="ur-facetype" placeholder="Номер телефона" name="phone" value="<?php if(!empty($_POST['phone'])) echo $_POST['phone']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <label class="fiz-facetype" style="line-height: 35px;"><input type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества</label>
+                                <label class="fiz-facetype" style="line-height: 35px;">
+                                    <input id="surname" type="checkbox" name="second_name_exist" <?php if(!empty($_POST['second_name_exist'])) echo 'checked'; ?>> Без отчества
+                                </label>
                             </div>
                         </div>
                     </div>

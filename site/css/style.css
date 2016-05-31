@@ -79,6 +79,7 @@ p {margin-bottom: 7px;}
 	padding-bottom: 30px;
 }
 .please-login span {text-transform: uppercase;}
+.please-login a {color: #146f90;}
 .red {color: #ff0000!important;}
 .tipical-button {
 	color: #054157;
@@ -681,6 +682,7 @@ p {margin-bottom: 7px;}
 	font-size: 18px;
 	margin-bottom: 15px;
 	color: #054157;
+	margin-top: 15px;
 }
 /* my_objects */
 .my-page-content {margin-top: -40px;}

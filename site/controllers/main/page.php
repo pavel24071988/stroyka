@@ -168,6 +168,6 @@ foreach($area_of_jobs as $area_of_job){
             </div>
         </div>
         <?php } ?>
-        <div class="please-login"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</div>
+        <div class="please-login"><a href="/registration/"><span>Зарегистрируйтесь</span><br>чтобы принять участие!</a></div>
     </div>
 </div>
