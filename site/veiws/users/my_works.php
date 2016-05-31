@@ -49,7 +49,7 @@ $my_works = $DB->query('
                 <div class="my-works-top">
                     <p><b>Здесь вы можете показать свои работы.</b></p>
                     <br>
-                    <p>Заполните поля, загрузите изображение. Размер фото не должен превышать 3 мегабайта.</p>
+                    <p>Заполните поля, загрузите изображение. Размер фото не должен превышать 3 мегабайта.Следуйте инструкциям по заполнению, чтобы не возникло проблем с загрузкой портфолио</p>
                     <br>
                     <p></p>
                 </div>
@@ -62,15 +62,15 @@ $my_works = $DB->query('
                                     <input type="text" name="name" class="tipical-input">
                                 </div>
                                 <div class="add-myworks-form-item">
-                                    <div>Год сдачи</div>
+                                    <div>Год сдачи (указать цифрами)</div>
                                     <input type="text" name="year" class="tipical-input">
                                 </div>
                                 <div class="add-myworks-form-item">
-                                    <div>Стоимость</div>
+                                    <div>Стоимость (указать цифрами без пробелов)</div>
                                     <input type="text" name="amount" class="tipical-input">
                                 </div>
                                 <div class="add-myworks-form-item">
-                                    <div>Сроки в месяцах</div>
+                                    <div>Сроки в месяцах(указать цифрами)</div>
                                     <input type="text" name="term" class="tipical-input">
                                 </div>
                             </div>
