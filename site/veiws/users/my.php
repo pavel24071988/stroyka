@@ -59,6 +59,11 @@ if(isset($_POST['changeStatus'])){
             }
         }
     }
+}elseif(!empty($_POST['del_price_doc'])){
+    // удаляем прикрепленный файл к услугам и ценам
+    $DB->prepare('UPDATE users SET "price_doc"=NULL WHERE "id"='. $user['id'])->execute();
+    $_SESSION['user']['price_doc'] = NULL;
+    $user['price_doc'] = NULL;
 }
 
 $prices_services = $DB->query('
@@ -535,6 +540,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                             <p><?php echo $price_service['name']; ?>......................от <?php echo $price_service['amount']; ?> р/<?php echo $price_service['value']; ?></p>
                             <?php } ?>
                             <a download="" target="_blank" type="application/file" href="/data/users/<?php echo $user['id']; ?>/<?php echo $user['price_doc']; ?>"><?php echo $user['price_doc']; ?></a>
+                            <?php if($common_data['check_owner'] && !empty($user['price_doc'])){ ?><form method="POST"><input type="submit" name="del_price_doc" value="Удалить"/></form><?php } ?>
                         </div>
                     </div>
                 </div>

@@ -131,6 +131,10 @@ if($applicationURL['2'] === 'add'){
         $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
     }
     
+    if(!empty($_POST['del_doc_src'])){
+        $DB->prepare('DELETE FROM objects_docs WHERE "src"=\''. $_POST['doc_src'] .'\'')->execute();
+    }
+    
     // обрабатываем пост здесь
     if(!empty($_POST) && !empty($_POST['update'])){
         
@@ -254,7 +258,7 @@ if(!empty($object)){
           FROM objects_docs oi
             WHERE oi."objectID"='. $object['id'])->fetchAll();
     foreach($object_docs as $object_doc){
-        $object_docs_arr[] = '<a href="/data/objects/'. $object_doc['objectID'] .'/'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a><br/>';
+        $object_docs_arr[] = '<a href="/data/objects/'. $object_doc['objectID'] .'/'. $object_doc['src'] .'"/>'. $object_doc['name'] .'</a><form method="POST"><input type="hidden" name="doc_src" value="'. $object_doc['src'] .'"><input type="submit" name="del_doc_src" value="Удалить"/></form><br/>';
     }
 }
 ?>
