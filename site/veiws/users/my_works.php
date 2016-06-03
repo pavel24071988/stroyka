@@ -59,19 +59,19 @@ $my_works = $DB->query('
                             <div class="add-myworks-left">
                                 <div class="add-myworks-form-item">
                                     <div>Название объекта</div>
-                                    <input type="text" name="name" class="tipical-input">
+                                    <input type="text" name="name" class="tipical-input" autocomplete="off">
                                 </div>
                                 <div class="add-myworks-form-item">
                                     <div>Год сдачи (указать цифрами)</div>
-                                    <input type="text" name="year" class="tipical-input">
+                                    <input type="text" name="year" class="tipical-input" autocomplete="off">
                                 </div>
                                 <div class="add-myworks-form-item">
                                     <div>Стоимость (указать цифрами без пробелов)</div>
-                                    <input type="text" name="amount" class="tipical-input">
+                                    <input type="text" name="amount" class="tipical-input" autocomplete="off">
                                 </div>
                                 <div class="add-myworks-form-item">
                                     <div>Сроки в месяцах(указать цифрами)</div>
-                                    <input type="text" name="term" class="tipical-input">
+                                    <input type="text" name="term" class="tipical-input" autocomplete="off">
                                 </div>
                             </div>
                             <div class="add-myworks-right">

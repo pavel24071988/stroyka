@@ -178,9 +178,10 @@ foreach($users as $user){
                     <span class="star-master <!--active-->"></span>
                 </div>
                 <?php if(!empty($imgs)){ ?>
-                <div class="product-sub-headline">Фото работ</div>
-                <?php echo implode(' ', $imgs); ?>
+                    <div class="product-sub-headline">Фото работ</div>
+                    <?php echo implode(' ', $imgs); ?>
                 <?php } ?>
+
                 <?php if(!empty($prices_services)){ ?>
                 <div class="product-sub-headline">Цены на услуги</div>
                 <?php foreach($prices_services as $price_service){ ?>
