@@ -46,7 +46,7 @@ if(isset($_POST['changeStatus'])){
         if(!file_exists("data/users/". $user['id'])) mkdir("data/users/". $user['id'], 0777);
         $filename = $_FILES['price_doc']['name'];
         if($_FILES['price_doc']['size'][$key] / 1000000 > 3){
-            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
         }else{
             if(copy($_FILES['price_doc']['tmp_name'], "data/users/". $user['id'] ."/". $filename)){
                 $update_avatar = $DB->prepare('UPDATE users SET "price_doc"=\''. $filename .'\' WHERE "id"='. $user['id']);

@@ -37,6 +37,7 @@ if(!empty($_POST)){
     if(empty($_POST['assignment'])) $error .= 'Не заполнено поле: Я согласен с пользовательским соглашением<br/>';
     if(empty($_POST['password'])) $error .= 'Не заполнено поле: Пароль<br/>';
     elseif($_POST['password'] !== $_POST['repeat_password']) $error .= 'Поля пароль и повторите пароль не совпадают<br/>';
+    if(empty($_POST['areas_for_user'])) $error .= 'Необходимо выбрать вид деятельности<br/>';
     
     $city = $DB->query('SELECT * FROM cities c WHERE c.name ILIKE \''. $_POST['city'] .'\'')->fetch();
     if(empty($city)){
@@ -180,7 +181,7 @@ if(!empty($_POST)){
             <a href="#" class="registration-breadcrumb-step" data-id="step2">2</a>
         </div>
         <form class="registration-form" action="/registration/" method="POST" enctype="multipart/form-data">
-            <div style="color: red;"><?php echo $error; ?></div>
+            <div style="color: red; font-weight: normal;"><?php echo $error; ?></div>
             <fieldset id="step1">
                 <div class="registration-form-headline">Ваши данные будут проверяться! Не указывайте недостоверную информацию!</div>
                 <div class="registration-form-columns clearfix">

@@ -42,7 +42,7 @@ if(!empty($_POST)){
                     </div>
                     <button type="submit">Войти</button>
                 </div>
-                <div style="color: red; font-weight: bold;"><?php echo($error); ?></div>
+                <div style="color: red; font-weight: normal;"><?php echo($error); ?></div>
             </fieldset>
         </form>
     </div>

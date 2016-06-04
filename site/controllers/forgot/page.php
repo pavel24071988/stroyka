@@ -22,7 +22,7 @@ if(!empty($_POST['email'])){
             }
         }
     }
-    echo '<div style="color: red;">'. $error .'</div>';
+    echo '<div style="color: red; font-weight: normal;">'. $error .'</div>';
 }
 ?>
 <!--<h1>Форма восстановления пароля</h1>

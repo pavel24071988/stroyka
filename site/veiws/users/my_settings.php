@@ -29,7 +29,7 @@ if(!empty($_POST)){
             }
         }
     }elseif(isset($_POST['personal_data'])){
-        
+
         $city = $DB->query('SELECT c.id FROM cities c WHERE c.name=\''. $_POST['city_name'] .'\'')->fetch();
         if(empty($cities)){
             $city = $DB->prepare('INSERT INTO cities (name) VALUES(\''. $_POST['city_name'] .'\')')->execute();
@@ -37,8 +37,7 @@ if(!empty($_POST)){
         }else{
             $cityID = $city['id'];
         }
-        $city_name = 
-        
+
         $update_check = $DB->prepare('
             UPDATE users
               SET "name"=\''. $_POST['name'] .'\',
@@ -48,11 +47,9 @@ if(!empty($_POST)){
                   "phone"=\''. $_POST['phone'] .'\',
                   "cityID"=\''. $cityID .'\'
                 WHERE "id"='. $user['id']);
-        if($update_check->execute() === true){
-            $error = 'Данные отредактированы.';
-        }else{
-            $error = 'Не заполнены обязательные поля.';
-        }
+        if(empty($_POST['areas_for_user'])) $error = 'Необходимо выбрать вид деятельности<br/>';
+        elseif($update_check->execute() === true) $error = 'Данные отредактированы.';
+        else $error = 'Не заполнены обязательные поля.';
     }
     $user = $DB->query('
         SELECT u.*,
@@ -84,7 +81,7 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
             <div class="my-page-wrapper-content">
                 <div class="my-page-wrapper-headline">Учетные данные</div>
                 <div class="personal-main-data">
-                    <?php if(!empty($error)) echo '<div style="color: red;">'. $error .'</div><br/>'; ?>
+                    <?php if(!empty($error)) echo '<div style="color: red; font-weight: normal;">'. $error .'</div><br/>'; ?>
                     <p>Ваш логин: <span><?php echo $user['email']; ?></span></p>
                     <p>Ваша почта: <span><?php echo $user['email']; ?></span></p>
                 </div>

@@ -48,7 +48,7 @@ if($applicationURL['2'] === 'add'){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
         if(!empty($errors)){
-            $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
+            $error = '<div style="color: red; font-weight: normal;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $create_sql = $DB->prepare('
                 INSERT INTO objects (amount, cpo, "createrUserID", "dateFrom", "dateTo", description, house, name, recomendations, require, street, type_of_kind, phone, email, "areaID", "cityID")
@@ -80,7 +80,7 @@ if($applicationURL['2'] === 'add'){
                     foreach($_FILES['object_img']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
                         if($_FILES['object_img']['size'][$key] / 1000000 > 3){
-                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
                             continue;
                         }
                         if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $lastInsertId ."/". $filename)){
@@ -96,7 +96,7 @@ if($applicationURL['2'] === 'add'){
                     foreach($_FILES['object_doc']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_doc']['name'][$key]);
                         if($_FILES['object_doc']['size'][$key] / 1000000 > 3){
-                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
                             continue;
                         }
                         if(copy($_FILES['object_doc']['tmp_name'][$key], "data/objects/". $lastInsertId ."/". $filename)){
@@ -108,7 +108,7 @@ if($applicationURL['2'] === 'add'){
                 
                 if(empty($error)) echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
             }else{
-                $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Не удалось создать, попробуйте позже.</div>';
             }
         }
     }
@@ -146,7 +146,7 @@ if($applicationURL['2'] === 'add'){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
         if(!empty($errors)){
-            $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
+            $error = '<div style="color: red; font-weight: normal;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $update_check = $DB->prepare('
                 UPDATE objects SET
@@ -182,7 +182,7 @@ if($applicationURL['2'] === 'add'){
                     foreach($_FILES['object_img']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
                         if($_FILES['object_img']['size'][$key] / 1000000 > 3){
-                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
                             continue;
                         }
                         if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $applicationURL[2] ."/". $filename)){
@@ -198,7 +198,7 @@ if($applicationURL['2'] === 'add'){
                     foreach($_FILES['object_doc']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_doc']['name'][$key]);
                         if($_FILES['object_doc']['size'][$key] / 1000000 > 3){
-                            $error .= '<div style="color: red;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
+                            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
                             continue;
                         }
                         if(copy($_FILES['object_doc']['tmp_name'][$key], "data/objects/". $applicationURL[2] ."/". $filename)){
@@ -218,7 +218,7 @@ if($applicationURL['2'] === 'add'){
                         ('. $_SESSION['user']['id'] .', \'Заказ № '. $applicationURL[2] .' был изменен. Просьба проверить.\', '. $user['fromUserID'] .', \'system_object\', '. $applicationURL[2] .')
                     ')->execute();
             }else{
-                $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Не удалось отредактировать, попробуйте позже.</div>';
             }
         }
     }

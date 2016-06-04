@@ -40,7 +40,7 @@ if($applicationURL['2'] === 'add'){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
         if(!empty($errors)){
-            $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
+            $error = '<div style="color: red; font-weight: normal;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $create_sql = $DB->prepare('
                 INSERT INTO jobs (amount, bargain, "createrUserID", conditions, description, house, name, recomendations, require, street, "scheduleID", "areaID", "cityID")
@@ -62,11 +62,11 @@ if($applicationURL['2'] === 'add'){
                 if(!empty($_POST['areas_for_job'])){
                     foreach($_POST['areas_for_job'] as $area_for_job) $DB->prepare('INSERT INTO links_kinds_of_jobs_jobs ("jobID", "kindOfJobID") VALUES ('. $lastInsertId .', '. $area_for_job .')')->execute();
                 }
-                $error = '<div style="color: red;">Вакансия создана.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Вакансия создана.</div>';
                 /*echo '<meta http-equiv="refresh" content="1;URL=/jobs/'. $lastInsertId .'/">';*/
                 echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
             }else{
-                $error = '<div style="color: red;">Не удалось создать, попробуйте позже.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Не удалось создать, попробуйте позже.</div>';
             }
         }
     }
@@ -101,7 +101,7 @@ if($applicationURL['2'] === 'add'){
             if(empty($_POST[$key])) $errors[] = 'Не заполнено поле: '. $row_to_check;
         }
         if(!empty($errors)){
-            $error = '<div style="color: red;">'. implode('<br/>', $errors) .'</div>';
+            $error = '<div style="color: red; font-weight: normal;">'. implode('<br/>', $errors) .'</div>';
         }else{
             $update_check = $DB->prepare('
                 UPDATE jobs SET
@@ -126,7 +126,7 @@ if($applicationURL['2'] === 'add'){
                 
                 $job = $DB->query('SELECT j.* FROM jobs j WHERE j."id"='. $applicationURL[2])->fetch();
                 $main_title = '<span class="edit-process">Редактирование:</span><br>'. $job['name'] .'<a href="/jobs/'. $job['id'] .'/close/" class="close-edit">(Закрыть)</a>';
-                $error = '<div style="color: red;">Вакансия отредактирована.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Вакансия отредактирована.</div>';
                 echo '<meta http-equiv="refresh" content="1;URL=/users/'. $_SESSION['user']['id'] .'/my_objects/">';
                 
                 // отправляем откликнувшимся пользователям сообщения
@@ -137,7 +137,7 @@ if($applicationURL['2'] === 'add'){
                         ('. $_SESSION['user']['id'] .', \'Вакансия № '. $applicationURL[2] .' была изменена. Просьба проверить.\', '. $user['fromUserID'] .', \'system_job\', '. $applicationURL[2] .')
                     ')->execute();
             }else{
-                $error = '<div style="color: red;">Не удалось отредактировать, попробуйте позже.</div>';
+                $error = '<div style="color: red; font-weight: normal;">Не удалось отредактировать, попробуйте позже.</div>';
             }
         }
     }
