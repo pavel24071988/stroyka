@@ -9,9 +9,11 @@ if(isset($_GET['search']) && $_GET['search'] === 'true'){
 
 $cities = Application::$DB->query('SELECT * FROM cities')->fetchAll();
 $areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
+$types = [0 => 'Все', 1 => 'Частный мастер', 2 => 'Бригада', 3 => 'Компания'];
 
 $cities_options = '';
 $areas_options = '';
+$types_options = '';
 
 foreach($cities as $general_city){
     if(!empty($city) && $city['id'] === $general_city['id']) continue;
@@ -20,6 +22,11 @@ foreach($cities as $general_city){
 foreach($areas as $general_area){
     if(!empty($area) && $area['id'] === $general_area['id']) continue;
     $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+}
+foreach($types as $key => $general_type){
+    $selected = '';
+    if(!empty($_GET['type']) && (int) $_GET['type'] === $key) $selected = ' selected';
+    $types_options .= '<option value="'. $key .'" '. $selected .'>'. $general_type .'</option>';
 }
 
 $dopSQL = [];
@@ -54,7 +61,11 @@ if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
 if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
 if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
 if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_str'] .'%\'';
-if(!empty($_GET['type']) && $_GET['type'] === 'companies') $dopSQL[] = 'r."type_of_registration"=2';
+if(!empty($_GET['type'])){
+    if($_GET['type'] === '1') $dopSQL[] = 'r."type_of_registration" = 1 AND r."type_of_kind" = 1';
+    if($_GET['type'] === '2') $dopSQL[] = 'r."type_of_registration" = 1 AND r."type_of_kind" = 2';
+    if($_GET['type'] === '3') $dopSQL[] = 'r."type_of_registration" = 2';
+}
 if(!empty($busy)) $dopSQL[] = $busy;
 if(!empty($dopSQL)) $sql .= ' WHERE '. implode(' AND ', $dopSQL);
 
@@ -205,6 +216,10 @@ foreach($users as $user){
                             <select name="cityID">
                                 <?php if(!empty($city)) echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>'; ?>
                                 <?php echo $cities_options; ?>
+                            </select>
+                            <div class="column-searcher-select-label">Вид исполнителя</div>
+                            <select name="type">
+                                <?php echo $types_options; ?>
                             </select>
                         </div>
                         <div class="column-searcher-categories">
