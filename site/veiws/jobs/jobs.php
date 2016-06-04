@@ -16,8 +16,8 @@ foreach($cities as $general_city){
     $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
 }
 foreach($areas as $general_area){
-    if(!empty($area) && $area['id'] === $general_area['id']) continue;
-    $areas_options .= '<option value="'. $general_area['id'] .'">'. $general_area['name'] .'</option>';
+    $selected = (!empty($city) && $city['areaID'] === $general_area['id']) ? ' selected' : '';
+    $areas_options .= '<option value="'. $general_area['id'] .'" '. $selected .'>'. $general_area['name'] .'</option>';
 }
 
 $sql = '
@@ -75,8 +75,7 @@ $jobs = Application::$DB->query($sql)->fetchAll();
                     <fieldset>
                         <div class="column-searcher-selects">
                             <div class="column-searcher-select-label">Регион</div>
-                            <select name="areaID">
-                                <?php if(!empty($area)) echo '<option value="'. $area['id'] .'">'. $area['name'] .'</option>'; ?>
+                            <select <!--name="areaID"-->>
                                 <?php echo $areas_options; ?>
                             </select>
                             <div class="column-searcher-select-label">Мой город</div>
