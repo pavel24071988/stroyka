@@ -31,7 +31,7 @@ if(!empty($_POST)){
     }elseif(isset($_POST['personal_data'])){
 
         $city = $DB->query('SELECT c.id FROM cities c WHERE c.name=\''. $_POST['city_name'] .'\'')->fetch();
-        if(empty($cities)){
+        if(empty($city)){
             $city = $DB->prepare('INSERT INTO cities (name) VALUES(\''. $_POST['city_name'] .'\')')->execute();
             $cityID = $DB->lastInsertId('cities_id_seq');
         }else{
