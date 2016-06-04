@@ -57,7 +57,7 @@ $sql = '
 $busy = 'r."status"=\'0\'';
 if(!empty($_GET['busy'])) $busy ='';
 if(!empty($_GET['cityID'])) $dopSQL[] = 'r."cityID"=\''. $_GET['cityID'] .'\'';
-/*if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';*/
+if(!empty($_GET['areaID'])) $dopSQL[] = 'r."areaID"=\''. $_GET['areaID'] .'\'';
 if(!empty($_GET['comments'])) $dopSQL[] = 'r."comment_count">0';
 if(!empty($_GET['plus_comments'])) $dopSQL[] = 'r."plus_comment_count">0';
 if(!empty($_GET['search_str'])) $dopSQL[] = 'r."name" LIKE \'%'. $_GET['search_str'] .'%\'';
@@ -208,7 +208,7 @@ foreach($users as $user){
                     <fieldset>
                         <div class="column-searcher-selects">
                             <div class="column-searcher-select-label">Регион</div>
-                            <select name="areaID">
+                            <select <!--name="areaID"-->>
                                 <?php if(!empty($area)) echo '<option value="'. $area['id'] .'">'. $area['name'] .'</option>'; ?>
                                 <?php echo $areas_options; ?>
                             </select>
