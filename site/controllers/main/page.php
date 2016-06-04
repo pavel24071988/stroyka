@@ -86,6 +86,7 @@ foreach($area_of_jobs as $area_of_job){
 </div>
 
 <div class="content">
+    <!--
     <div class="search-block">
         <div class="search-block-headline">Поиск</div>
         <form class="search-block-form" method="GET" action="/masters/">
@@ -95,7 +96,6 @@ foreach($area_of_jobs as $area_of_job){
                     <div class="search-block-left">
                         <select id="masters-select" class="tipical-select" name="type">
                             <option value="masters">Мастера</option>
-                            <!--<option value="companies">Компании</option>-->
                             <option value="objects">Заказы</option>
                             <option value="jobs">Вакансии</option>
                         </select>
@@ -115,6 +115,7 @@ foreach($area_of_jobs as $area_of_job){
             </fieldset>
         </form>
     </div>
+    -->
     <div class="tipical-content-headline">Новые объекты</div>
     <div class="objects-holder">
         <?php foreach($objects as $object){
