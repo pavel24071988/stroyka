@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
 $application = new Application;
@@ -88,7 +88,7 @@ $application = new Application;
                     </ul>
                 </div>
                 <div class="footer-mail-column">
-                    <p>Замечания по работе сайте и другие вопросы<br>отправляйте на почту</p>
+                    <p>Замечания по работе сайта и другие вопросы<br>отправляйте на почту</p>
                     <a href="mailto:support@onobject.ru">support@onobject.ru</a>
                 </div>
             </div>
