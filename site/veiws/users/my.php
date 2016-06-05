@@ -228,7 +228,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <?php } ?>
                     </div>
                     <div class="company-passport-map">
-                        !!сюда вставить карту!!
+                        <!-- !!сюда вставить карту!! -->
                     </div>
 
 
@@ -575,6 +575,55 @@ else echo '<h1>Страница пользователя</h1>';*/
                     </div>
                 </form>
                 <?php } ?>
+
+                <div class="specialist-meta-block">
+                    <div class="specialist-block-title">
+                        <span>Портфолио</span>
+                        <?php if($common_data['check_owner']){ ?><a class="tipical-button">Добавить работы</a><?php } ?>
+                    </div>
+                    <div class="portfo-holder clearfix">
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                        <a href="#portfo" class="portfo-item modal_on">
+                            <img src="/images/img1.jpg">
+                        </a>
+                    </div>
+                </div>
+
                 <div class="specialist-meta-block">
                     <div class="specialist-block-title">
                         <span>Отзывы</span>
@@ -739,3 +788,63 @@ else echo '<h1>Страница пользователя</h1>';*/
 </div>
 <?php } ?>
 <?php } ?>
+
+<div style="display: none;">
+    <div id="portfo" style="width: 750px;">
+        <div class="modal-subtitle">Ремонт на балконе</div>
+        <div class="big-portfo-photo">
+            <img src="/images/avatar1.jpg" id="big-portfo-photo">
+            <a href="#" class="portfo-nav left"></a>
+            <a href="#" class="portfo-nav right"></a>
+        </div>
+
+        <!-- Эта часть видна только владельцу страницы -->
+        <div class="make-main-holder">
+            <a href="#">Сделать фотографию основной</a>
+            <p>Фотография станет обложкой вашей работы.</p>
+        </div>
+
+        <!-- Эта часть видна только владельцу страницы и если текущая фотка уже выбрана основной -->
+        <div class="make-main-holder">
+            <b>Это главная фотография</b>
+            <p>Она является обложкой вашей работы.</p>
+        </div>
+
+        <div class="portfo-thumbs-holder clearfix">
+            <a href="#" class="portfo-thumb">
+                <img src="/images/avatar1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/img1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/objects/_DSC6097.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/avatar1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/img1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/objects/_DSC6097.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/avatar1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/img1.jpg">
+            </a>
+            <a href="#" class="portfo-thumb">
+                <img src="/images/objects/_DSC6097.jpg">
+            </a>
+        </div>
+        <div class="portfo-info">
+            <p><b>Год сдачи:</b> 2016</p>
+            <p><b>Срок работы:</b> 2 месяца</p>
+            <p><b>Стоимость:</b> 10 000 рублей</p>
+            <br>
+            <p>Комментарий пользователя. Что сделано: разводка сантехники,подключение сантехники,плиточные работы,тёплый пол</p>
+        </div>
+    </div>
+</div>

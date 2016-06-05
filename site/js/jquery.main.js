@@ -129,7 +129,7 @@ $(document).ready(function() {
 			reader.readAsDataURL(f);
 	    }
 	}
-        if(document.getElementById('ava-files') !== null) document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
+    if(document.getElementById('ava-files') !== null) document.getElementById('ava-files').addEventListener('change', handleFileSelect, false);
 	//
 	$('#add-pricerow').on('click', function(){
         var rowHTML = '<div class="add-price-table-row clearfix">'+
@@ -165,6 +165,21 @@ $(document).ready(function() {
 	});
 	var sur = $('#surname').val();
 	//
+	$('#by_agreement').on('click', function(){
+		if($("#by_agreement").attr("checked") != 'checked') { 
+	        $('#object_fund').prop( "disabled", false);
+	    } else {
+	    	$('#object_fund').prop( "disabled", true).val('');
+	    }
+	});
+	//
+	$('.portfo-thumbs-holder .portfo-thumb').on('click', function(){
+		var $this = $(this);
+		var imgsrc = $this.find('img').attr('src');
+		$('#big-portfo-photo').attr('src', imgsrc);
+		return false;
+	});
+	//
 	function handleFileSelectName(evt) {
 		var files = evt.target.files; // FileList object
 		// files is a FileList of File objects. List some properties.
@@ -175,6 +190,41 @@ $(document).ready(function() {
 		document.getElementById('names-list').innerHTML = '<ul>' + output.join('') + '</ul>';
 	}
 	if(document.getElementById('name-files') !== null) document.getElementById('name-files').addEventListener('change', handleFileSelectName, false);
+	//
+	function handleFileSelect(evt) {
+	    var files = evt.target.files; // FileList object
+	    // Loop through the FileList and render image files as thumbnails.
+	    for (var i = 0, f; f = files[i]; i++) {
+			// Only process image files.
+			if (!f.type.match('image.*')) {continue;}
+			var reader = new FileReader();
+			// Closure to capture the file information.
+			reader.onload = (function(theFile) {
+				return function(e) {
+				// Render thumbnail.
+					var span = document.createElement('span');
+					span.innerHTML = ['<img class="thumb" src="', e.target.result,
+					                '" title="', escape(theFile.name), '"/>'].join('');
+					document.getElementById('obj-photo').insertBefore(span, null);
+				};
+			})(f);
+			// Read in the image file as a data URL.
+			reader.readAsDataURL(f);
+	    }
+	}
+	if(document.getElementById('obj-files') !== null) document.getElementById('obj-files').addEventListener('change', handleFileSelect, false);
+	//
+	function handleFileSelectName(evt) {
+		var files = evt.target.files; // FileList object
+		// files is a FileList of File objects. List some properties.
+		var output = [];
+		for (var i = 0, f; f = files[i]; i++) {
+		  output.push('<li>', escape(f.name), '</li>');
+		}
+		document.getElementById('names-obj-list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	}
+	if(document.getElementById('name-obj-files') !== null) document.getElementById('name-obj-files').addEventListener('change', handleFileSelectName, false);
+	//
 });
 //
 jQuery(document).ready(function ($) {

@@ -378,10 +378,10 @@ if(!empty($object)){
                             <div class="personal-data-form-headline red">Бюджет проекта</div>
                             <div class="personal-form-snippet">Укажите общую стоимость работ по проекту.</div>
                             <div class="personal-data-row clearfix">
-                                <input type="text" name="amount" value="<?php echo $object['amount']; ?>"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
+                                <input type="text" id="object_fund" name="amount" value="<?php echo $object['amount']; ?>"><label style="color: #010101; font-size: 14px;">&nbsp;&nbsp;рублей</label>
                             </div>
                             <div>
-                                <label class="spec"><input type="checkbox"> по договоренности</label>
+                                <label class="spec"><input type="checkbox" id="by_agreement"> по договоренности</label>
                             </div>
                             <br>
                             <div class="personal-data-form-headline red">Описание объекта</div>
@@ -441,7 +441,11 @@ if(!empty($object)){
                             <div class="personal-form-snippet">В этом поле можно добавить план, фотографии объекта.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file" name="object_img[]"  multiple='true'>
+                                <input type="file" id="obj-files" name="object_img[]" multiple='true'>
+                            </div>
+                            <br>
+                            <div class="obj-photo clearfix">
+                                <output id="obj-photo" class="clearfix"></output>
                             </div>
                             <br>
                             <div><?php echo implode(' ', $object_imgs_arr);?></div>
@@ -450,8 +454,10 @@ if(!empty($object)){
                             <div class="personal-form-snippet">Добавьте смету если имеется.</div>
                             <div class="file_upload">
                                 <button type="button" style="width: 205px;" class="tipical-button">Загрузить с компьютера</button>
-                                <input type="file" name="object_doc[]"  multiple='true'>
+                                <input id="name-obj-files" name="object_doc[]" type="file" multiple='true'>
                             </div>
+                            <br>
+                            <output id="names-obj-list" class="names-list"></output>
                             <br>
                             <div><?php echo implode(' ', $object_docs_arr);?></div>
                             <br><br>

@@ -211,7 +211,7 @@ if(!empty($_POST)){
                                 <input type="text" class="ur-facetype" placeholder="Наименование организации" name="name_of_organization" value="<?php if(!empty($_POST['name_of_organization'])) echo $_POST['name_of_organization']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <select name="experience" class="ur-facetype" style="display: none;">
+                                <!-- <select name="experience" class="ur-facetype" style="display: none;">
                                     <option value="1">Опыт работы (лет)</option>
                                     <option value="1" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '1') echo 'selected'; ?>>1</option>
                                     <option value="2" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '2') echo 'selected'; ?>>2</option>
@@ -221,7 +221,8 @@ if(!empty($_POST)){
                                     <option value="6" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '6') echo 'selected'; ?>>6</option>
                                     <option value="7" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '7') echo 'selected'; ?>>7</option>
                                     <option value="8" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '8') echo 'selected'; ?>>8</option>
-                                </select>
+                                </select> -->
+                                <input type="text" class="ur-facetype" placeholder="Опыт работы (лет)" name="" style="display: none;" />
                             </div>
                         </div>
                         <div class="registration-form-row clearfix">
@@ -229,7 +230,9 @@ if(!empty($_POST)){
                                 <input type="text" class="fiz-facetype" placeholder="Фамилия" name="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname']; ?>" />
                                 <input type="text" class="ur-facetype" placeholder="Адрес организации" name="adress_of_organization" value="<?php if(!empty($_POST['adress_of_organization'])) echo $_POST['adress_of_organization']; ?>" style="display: none;" />
                             </div>
-                            <div class="registration-form-row-cell"></div>
+                            <div class="registration-form-row-cell">
+                                <input type="text" class="ur-facetype" placeholder="Email организации" name="" style="display: none;" />
+                            </div>
                         </div>
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
