@@ -70,7 +70,7 @@ $my_works = $DB->query('
                                     <input type="text" name="amount" class="tipical-input" autocomplete="off">
                                 </div>
                                 <div class="add-myworks-form-item">
-                                    <div>Сроки в месяцах(указать цифрами)</div>
+                                    <div>Сроки в месяцах (указать цифрами)</div>
                                     <input type="text" name="term" class="tipical-input" autocomplete="off">
                                 </div>
                             </div>
