@@ -264,3 +264,8 @@ jQuery(document).ready(function ($) {
 	$(window).bind("orientationchange", ScaleSlider);
 	//responsive code end
 });
+//
+$(document).scroll(function() {
+	var Hright = $('.my-page-wrapper').height();
+	$('.my-page-navbar').css('height', Hright-10);
+});
