@@ -505,10 +505,10 @@ else echo '<h1>Страница пользователя</h1>';*/
                                     </div>
                                     <div data-u="slides" class="rotator-content">
                                         <div style="display: none;">
-                                            <a href="" rel="photo_group">
-                                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
-                                            </a>
-                                        </div>
+-                                            <a href="" rel="photo_group">
+-                                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
+-                                            </a>
+-                                        </div>
                                     </div>
                                     <!-- Bullet Navigator -->
                                     <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">

@@ -58,6 +58,7 @@ if(!empty($_POST)){
         if(!empty($user_check)){
             $error .= 'Данный пользователь уже зарегистрирован. ';
         }
+        if(empty($_POST['experience'])) $_POST['experience'] = 1;
         
         $registration_check = $DB->prepare('
             INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person, adress_of_organization, phone, experience, status)
