@@ -17,6 +17,15 @@ class Application
         if($newURL[0] === '' && empty($newURL[1])){
             $curURL = [];
             $path_to_site = 'site/controllers/main';
+        }elseif(!empty($newURL[1]) && $newURL[1] === 'admin'){
+            $path_to_site = 'admin/controllers';
+            $curURL = [];
+            foreach($newURL as $key => $path){
+                $check = preg_match('/^\d+$/', $path);
+                if($key === 0 || $path === 'admin') continue;
+                if(empty($check)) $curURL[] = $path;
+                else break;
+            }
         }else{
             $path_to_site = 'site/controllers';
             $curURL = [];
@@ -196,5 +205,22 @@ class Application
         if($GET['pagination'] === $cysles) $paginationright = '';
         
         echo $paginationleft .'<ul class="pagination-pages">'. $lis .'</ul>'. $paginationright;
+    }
+    
+    public static function checkAdmin(){
+        if(!empty($_POST['Login']) && !empty($_POST['Password']) && $_POST['Login'] === 'admin' && $_POST['Password'] === 'admin'){
+            $_SESSION['admin']['Login'] = $_POST['Login'];
+            $_SESSION['admin']['Password'] = $_POST['Password'];
+        }
+        if(empty($_SESSION['admin'])){
+            echo '<div style="color: red;">Необходимо авторизоваться под админом.</div>
+                <form method="POST">
+                    <input type="text" name="Login"><br/>
+                    <input type="text" name="Password"><br/>
+                    <input type="submit" name="admin_auth">
+                </form>
+            ';
+            exit;
+        }
     }
 }
