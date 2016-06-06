@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 include($_SERVER['DOCUMENT_ROOT'] .'/functions/main.php');
 $application = new Application;
