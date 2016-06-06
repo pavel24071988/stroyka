@@ -200,7 +200,7 @@ if(!empty($job)){
 <input type="submit" value="<?php //echo $button_name; ?>"/>
 </form>
 -->
-<div class="content">
+<div class="content" style="margin-top: -20px;">
 
     <div class="my-page-content clearfix">
         <?php echo Application::getLeftMenu(); ?>
