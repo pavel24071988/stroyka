@@ -7,6 +7,9 @@ $(document).ready(function() {
             url: '/ajax/',
             data: {ajax: true, regionID: $('.column-searcher-selects .region').val(), method: 'getcitiesbyregion'}
         }).done(function(data){
+            $('.column-searcher-selects .city option').each(function(){
+                if($( this ).attr('selected') === 'selected') data = '<option value="'+ $( this ).val() +'">'+ $( this ).text() +'</option>' + data;
+            });
             $('.column-searcher-selects .city').html(data);
         });
     }
