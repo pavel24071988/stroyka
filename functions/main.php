@@ -74,6 +74,12 @@ class Application
         require_once $path_to_site;
     }
     
+    public static function get_ajax(){
+        if(!empty($_POST['ajax'])){
+            require_once 'site/controllers/ajax/page.php';
+        }
+    }
+    
     public static function getLeftMenu(){
         $user = $_SESSION['user'];
         $userMessages = self::getCountsUserMessages($_SESSION['user']['id']);
