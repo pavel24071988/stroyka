@@ -75,11 +75,11 @@ $jobs = Application::$DB->query($sql)->fetchAll();
                     <fieldset>
                         <div class="column-searcher-selects">
                             <div class="column-searcher-select-label">Регион</div>
-                            <select <!--name="areaID"-->>
+                            <select class="region" >
                                 <?php echo $areas_options; ?>
                             </select>
                             <div class="column-searcher-select-label">Мой город</div>
-                            <select name="cityID">
+                            <select class="city"  name="cityID">
                                 <?php if(!empty($city)) echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>'; ?>
                                 <?php echo $cities_options; ?>
                             </select>
