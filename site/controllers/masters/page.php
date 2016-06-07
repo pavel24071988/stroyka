@@ -7,10 +7,8 @@ if(isset($_GET['search']) && $_GET['search'] === 'true'){
     if(!empty($_GET['areaID'])) $area = Application::$DB->query('SELECT * FROM areas WHERE id='. $_GET['areaID'])->fetch();
 }
 
-$areas = Application::$DB->query('SELECT * FROM areas ORDER BY name')->fetchAll();
 $cities = Application::$DB->query('SELECT * FROM cities ORDER BY name')->fetchAll();
-if(isset($_GET['search']) && $_GET['search'] === 'true' && !empty($_GET['areaID']))
-    $cities = Application::$DB->query('SELECT * FROM cities WHERE "areaID"='. $_GET['areaID'] .' ORDER BY name')->fetchAll();
+$areas = Application::$DB->query('SELECT * FROM areas ORDER BY name')->fetchAll();
 $types = [0 => 'Все', 1 => 'Частный мастер', 2 => 'Бригада', 3 => 'Компания'];
 
 $cities_options = '';
