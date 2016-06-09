@@ -205,7 +205,9 @@ $(document).ready(function() {
 					var span = document.createElement('span');
 					span.innerHTML = ['<img class="thumb" src="', e.target.result,
 					                '" title="', escape(theFile.name), '"/>'].join('');
-					document.getElementById('obj-photo').insertBefore(span, null);
+                                        console.log($('#obj-photo').attr('id'));
+					if($('#obj-photo').attr('id') === 'obj-photo') document.getElementById('obj-photo').insertBefore(span, null);
+                                        if($('#ava-photo').attr('id') === 'ava-photo') document.getElementById('ava-photo').insertBefore(span, null);
 				};
 			})(f);
 			// Read in the image file as a data URL.
