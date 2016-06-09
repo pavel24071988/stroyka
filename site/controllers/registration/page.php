@@ -51,7 +51,7 @@ if(!empty($_POST)){
 	$email = $_POST['email'];
 	$name = $_POST['name'];
 	if($_POST['type_of_registration'] === '2'){
-		$email = $_POST['name_of_organization'];
+		$email = $_POST['email_of_organization'];
 		$name = $_POST['name_of_organization'];
 	}
         $user_check = $DB->query('SELECT * FROM users WHERE email=\''. $email .'\'')->fetch();
@@ -59,10 +59,14 @@ if(!empty($_POST)){
             $error .= 'Данный пользователь уже зарегистрирован. ';
         }
         if(empty($_POST['experience'])) $_POST['experience'] = 1;
-        
-        $registration_check = $DB->prepare('
-            INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, cpo, contact_person, adress_of_organization, phone, experience, status)
-              VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)');
+
+        if($_POST['type_of_registration'] === '1')
+            $sql = 'INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, status)
+                VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. md5($_POST['password']) .'\', 0)';
+        elseif($_POST['type_of_registration'] === '2')
+            $sql = 'INSERT INTO users (name, email, "cityID", "areaID", type_of_registration, password, cpo, contact_person, adress_of_organization, phone, experience, status)
+                VALUES(\''. $name .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. md5($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)';
+        $registration_check = $DB->prepare($sql);
         if($registration_check->execute() === true){
             
             $newUserID = $DB->lastInsertId('users_id_seq');
@@ -232,7 +236,7 @@ if(!empty($_POST)){
                                 <input type="text" class="ur-facetype" placeholder="Адрес организации" name="adress_of_organization" value="<?php if(!empty($_POST['adress_of_organization'])) echo $_POST['adress_of_organization']; ?>" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
-                                <input type="text" class="ur-facetype" placeholder="Email организации" name="" style="display: none;" />
+                                <input type="text" class="ur-facetype" placeholder="Email организации" name="email_of_organization" style="display: none;" />
                             </div>
                         </div>
                         <div class="registration-form-row clearfix">
