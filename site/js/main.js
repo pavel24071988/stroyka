@@ -65,6 +65,11 @@ $(document).ready(function() {
         }
         return false;
     });
+    // нажатия на маленькие изображения слайдера
+    $('#portfo').on('click', '.portfo-thumbs-holder a', function(){
+        $('#portfo .big-portfo-photo').find('img').attr('src', $( this ).find('img').attr('src')).attr('data-imgID', $( this ).find('img').attr('data-imgID'));
+        return false;
+    });
     // сделать фотографию основной
     $('#portfo .make-main-holder a').on('click', function(){
         var imgID = $( this ).parents('#portfo').find('.big-portfo-photo img').attr('data-imgID');
