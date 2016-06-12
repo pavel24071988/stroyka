@@ -4,6 +4,14 @@ switch ($_POST['method']) {
         echo getCitiesByRegion();
         exit;
         break;
+    case 'getphotoesforobject':
+        echo json_encode(getPhotoesForObject());
+        exit;
+        break;
+    case 'setmainphotoe':
+        echo json_encode(setMainPhotoe());
+        exit;
+        break;
     default:
         echo 'ничего не найдено';
         break;
@@ -26,3 +34,32 @@ function getCitiesByRegion(){
  * and open the template in the editor.
  */
 
+function getPhotoesForObject(){
+    $imgs_query = Application::$DB->query('
+    SELECT *
+      FROM objects_imgs
+        WHERE "objectID"='. $_POST['objectID'])->fetchAll();
+    $imgs = [];
+    foreach($imgs_query as $img) $imgs[] = $img;
+    $object = Application::$DB->query('
+    SELECT *
+      FROM objects
+        WHERE "id"='. $_POST['objectID'])->fetch();
+    return ['imgs' => $imgs, 'data' => $object];
+}
+
+function setMainPhotoe(){
+    $select_sql = Application::$DB->query('
+        SELECT *
+          FROM objects_imgs
+            WHERE "id"='. $_POST['imgID'])->fetch();
+    $update_sql = Application::$DB->prepare('
+        UPDATE objects_imgs SET
+            "main"=\'false\'
+                WHERE "objectID"='. $select_sql['objectID'])->execute();
+    $update_sql = Application::$DB->prepare('
+        UPDATE objects_imgs SET
+            "main"=\'true\'
+                WHERE "id"='. $_POST['imgID'])->execute();
+    return ['code' => 1, 'status' => 'ok'];
+}

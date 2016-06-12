@@ -1,9 +1,10 @@
 ﻿<?php
 $DB = Application::$DB;
-if(isset($_POST['uploadObject'])){    
+if(isset($_POST['uploadObject'])){
+    $_POST['year'] = '01.01.'. $_POST['year'] .' 00:00:00';
     // добавляем объект
-    $object = $DB->prepare('INSERT INTO objects (name, amount, term, "createrUserID", description, type_of_kind)
-                  VALUES(\''. $_POST['name'] .'\', \''. $_POST['amount'] .'\', \''. $_POST['term'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['description'] .'\', \'2\')');
+    $object = $DB->prepare('INSERT INTO objects (name, amount, term, "createrUserID", description, type_of_kind, finished)
+                  VALUES(\''. $_POST['name'] .'\', \''. $_POST['amount'] .'\', \''. $_POST['term'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['description'] .'\', \'2\', \''. $_POST['year'] .'\')');
     if(!$object->execute()) $error = 'Произошел сбой добавления объекта';
     $objectID = $DB->lastInsertId('objects_id_seq');
     

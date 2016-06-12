@@ -96,7 +96,7 @@ $countOfViews = $DB->query('SELECT COUNT(DISTINCT(session_id)) FROM logs WHERE u
 
 $my_works_query = $DB->query('
     SELECT r.*
-      FROM (SELECT o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID") as r
+      FROM (SELECT DISTINCT ON (o.id) o.id, o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID" ORDER BY o.id, oi.main DESC) as r
         WHERE r.src IS NOT NULL AND
               r."createrUserID"='. $user['id'] .' AND
               r."type_of_kind"=2 AND
@@ -104,7 +104,7 @@ $my_works_query = $DB->query('
 $my_works = [];
 foreach($my_works_query as $my_work){
     if(empty($my_work['src'])) continue;
-    $my_works[] = '<a href="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'" rel="photo_group"><img data-u="image" width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/></a>';
+    $my_works[] = '<a href="#portfo" data-objectid="'. $my_work['id'] .'" class="portfo-item modal_on"><img width="100px" height="100px" src="/images/objects/'. $my_work['id'] .'/'. $my_work['src'] .'"/></a>';
 }
 /*
 if($common_data['check_owner']) echo '<h1>Мой поспорт</h1>';
@@ -309,30 +309,9 @@ else echo '<h1>Страница пользователя</h1>';*/
             <?php } ?>
             <?php if(!empty($my_works)){ ?>
             <div class="product-sub-headline">Фото работ</div>
-            <div class="photo-carousel-standart">
-                <div id="jssor_1" class="rotator-holder">
-                    <!-- Loading Screen -->
-                    <div data-u="loading" class="rotator-inner">
-                        <div class="rotator-inner-block"></div>
-                        <div class="rotator-inner-load"></div>
-                    </div>
-                    <div data-u="slides" class="rotator-content">
-                        <div style="display: none;">
-                            <a href="" rel="photo_group">
-                                <?php echo implode('</div><div style="display: none;">', $my_works); ?>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Bullet Navigator -->
-                    <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
-                        <!-- bullet navigator item prototype -->
-                        <div data-u="prototype" style="width:21px;height:21px;">
-                            <div data-u="numbertemplate"></div>
-                        </div>
-                    </div>
-                    <!-- Arrow Navigator -->
-                    <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
-                    <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
+            <div class="specialist-meta-block">
+                <div class="portfo-holder clearfix">
+                    <?php echo implode('', $my_works); ?>
                 </div>
             </div>
             <?php } ?>
@@ -491,6 +470,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                                 
                             <?php } ?>
                         </div>
+                        <!--
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>Избранное портфолио</span>
@@ -498,7 +478,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                             </div>
                             <div class="photo-carousel-standart">
                                 <div id="jssor_1" class="rotator-holder">
-                                    <!-- Loading Screen -->
+                                    <!-- Loading Screen --><!--
                                     <div data-u="loading" class="rotator-inner">
                                         <div class="rotator-inner-block"></div>
                                         <div class="rotator-inner-load"></div>
@@ -510,19 +490,20 @@ else echo '<h1>Страница пользователя</h1>';*/
 -                                            </a>
 -                                        </div>
                                     </div>
-                                    <!-- Bullet Navigator -->
+                                    <!-- Bullet Navigator --><!--
                                     <div data-u="navigator" class="jssorb03" style="bottom:10px;right:10px;">
-                                        <!-- bullet navigator item prototype -->
+                                        <!-- bullet navigator item prototype --><!--
                                         <div data-u="prototype" style="width:21px;height:21px;">
                                             <div data-u="numbertemplate"></div>
                                         </div>
                                     </div>
-                                    <!-- Arrow Navigator -->
+                                    <!-- Arrow Navigator --><!--
                                     <span data-u="arrowleft" class="jssora03l" style="top:0px;left:8px;width:55px;height:55px;" data-autocenter="2"></span>
                                     <span data-u="arrowright" class="jssora03r" style="top:0px;right:8px;width:55px;height:55px;" data-autocenter="2"></span>
                                 </div>
                             </div>
                         </div>
+                        -->
                         <div class="specialist-meta-block">
                             <div class="specialist-block-title">
                                 <span>О себе</span>
@@ -578,49 +559,11 @@ else echo '<h1>Страница пользователя</h1>';*/
 
                 <div class="specialist-meta-block">
                     <div class="specialist-block-title">
-                        <span>Портфолио</span>
-                        <?php if($common_data['check_owner']){ ?><a class="tipical-button">Добавить работы</a><?php } ?>
+                        <span>Избранное портфолио</span>
+                        <?php if($common_data['check_owner']){ ?><a href="/users/<?php echo $user['id']; ?>/my_works/" class="tipical-button">Добавить</a><?php } ?>
                     </div>
                     <div class="portfo-holder clearfix">
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
-                        <a href="#portfo" class="portfo-item modal_on">
-                            <img src="/images/img1.jpg">
-                        </a>
+                        <?php echo implode('', $my_works); ?>
                     </div>
                 </div>
 
@@ -793,17 +736,18 @@ else echo '<h1>Страница пользователя</h1>';*/
     <div id="portfo" style="width: 750px;">
         <div class="modal-subtitle">Ремонт на балконе</div>
         <div class="big-portfo-photo">
-            <img src="/images/avatar1.jpg" id="big-portfo-photo">
+            <img src="" id="big-portfo-photo">
             <a href="#" class="portfo-nav left"></a>
             <a href="#" class="portfo-nav right"></a>
         </div>
 
         <!-- Эта часть видна только владельцу страницы -->
+        <?php if($common_data['check_owner']){ ?>
         <div class="make-main-holder">
             <a href="#">Сделать фотографию основной</a>
             <p>Фотография станет обложкой вашей работы.</p>
         </div>
-
+        <?php } ?>
         <!-- Эта часть видна только владельцу страницы и если текущая фотка уже выбрана основной -->
         <div class="make-main-holder">
             <b>Это главная фотография</b>
@@ -811,40 +755,14 @@ else echo '<h1>Страница пользователя</h1>';*/
         </div>
 
         <div class="portfo-thumbs-holder clearfix">
-            <a href="#" class="portfo-thumb">
-                <img src="/images/avatar1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/img1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/objects/_DSC6097.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/avatar1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/img1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/objects/_DSC6097.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/avatar1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/img1.jpg">
-            </a>
-            <a href="#" class="portfo-thumb">
-                <img src="/images/objects/_DSC6097.jpg">
-            </a>
+            
         </div>
         <div class="portfo-info">
-            <p><b>Год сдачи:</b> 2016</p>
-            <p><b>Срок работы:</b> 2 месяца</p>
-            <p><b>Стоимость:</b> 10 000 рублей</p>
+            <p><b>Год сдачи:</b> </p>
+            <p><b>Срок работы:</b> </p>
+            <p><b>Стоимость:</b> </p>
             <br>
-            <p>Комментарий пользователя. Что сделано: разводка сантехники,подключение сантехники,плиточные работы,тёплый пол</p>
+            <!--<p>Комментарий пользователя. Что сделано: разводка сантехники,подключение сантехники,плиточные работы,тёплый пол</p>-->
         </div>
     </div>
 </div>
