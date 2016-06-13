@@ -1,11 +1,12 @@
 ﻿<?php
 $DB = Application::$DB;
+$error = '';
 if(isset($_POST['uploadObject'])){
     $_POST['year'] = '01.01.'. $_POST['year'] .' 00:00:00';
     // добавляем объект
     $object = $DB->prepare('INSERT INTO objects (name, amount, term, "createrUserID", description, type_of_kind, finished)
                   VALUES(\''. $_POST['name'] .'\', \''. $_POST['amount'] .'\', \''. $_POST['term'] .'\', \''. $_SESSION['user']['id'] .'\', \''. $_POST['description'] .'\', \'2\', \''. $_POST['year'] .'\')');
-    if(!$object->execute()) $error = 'Произошел сбой добавления объекта';
+    if(!$object->execute()) $error .= '<div style="color: red; font-weight: normal;">Произошел сбой добавления объекта</div>';
     $objectID = $DB->lastInsertId('objects_id_seq');
     
     if(!empty($_FILES['object_img']['tmp_name'][0])){
@@ -13,10 +14,14 @@ if(isset($_POST['uploadObject'])){
         foreach($_FILES['object_img']['tmp_name'] as $key => $value){
             $name = $_FILES['object_img']['name'][$key];
             $tmp_name = $_FILES['object_img']['tmp_name'][$key];
+            if($_FILES['object_img']['size'][$key] / 1000000 > 3){
+                $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $name .', размер больше 3 Мб.</div>';
+                continue;
+            }
             if(!file_exists("images/objects/". $objectID)) mkdir("images/objects/". $objectID, 0777);
             if(copy($tmp_name, "images/objects/". $objectID ."/". $name)){
                 $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $objectID .'\', \''. $name .'\')');
-                if(!$create_sql->execute()) $error = 'Произошел сбой добавления изображения';
+                if(!$create_sql->execute()) $error .= '<div style="color: red; font-weight: normal;">Произошел сбой добавления изображения</div>';
             }
         }
     }
@@ -47,6 +52,7 @@ $my_works = $DB->query('
                 </ul>
             </div>
             <div class="my-page-wrapper-content">
+                <?php if(!empty($error)) echo $error; ?>
                 <div class="my-works-top">
                     <p><b>Здесь вы можете показать свои работы.</b></p>
                     <br>
