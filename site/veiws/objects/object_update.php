@@ -320,8 +320,12 @@ if(!empty($object)){
             <div class="my-page-wrapper">
                 <div class="my-page-breadcrumb">
                     <ul>
-                        <li>
-                        <a href="/users/<?php echo $_SESSION['user']['id']; ?>/my_objects/">Объекты и вакансии</a>
+                    <li>
+                    <?php if($object['type_of_kind'] === 2){ ?>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_works/'; ?>">Мои работы</a>
+                    <?php }else{ ?>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Объекты и вакансии</a>
+                    <?php } ?>
                     </li>
                     <li>
                         <a href=""><?php if($applicationURL['2'] === 'add') echo 'Добавить объект'; else echo 'Редактировать объект'; ?></a>

@@ -179,9 +179,9 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
                 <ul>
                     <li>
                     <?php if($object['type_of_kind'] === 2){ ?>
-                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Мои работы</a>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_works/'; ?>">Мои работы</a>
                     <?php }else{ ?>
-                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_works/'; ?>">Объекты и вакансии</a>
+                        <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Объекты и вакансии</a>
                     <?php } ?>
                     </li>
                     <li>
