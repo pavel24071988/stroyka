@@ -178,7 +178,7 @@ if(!empty($applicationURL['3']) && $applicationURL['3'] === 'close' && $check_ow
             <div class="my-page-breadcrumb">
                 <ul>
                     <li>
-                    <?php var_dump($object['type_of_kind']); if($object['type_of_kind'] === '2'){ ?>
+                    <?php if($object['type_of_kind'] === 2){ ?>
                         <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_objects/'; ?>">Мои работы</a>
                     <?php }else{ ?>
                         <a href="<?php echo '/users/'. $_SESSION['user']['id'] .'/my_works/'; ?>">Объекты и вакансии</a>
