@@ -145,7 +145,7 @@ foreach($users as $user){
                 }
                 $objects_images = $DB->query('
                     SELECT r.*
-                      FROM (SELECT DISTINCT ON (o.id) o.id, o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID" ORDER BY o.id, oi.main DESC) as r
+                      FROM (SELECT DISTINCT ON (o.id) o.id, o.*, oi.src, oi."objectID" FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID" ORDER BY o.id, oi.main DESC) as r
                         WHERE r.src IS NOT NULL AND
                               r."createrUserID"='. $user['id'] .' AND
                               r."status" <> \'archive\'')->fetchAll();
