@@ -143,14 +143,12 @@ foreach($users as $user){
                 foreach($users_professions as $profession){
                     $profession_arr[] = $profession['name'];
                 }
-
                 $objects_images = $DB->query('
-                    SELECT *
-                        FROM objects o
-                        LEFT JOIN objects_imgs oi ON o."id" = oi."objectID"
-                          WHERE o."createrUserID"='. $user['id'] .' AND
-                                o."status" <> \'archive\' AND
-                                oi."src" IS NOT NULL')->fetchAll();
+                    SELECT r.*
+                      FROM (SELECT DISTINCT ON (o.id) o.id, o.*, oi.src FROM objects o LEFT JOIN objects_imgs oi ON o.id = oi."objectID" ORDER BY o.id, oi.main DESC) as r
+                        WHERE r.src IS NOT NULL AND
+                              r."createrUserID"='. $user['id'] .' AND
+                              r."status" <> \'archive\'')->fetchAll();
 
                 $imgs = [];
                 foreach($objects_images as $image){

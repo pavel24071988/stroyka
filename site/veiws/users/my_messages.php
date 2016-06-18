@@ -84,7 +84,7 @@ if($applicationURL[4] === 'dialogs'){
                 <?php foreach($incomeMessages as $message){ ?>
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
-                        <a href="#">
+                        <a href="/users/<?= $message['id']; ?>/">
                             <img src="<?php echo '/images/users/'. $message['id'] .'/'. $message['avatar']; ?>">
                         </a>
                     </div>
@@ -104,7 +104,7 @@ if($applicationURL[4] === 'dialogs'){
                 <?php foreach($outcomeMessages as $message){ ?>
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
-                        <a href="#">
+                        <a href="/users/<?= $message['id']; ?>/">
                             <img src="<?php echo '/images/users/'. $message['id'] .'/'. $message['avatar']; ?>">
                         </a>
                     </div>
