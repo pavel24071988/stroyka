@@ -17,7 +17,7 @@ if(isset($_POST['changeStatus'])){
     $sql->execute();
 }elseif(!empty($_FILES['avatar']['tmp_name'])){
     if(!file_exists("images/users/". $user['id'])) mkdir("images/users/". $user['id'], 0777);
-    if(copy($_FILES['avatar']['tmp_name'], "images/users/". $user['id'] ."/". $_FILES['avatar']['name'])){
+    if(Application::resize($_FILES['avatar']['tmp_name'], "images/users/". $user['id'] ."/". $_FILES['avatar']['name'], 200, 0)){
         $update_avatar = $DB->prepare('UPDATE users SET "avatar"=\''. $_FILES['avatar']['name'] .'\' WHERE "id"='. $user['id']);
         if($update_avatar->execute() === true){
             $error = 'Фотография загружена.';

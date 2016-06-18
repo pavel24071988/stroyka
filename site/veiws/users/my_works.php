@@ -14,12 +14,8 @@ if(isset($_POST['uploadObject'])){
         foreach($_FILES['object_img']['tmp_name'] as $key => $value){
             $name = $_FILES['object_img']['name'][$key];
             $tmp_name = $_FILES['object_img']['tmp_name'][$key];
-            if($_FILES['object_img']['size'][$key] / 1000000 > 3){
-                $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $name .', размер больше 3 Мб.</div>';
-                continue;
-            }
             if(!file_exists("images/objects/". $objectID)) mkdir("images/objects/". $objectID, 0777);
-            if(copy($tmp_name, "images/objects/". $objectID ."/". $name)){
+            if(Application::resize($tmp_name, "images/objects/". $objectID ."/". $name, 200, 0)){
                 $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $objectID .'\', \''. $name .'\')');
                 if(!$create_sql->execute()) $error .= '<div style="color: red; font-weight: normal;">Произошел сбой добавления изображения</div>';
             }

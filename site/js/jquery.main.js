@@ -208,6 +208,7 @@ $(document).ready(function() {
                                         console.log($('#obj-photo').attr('id'));
 					if($('#obj-photo').attr('id') === 'obj-photo') document.getElementById('obj-photo').insertBefore(span, null);
                                         if($('#ava-photo').attr('id') === 'ava-photo') document.getElementById('ava-photo').insertBefore(span, null);
+                                        document.getElementById('add_photo_save').style.display="block";
 				};
 			})(f);
 			// Read in the image file as a data URL.

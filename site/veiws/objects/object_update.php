@@ -79,11 +79,11 @@ if($applicationURL['2'] === 'add'){
                     if(!file_exists("images/objects/". $lastInsertId)) mkdir("images/objects/". $lastInsertId, 0777);
                     foreach($_FILES['object_img']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
-                        if($_FILES['object_img']['size'][$key] / 1000000 > 3){
+                        /*if($_FILES['object_img']['size'][$key] / 1000000 > 3){
                             $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
                             continue;
-                        }
-                        if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $lastInsertId ."/". $filename)){
+                        }*/
+                        if(Application::resize($_FILES['object_img']['tmp_name'][$key], "images/objects/". $lastInsertId ."/". $filename, 200, 0)){
                             $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $lastInsertId .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
                             $create_sql->execute();
                         }
@@ -181,11 +181,7 @@ if($applicationURL['2'] === 'add'){
                     if(!file_exists("images/objects/". $applicationURL[2])) mkdir("images/objects/". $applicationURL[2], 0777);
                     foreach($_FILES['object_img']['name'] as $key => $img){
                         $filename = iconv("UTF-8","WINDOWS-1251", $_FILES['object_img']['name'][$key]);
-                        if($_FILES['object_img']['size'][$key] / 1000000 > 3){
-                            $error .= '<div style="color: red; font-weight: normal;">Не удалось загрузить файл '. $filename .', размер больше 3 Мб.</div>';
-                            continue;
-                        }
-                        if(copy($_FILES['object_img']['tmp_name'][$key], "images/objects/". $applicationURL[2] ."/". $filename)){
+                        if(Application::resize($_FILES['object_img']['tmp_name'][$key], "images/objects/". $applicationURL[2] ."/". $filename, 200, 0)){
                             $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $applicationURL[2] .'\', \''. $_FILES['object_img']['name'][$key] .'\')');
                             $create_sql->execute();
                         }
