@@ -73,7 +73,7 @@ if(!empty($_POST)){
             
             if(!empty($_FILES['avatar']['tmp_name'])){
                 if(!file_exists("images/users/". $newUserID)) mkdir("images/users/". $newUserID, 0777);
-                if(Application::resize($_FILES['avatar']['tmp_name'], "images/users/". $newUserID ."/". $_FILES['avatar']['name'], 200, 0)){
+                if(Application::resize($_FILES['avatar']['tmp_name'], "images/users/". $newUserID ."/". $_FILES['avatar']['name'], 500, 0)){
                     $update_avatar = $DB->prepare('UPDATE users SET "avatar"=\''. $_FILES['avatar']['name'] .'\' WHERE "id"='. $newUserID);
                     if($update_avatar->execute() === true){
                         $error = 'Фотография загружена.';

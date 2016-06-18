@@ -76,7 +76,7 @@ foreach($object_imgs as $key => $object_img){
     $object_imgs_arr_bg[] = '
 	    <div id="work'. ($key+1) .'" style="width: 820px;">
 		<div class="modal-title">'. $object_img['src'] .'</div>
-		<img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'" class="modal-works-photo">
+		<img src="/images/objects/'. $object_img['objectID'] .'/'. $object_img['src'] .'" class="modal-works-photo" width="500">
 		<div class="modal-photo-content">
 		    <p><b>Стоимость:</b> '. $object_img['amount'] .' руб.</p>
 		    <!--<p><b>Сроки:</b> 8 месяцев</p>

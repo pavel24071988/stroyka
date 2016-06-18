@@ -15,7 +15,7 @@ if(isset($_POST['uploadObject'])){
             $name = $_FILES['object_img']['name'][$key];
             $tmp_name = $_FILES['object_img']['tmp_name'][$key];
             if(!file_exists("images/objects/". $objectID)) mkdir("images/objects/". $objectID, 0777);
-            if(Application::resize($tmp_name, "images/objects/". $objectID ."/". $name, 200, 0)){
+            if(Application::resize($tmp_name, "images/objects/". $objectID ."/". $name, 500, 0)){
                 $create_sql = $DB->prepare('INSERT INTO objects_imgs ("objectID", "src") VALUES(\''. $objectID .'\', \''. $name .'\')');
                 if(!$create_sql->execute()) $error .= '<div style="color: red; font-weight: normal;">Произошел сбой добавления изображения</div>';
             }
