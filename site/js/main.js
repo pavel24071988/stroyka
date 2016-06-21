@@ -83,4 +83,15 @@ $(document).ready(function() {
         });
         return false;
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // для админки напишем здесь
+    $( "#switchon, #switchoff" ).datepicker();
 });

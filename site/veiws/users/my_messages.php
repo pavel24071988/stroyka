@@ -40,13 +40,13 @@ if($applicationURL[4] === 'dialogs'){
                     <?php foreach($historyOfMessagesByUser as $historyOfMessageByUser){ ?>
                     <div class="speech-item clearfix">
                         <div class="speech-item-avatar">
-                            <a href="#">
+                            <a href="/users/<?= $historyOfMessageByUser['id']; ?>/">
                                 <img src="<?php echo '/images/users/'. $historyOfMessageByUser['id'] .'/'. $historyOfMessageByUser['avatar']; ?>" />
                             </a>
                         </div>
                         <div class="speech-item-content">
                             <div class="speech-item-top clearfix">
-                                <a href="#" class="speech-item-name"><?php echo $historyOfMessageByUser['name'] .' '. $historyOfMessageByUser['surname']; ?></a>
+                                <a href="/users/<?= $historyOfMessageByUser['id']; ?>/" class="speech-item-name"><?php echo $historyOfMessageByUser['name'] .' '. $historyOfMessageByUser['surname']; ?></a>
                                 <div class="speech-item-date"><?php echo date('j.m.Y H:i:s', strtotime($historyOfMessageByUser['created'])); ?></div>
                             </div>
                             <?php echo $historyOfMessageByUser['text']; ?>
@@ -84,7 +84,7 @@ if($applicationURL[4] === 'dialogs'){
                 <?php foreach($incomeMessages as $message){ ?>
                 <div class="dialog-item clearfix">
                     <div class="dialog-item-avatar">
-                        <a href="/users/<?= $message['id']; ?>/">
+                        <a href="/users/<?= $_SESSION['user']['id']; ?>/my_messages/dialogs/<?= $message['id']; ?>/">
                             <img src="<?php echo '/images/users/'. $message['id'] .'/'. $message['avatar']; ?>">
                         </a>
                     </div>

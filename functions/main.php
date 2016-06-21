@@ -327,4 +327,20 @@ class Application
                     return $func($img_o,$file_output);
             }
     }
+    
+    // найдем баннер для рекламы
+    public static function findBanner($GET){
+        $banner = self::$DB->query('SELECT * FROM advertising WHERE switchon < now() AND switchoff > now() AND type=\'banner\'')->fetch();
+        $text = self::$DB->query('SELECT * FROM advertising WHERE switchon < now() AND switchoff > now() AND type=\'text\'')->fetch();
+        
+        $bannerHTML = '';
+        if(!empty($banner)){
+            $bannerHTML .= '<img src="/images/advertisings/'. $banner['id'] .'/'. $banner['src'] .'">';
+        }
+        if(!empty($text)){
+            $bannerHTML .= '<div style="color: red;">'. $text['description'] .'</div>';
+        }
+        
+        return $bannerHTML;
+    }
 }

@@ -94,6 +94,8 @@ $jobs = Application::$DB->query($sql)->fetchAll();
                         </div>
                     </fieldset>
                 </form>
+                <br><br>
+                <div style="padding: 0 18px;"><?= Application::findBanner($_GET); ?></div>
             </div>
         </div>
     </div>
