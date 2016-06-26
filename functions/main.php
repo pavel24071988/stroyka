@@ -329,10 +329,33 @@ class Application
     }
     
     // найдем баннер для рекламы
-    public static function findBanner($GET){
-        $banner = self::$DB->query('SELECT * FROM advertising WHERE switchon < now() AND switchoff > now() AND type=\'banner\'')->fetch();
-        $text = self::$DB->query('SELECT * FROM advertising WHERE switchon < now() AND switchoff > now() AND type=\'text\'')->fetch();
-        
+    public static function findBanner($selectedAreaID, $selectedCityID){
+        $banner = self::$DB->query('
+            SELECT *,
+            (SELECT DISTINCT laa.area_id FROM links_areas_advertising laa WHERE laa.advertising_id = a.id AND laa.area_id = '. $selectedAreaID .' LIMIT 1) as targetAreaCheck,
+            (SELECT DISTINCT lca.city_id FROM links_cities_advertising lca WHERE lca.advertising_id = a.id AND lca.city_id = '. $selectedCityID .' LIMIT 1) as targetCityCheck
+              FROM advertising a
+                WHERE a.switchon < now() AND
+                      a.switchoff > now() AND
+                      a.type=\'banner\' AND
+                      a.id IN (SELECT laa.advertising_id FROM links_areas_advertising laa WHERE laa.advertising_id = a.id AND (laa.area_id = '. $selectedAreaID .' OR laa.area_id = -1)) AND
+                      a.id IN (SELECT lca.advertising_id FROM links_cities_advertising lca WHERE lca.advertising_id = a.id AND (lca.city_id = '. $selectedCityID .' OR lca.city_id = -1))
+                  ORDER BY targetAreaCheck, targetCityCheck
+        ')->fetch();
+
+        $text = self::$DB->query('
+            SELECT *,
+            (SELECT DISTINCT laa.area_id FROM links_areas_advertising laa WHERE laa.advertising_id = a.id AND laa.area_id = '. $selectedAreaID .' LIMIT 1) as targetAreaCheck,
+            (SELECT DISTINCT lca.city_id FROM links_cities_advertising lca WHERE lca.advertising_id = a.id AND lca.city_id = '. $selectedCityID .' LIMIT 1) as targetCityCheck
+              FROM advertising a
+                WHERE a.switchon < now() AND
+                      a.switchoff > now() AND
+                      a.type=\'text\' AND
+                      a.id IN (SELECT laa.advertising_id FROM links_areas_advertising laa WHERE laa.advertising_id = a.id AND (laa.area_id = '. $selectedAreaID .' OR laa.area_id = -1)) AND
+                      a.id IN (SELECT lca.advertising_id FROM links_cities_advertising lca WHERE lca.advertising_id = a.id AND (lca.city_id = '. $selectedCityID .' OR lca.city_id = -1))
+                  ORDER BY targetAreaCheck, targetCityCheck
+        ')->fetch();
+
         $bannerHTML = '';
         if(!empty($banner)){
             $bannerHTML .= '<img src="/images/advertisings/'. $banner['id'] .'/'. $banner['src'] .'">';

@@ -128,15 +128,15 @@ if(empty($_GET['update'])){
     <input type="hidden" name="id" value="<?= $_GET['update']; ?>">
     <p>Тип: 
         <select name="type">
-            <option value="banner">Баннер</option>
-            <option value="text">Текст</option>
+            <option value="banner"<?php if(!empty($_POST['type']) && $_POST['type'] === 'banner') echo 'selected'; ?>>Баннер</option>
+            <option value="text"<?php if(!empty($_POST['type']) && $_POST['type'] === 'text') echo 'selected'; ?>>Текст</option>
         </select>
     </p>
     <p>Описание/Текст: <textarea name="description"><?= $advertising['description'] ?></textarea></p>
     <p>Время включения: <input type="text" id="switchon" name="switchon" value="<?= date('m/d/Y', strtotime($advertising['switchon'])); ?>"></p>
     <p>Время выключения: <input type="text" id="switchoff" name="switchoff" value="<?= date('m/d/Y', strtotime($advertising['switchoff'])); ?>"></p>
-    <p>Области: <select size="15" multiple="multiple" name="areas[]"><?= implode('', $areasOptions); ?></select></p>
-    <p>Города: <select size="15" multiple="multiple" name="cities[]"><?= implode('', $citiesOptions); ?></select></p>
+    <p>Области: <br/><select size="15" multiple="multiple" name="areas[]"><?= implode('', $areasOptions); ?></select></p>
+    <p>Города: <br/><select size="15" multiple="multiple" name="cities[]"><?= implode('', $citiesOptions); ?></select></p>
     <p>Повторять: <input type="checkbox" <?php if($advertising['repeat']) echo 'checked'; ?> name="repeat"></p>
     <p>Каждые <input type="text" name="repeat_minutes"> минут</p>
     <p><img src="/images/advertisings/<?= $advertising['id'] .'/'. $advertising['src'] ?>"></p>

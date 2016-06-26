@@ -11,6 +11,10 @@ $areas = Application::$DB->query('SELECT * FROM areas')->fetchAll();
 $cities_options = '';
 $areas_options = '';
 
+// соберем выбранный город и область - нужно для отображения рекламы
+$selectedAreaID = empty($city) ? $areas[0]['id'] : $city['areaID'];
+$selectedCityID = empty($city) ? $cities[0]['id'] : $city['id'];
+
 foreach($cities as $general_city){
     if(!empty($city) && $city['id'] === $general_city['id']) continue;
     $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
@@ -95,7 +99,7 @@ $jobs = Application::$DB->query($sql)->fetchAll();
                     </fieldset>
                 </form>
                 <br><br>
-                <div style="padding: 0 18px;"><?= Application::findBanner($_GET); ?></div>
+                <div style="padding: 0 18px;"><?= Application::findBanner($selectedAreaID, $selectedCityID); ?></div>
             </div>
         </div>
     </div>

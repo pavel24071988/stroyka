@@ -2,7 +2,7 @@
 $DB = Application::$DB;
 
 // начинаем выстраивать функционал поиска
-if(isset($_GET['search']) && $_GET['search'] === 'true'){    
+if(isset($_GET['search']) && $_GET['search'] === 'true'){
     if(!empty($_GET['cityID'])) $city = Application::$DB->query('SELECT * FROM cities WHERE id='. $_GET['cityID'])->fetch();
     if(!empty($_GET['areaID'])) $area = Application::$DB->query('SELECT * FROM areas WHERE id='. $_GET['areaID'])->fetch();
 }
@@ -14,6 +14,10 @@ $types = [0 => 'Все', 1 => 'Частный мастер', 2 => 'Бригад�
 $cities_options = '';
 $areas_options = '';
 $types_options = '';
+
+// соберем выбранный город и область - нужно для отображения рекламы
+$selectedAreaID = empty($city) ? $areas[0]['id'] : $city['areaID'];
+$selectedCityID = empty($city) ? $cities[0]['id'] : $city['id'];
 
 foreach($cities as $general_city){
     if(!empty($city) && $city['id'] === $general_city['id']) continue;
@@ -234,7 +238,7 @@ foreach($users as $user){
                     </fieldset>
                 </form>
                 <br><br>
-                <div style="padding: 0 18px;"><?= Application::findBanner($_GET); ?></div>
+                <div style="padding: 0 18px;"><?= Application::findBanner($selectedAreaID, $selectedCityID); ?></div>
             </div>
         </div>
     </div>
