@@ -46,8 +46,8 @@ if(empty($_GET['update'])){
 
         if($_POST['id'] === 'new'){
             $sql = $DB->prepare('
-                INSERT INTO advertising (description, repeat, repeat_minutes, switchon, switchoff, type)
-                  VALUES(\''. $_POST['description'] .'\', \''. $_POST['repeat'] .'\', \''. $_POST['repeat_minutes'] .'\', \''. $_POST['switchon'] .'\', \''. $_POST['switchoff'] .'\', \''. $_POST['type'] .'\')
+                INSERT INTO advertising (description, repeat, repeat_minutes, switchon, switchoff, type, img_banner_link)
+                  VALUES(\''. $_POST['description'] .'\', \''. $_POST['repeat'] .'\', \''. $_POST['repeat_minutes'] .'\', \''. $_POST['switchon'] .'\', \''. $_POST['switchoff'] .'\', \''. $_POST['type'] .'\', \''. $_POST['img_banner_link'] .'\')
             ');
             if($sql->execute()) $error[] = 'Баннер добавлен.';
             else  $error[] = 'Произошла ошибка добавления.';
@@ -61,7 +61,8 @@ if(empty($_GET['update'])){
                       repeat_minutes=\''. $_POST['repeat_minutes'] .'\',
                       switchon=\''. $_POST['switchon'] .'\',
                       switchoff=\''. $_POST['switchoff'] .'\',
-                      type=\''. $_POST['type'] .'\'
+                      type=\''. $_POST['type'] .'\',
+                      img_banner_link=\''. $_POST['img_banner_link'] .'\'
                     WHERE id='. $advirtisingID
             );
             if($sql->execute()) $error[] = 'Баннер обновлен.';
@@ -138,8 +139,9 @@ if(empty($_GET['update'])){
     <p>Области: <br/><select size="15" multiple="multiple" name="areas[]"><?= implode('', $areasOptions); ?></select></p>
     <p>Города: <br/><select size="15" multiple="multiple" name="cities[]"><?= implode('', $citiesOptions); ?></select></p>
     <p>Повторять: <input type="checkbox" <?php if($advertising['repeat']) echo 'checked'; ?> name="repeat"></p>
-    <p>Каждые <input type="text" name="repeat_minutes"> минут</p>
+    <p>Каждые: <input type="text" name="repeat_minutes"> минут</p>
     <p><img src="/images/advertisings/<?= $advertising['id'] .'/'. $advertising['src'] ?>"></p>
+    <p>Ссылка с изображения: <input type="text" name="img_banner_link"></p>
     <p>
         Картинка:
         <div class="file_upload">

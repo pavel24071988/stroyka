@@ -3,4 +3,5 @@ $checkAdmin = Application::checkAdmin();
 ?>
 <br/>
 <a href="/admin/users/">Управление пользователями</a><br/>
-<a href="/admin/advertising/">Управление рекламой</a>
+<a href="/admin/advertising/">Управление рекламой</a><br/>
+<a href="/admin/objects/">Управление объектами</a>

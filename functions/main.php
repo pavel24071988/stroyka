@@ -358,7 +358,7 @@ class Application
 
         $bannerHTML = '';
         if(!empty($banner)){
-            $bannerHTML .= '<img src="/images/advertisings/'. $banner['id'] .'/'. $banner['src'] .'">';
+            $bannerHTML .= '<a href="'. $banner['img_banner_link'] .'" target="_blank"><img src="/images/advertisings/'. $banner['id'] .'/'. $banner['src'] .'"></a>';
         }
         if(!empty($text)){
             $bannerHTML .= '<div style="color: red;">'. $text['description'] .'</div>';
