@@ -1,7 +1,7 @@
 ﻿<?php
 // ище данные для формы поиска
 $DB = Application::$DB;
-$masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users')->fetch();
+$masters_online = $DB->query('SELECT COUNT(id) as masters_online FROM users WHERE type_of_registration <> 2')->fetch();
 $jobs = $DB->query('SELECT COUNT(id) as jobs FROM jobs WHERE status<>\'archive\'')->fetch();
 $companies = $DB->query('SELECT COUNT(id) as companies FROM users WHERE type_of_registration = 2')->fetch();
 
