@@ -513,7 +513,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                           FROM jobs j
                           LEFT JOIN comments c ON j.id = c."typeID"
                           LEFT JOIN users u ON u.id = c."ownerUserID"
-                            WHERE j."workerID" = '. $user['id'] .' AND c.type = \'job_comment\'
+                            WHERE j."workerID" = '. $user['id'] .' AND c.type = \'job_comment\' AND
+                            (c.positive_description <> \'\' OR c.negative_description <> \'\' OR c.conclusion <> \'\')
                         UNION ALL
                         SELECT c.*,
                                o.name as type_name,
@@ -522,7 +523,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                           FROM objects o
                           LEFT JOIN comments c ON o.id = c."typeID"
                           LEFT JOIN users u ON u.id = c."ownerUserID"
-                            WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\'
+                            WHERE o."workerID" = '. $user['id'] .' AND c.type = \'object_comment\' AND
+                            (c.positive_description <> \'\' OR c.negative_description <> \'\' OR c.conclusion <> \'\')
                         UNION ALL
                         SELECT c.*,
                                u.name as type_name,
@@ -531,7 +533,8 @@ else echo '<h1>Страница пользователя</h1>';*/
                           FROM users u
                           LEFT JOIN comments c ON u.id = c."typeID"
                           LEFT JOIN users u_new ON u_new.id = c."ownerUserID"
-                            WHERE u."id" = '. $user['id'] .' AND c.type = \'user_comment\'
+                            WHERE u."id" = '. $user['id'] .' AND c.type = \'user_comment\' AND
+                            (c.positive_description <> \'\' OR c.negative_description <> \'\' OR c.conclusion <> \'\')
                     ')->fetchAll();
                     foreach($comments as $comment){
                     ?>
