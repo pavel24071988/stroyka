@@ -504,7 +504,7 @@ else echo '<h1>Страница пользователя</h1>';*/
                         <span>|</span>
                         <a href="#">'. $negative .' отрицательных</a>
                     </div>';
-                    
+
                     $comments = $DB->query('
                         SELECT c.*,
                                j.name as type_name,
