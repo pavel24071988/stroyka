@@ -8,7 +8,7 @@ if(!empty($_POST['delete_object'])){
 }
 
 $objects = $DB->query('
-    SELECT o.*, CONCAT(u.name, \' \', u.surname) as user
+    SELECT o.*, (u.name ||\' \'|| u.surname) as user
       FROM objects o
       LEFT JOIN users u ON o."createrUserID" = u.id
         ORDER BY o.id
