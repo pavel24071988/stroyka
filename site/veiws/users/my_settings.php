@@ -37,6 +37,15 @@ if(!empty($_POST)){
         }else{
             $cityID = $city['id'];
         }
+        $company_dop = '';
+        // пропишем доп поля в случае если это компания
+        if($user['type_of_registration'] === 2){
+            $company_dop = ',
+                "cpo"=\''. $_POST['cpo'] .'\',
+                "contact_person"=\''. $_POST['contact_person'] .'\',
+                "adress_of_organization"=\''. $_POST['adress_of_organization'] .'\'
+            ';
+        }
 
         $update_check = $DB->prepare('
             UPDATE users
@@ -46,6 +55,7 @@ if(!empty($_POST)){
                   "experience"=\''. $_POST['experience'] .'\',
                   "phone"=\''. $_POST['phone'] .'\',
                   "cityID"=\''. $cityID .'\'
+                  '. $company_dop .'
                 WHERE "id"='. $user['id']);
         if(empty($_POST['areas_for_user'])) $error = 'Необходимо выбрать вид деятельности<br/>';
         elseif($update_check->execute() === true) $error = 'Данные отредактированы.';
@@ -128,6 +138,25 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                                 <label>Телефон:</label><input type="text" value='<?php if(!empty($user['phone'])) echo $user['phone']; ?>' name="phone" />
                             </div>
                         </div>
+                        <?php if($user['type_of_registration'] === 2){ ?>
+                        <div class="personal-data-row clearfix">
+                            <div class="personal-data-row-cell">
+                                <label>Контактное лицо:</label><input type="text" value='<?php if(!empty($user['contact_person'])) echo $user['contact_person']; ?>' name="contact_person" />
+                            </div>
+                            <div class="personal-data-row-cell">
+                                <label>Адрес:</label><input type="text" value='<?php if(!empty($user['adress_of_organization'])) echo $user['adress_of_organization']; ?>' name="adress_of_organization" />
+                            </div>
+                        </div>
+                        <div class="personal-data-row clearfix">
+                            <div class="personal-data-row-cell">
+                                <label>Сро:</label>
+                                <select name="cpo" class="ur-facetype">
+                                    <option value="true" <?php if(!empty($user['cpo']) && $user['cpo'] === 'true') echo 'selected'; ?>>Да</option>
+                                    <option value="false" <?php if(empty($user['cpo'])) echo 'selected'; ?>>Нет</option>
+                                </select>
+                            </div>
+                        </div>
+                        <?php } ?>
                         <br><br>
                         <div class="personal-data-form-headline">Специализация:</div>
                         <ul class="searcher-categories">

@@ -3,7 +3,7 @@ $checkAdmin = Application::checkAdmin();
 $DB = Application::$DB;
 
 if(!empty($_POST['delete_object'])){
-    // удаляем пользователя
+    // удаляем объект
     $DB->prepare('DELETE FROM objects WHERE id='. (int) $_POST['objectID'])->execute();
 }
 
