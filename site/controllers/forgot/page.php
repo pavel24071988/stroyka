@@ -11,7 +11,7 @@ if(!empty($_POST['email'])){
         $newPassword=null;
         while($max--) $newPassword.=$chars[rand(0,$size)];
         
-        $changePassword = $DB->prepare('UPDATE users SET "password"=\''. md5($newPassword) .'\' WHERE "id"='. $checkEmail[0]['id']);
+        $changePassword = $DB->prepare('UPDATE users SET "password"=\''. ($newPassword) .'\' WHERE "id"='. $checkEmail[0]['id']);
         if($changePassword->execute() === true){
             $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
             $theme = "Восстановление пароля на сайте стройка.";

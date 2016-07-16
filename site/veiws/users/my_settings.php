@@ -18,12 +18,12 @@ if(!empty($_POST)){
     if(isset($_POST['password_data'])){
         if(empty($_POST['current_password'])){
             $error = 'Заполните поле текущий пароль.';
-        }elseif(md5($_POST['current_password']) !== $user['password']){
+        }elseif(($_POST['current_password']) !== $user['password']){
             $error = 'Введенный текущий пароль не совпадает с Вашим паролем.';
         }elseif(($_POST['new_password'] !== $_POST['repeat_new_password']) || empty($_POST['new_password'])){
             $error = 'Пароли не совпадают.';
         }else{
-            $update_check = $DB->prepare('UPDATE users SET "password"=\''. md5($_POST['new_password']) .'\' WHERE "id"='. $user['id']);
+            $update_check = $DB->prepare('UPDATE users SET "password"=\''. ($_POST['new_password']) .'\' WHERE "id"='. $user['id']);
             if($update_check->execute() === true){
                 $error = 'Пароль изменен.';
             }

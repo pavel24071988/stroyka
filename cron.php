@@ -45,7 +45,7 @@ for($i=0; $i<300; $i++){
 	
 	$sql = $DB->prepare('
         INSERT INTO users ("age", "areaID", "cityID", email, name, experience, status, password, second_name, surname, sort)
-          VALUES('. rand(18, 105) .', '. rand(1, 4) .', '. rand(1, 13) .', \'test_'. rand(1, 6000) .'@mail.ru\', \''. $names_rand .'\', '. rand(1, 105) .', 0, \''. md5(rand(1, 100000)) .'\', \''. $second_names_rand .'\', \''. $surnames_rand .'\', '. $i .')
+          VALUES('. rand(18, 105) .', '. rand(1, 4) .', '. rand(1, 13) .', \'test_'. rand(1, 6000) .'@mail.ru\', \''. $names_rand .'\', '. rand(1, 105) .', 0, \''. (rand(1, 100000)) .'\', \''. $second_names_rand .'\', \''. $surnames_rand .'\', '. $i .')
     ');
 	var_dump(1);
     $sql->execute();

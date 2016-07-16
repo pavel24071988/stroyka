@@ -14,7 +14,7 @@ if(!empty($_POST)){
               FROM users u
               LEFT JOIN cities c ON u."cityID" = c."id"
               LEFT JOIN areas a ON u."areaID" = a."id"
-                WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. md5($_POST['password']) .'\'
+                WHERE u."email"=\''. $_POST['email'] .'\' AND u."password"=\''. ($_POST['password']) .'\'
         ')->fetch();
         if(empty($user)){
             $error = 'Данного пользователя не существует.';
