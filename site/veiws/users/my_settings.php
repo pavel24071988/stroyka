@@ -41,6 +41,7 @@ if(!empty($_POST)){
         // пропишем доп поля в случае если это компания
         if($user['type_of_registration'] === 2){
             $company_dop = ',
+                "experience"=\''. $_POST['experience'] .'\',
                 "cpo"=\''. $_POST['cpo'] .'\',
                 "contact_person"=\''. $_POST['contact_person'] .'\',
                 "adress_of_organization"=\''. $_POST['adress_of_organization'] .'\'
@@ -52,13 +53,12 @@ if(!empty($_POST)){
               SET "name"=\''. $_POST['name'] .'\',
                   "surname"=\''. $_POST['surname'] .'\',
                   "second_name"=\''. $_POST['second_name'] .'\',
-                  "experience"=\''. $_POST['experience'] .'\',
                   "phone"=\''. $_POST['phone'] .'\',
                   "cityID"=\''. $cityID .'\'
                   '. $company_dop .'
                 WHERE "id"='. $user['id']);
-        if(empty($_POST['areas_for_user'])) $error = 'Необходимо выбрать вид деятельности<br/>';
-        elseif($update_check->execute() === true) $error = 'Данные отредактированы.';
+        /*if(empty($_POST['areas_for_user'])) $error = 'Необходимо выбрать вид деятельности<br/>';
+        else*/if($update_check->execute() === true) $error = 'Данные отредактированы.';
         else $error = 'Не заполнены обязательные поля.';
     }
     $user = $DB->query('
@@ -118,9 +118,11 @@ $list_of_areas = Application::getListOfAreas('user', $user['id']);
                             <div class="personal-data-row-cell">
                                 <label>Фамилия:</label><input type="text" value='<?php echo $user['surname']; ?>' name="surname" />
                             </div>
+                            <?php if($user['type_of_registration'] === 2){ ?>
                             <div class="personal-data-row-cell">
                                 <label>Стаж работы:</label><input type="text" value='<?php echo $user['experience']; ?>' name="experience" />
                             </div>
+                            <?php } ?>
                         </div>
                         <div class="personal-data-row clearfix">
                             <div class="personal-data-row-cell">

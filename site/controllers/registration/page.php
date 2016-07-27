@@ -18,6 +18,14 @@ $list_of_areas .= '</ul>';
 */
 // регистрируем пользователя
 $error = '';
+
+$areas = Application::$DB->query('SELECT * FROM areas ORDER BY name')->fetchAll();
+$areas_options = '';
+foreach($areas as $general_area){
+    $selected = '';
+    $areas_options .= '<option value="'. $general_area['id'] .'" '. $selected .'>'. $general_area['name'] .'</option>';
+}
+
 if(!empty($_POST)){
     $array_of_check = ['work_city' => 'Основное место работы (город или область)'];
     foreach($_POST as $key => $row){
@@ -38,14 +46,16 @@ if(!empty($_POST)){
     if(empty($_POST['password'])) $error .= 'Не заполнено поле: Пароль<br/>';
     elseif($_POST['password'] !== $_POST['repeat_password']) $error .= 'Поля пароль и повторите пароль не совпадают<br/>';
     if(empty($_POST['areas_for_user'])) $error .= 'Необходимо выбрать вид деятельности<br/>';
-    
+
+    /*
     $city = $DB->query('SELECT * FROM cities c WHERE c.name ILIKE \''. $_POST['city'] .'\'')->fetch();
     if(empty($city)){
         $DB->prepare('INSERT INTO cities (name) VALUES(\''. $_POST['city'] .'\')')->execute();
         $city = $DB->query('SELECT * FROM cities c WHERE c.name ILIKE \''. $_POST['city'] .'\'')->fetch();
     }
     $cityID = $city['id'];
-    
+    */
+
     // начинаем регистрировать
     if(empty($error)){
 	$email = $_POST['email'];
@@ -61,11 +71,11 @@ if(!empty($_POST)){
         if(empty($_POST['experience'])) $_POST['experience'] = 1;
 
         if($_POST['type_of_registration'] === '1')
-            $sql = 'INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, status)
-                VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. ($_POST['password']) .'\', 0)';
+            $sql = 'INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, status, phone)
+                VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. ($_POST['password']) .'\', 0, \''. $_POST['phone'] .'\')';
         elseif($_POST['type_of_registration'] === '2')
             $sql = 'INSERT INTO users (name, email, "cityID", "areaID", type_of_registration, password, cpo, contact_person, adress_of_organization, phone, experience, status)
-                VALUES(\''. $name .'\', \''. $email .'\', \''. $cityID .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. ($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)';
+                VALUES(\''. $name .'\', \''. $email .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. ($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)';
         $registration_check = $DB->prepare($sql);
         if($registration_check->execute() === true){
             
@@ -227,7 +237,7 @@ if(!empty($_POST)){
                                     <option value="7" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '7') echo 'selected'; ?>>7</option>
                                     <option value="8" <?php if(!empty($_POST['experience']) && $_POST['experience'] === '8') echo 'selected'; ?>>8</option>
                                 </select> -->
-                                <input type="text" class="ur-facetype" placeholder="Опыт работы (лет)" name="" style="display: none;" />
+                                <input type="text" placeholder="Номер телефона" name="phone" value="<?php if(!empty($_POST['phone'])) echo $_POST['phone']; ?>"/>
                             </div>
                         </div>
                         <div class="registration-form-row clearfix">
@@ -249,7 +259,7 @@ if(!empty($_POST)){
                         <div class="registration-form-row clearfix">
                             <div class="registration-form-row-cell">
                                 <input type="text" class="fiz-facetype sur-type" placeholder="Отчество" name="second_name" value="<?php if(!empty($_POST['second_name'])) echo $_POST['second_name']; ?>" />
-                                <input type="text" class="ur-facetype" placeholder="Номер телефона" name="phone" value="<?php if(!empty($_POST['phone'])) echo $_POST['phone']; ?>" style="display: none;" />
+                                <input type="text" class="ur-facetype" placeholder="Опыт работы (лет)" name="" style="display: none;" />
                             </div>
                             <div class="registration-form-row-cell">
                                 <label class="fiz-facetype" style="line-height: 35px;">
@@ -283,11 +293,24 @@ if(!empty($_POST)){
             </fieldset>
             <fieldset id="step2" style="display: none;">
                 <div class="registration-form-columns clearfix">
-                    <input type="hidden" name="areaID" value="1" />
+                    <!--<input type="hidden" name="areaID" value="1" />
                     <div class="main-place">
                         <p class="main-place-title">Основное место работы (город или область)</p>
                         <input type="text" name="city" value="<?php if(!empty($_POST['city'])) echo $_POST['city']; ?>" />
+                    </div>-->
+                    
+                    
+                    <div class="column-searcher-selects">
+                        <div class="column-searcher-select-label">Регион</div>
+                        <select class="region" name="areaID">
+                            <?= $areas_options; ?>
+                        </select>
+                        <div class="column-searcher-select-label">Мой город</div>
+                        <select class="city" name="cityID">
+                        </select>
                     </div>
+                    
+                    
                     <div class="main-place">
                         <p class="main-place-title" style="margin-bottom: 15px;">Выберите сферу деятельности</p>
                         <ul class="searcher-categories registr-type">

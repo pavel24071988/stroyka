@@ -564,6 +564,9 @@ p {margin-bottom: 7px;}
 	height: 25px;
 	color: #474848;
 }
+#step2 .column-searcher-selects select {
+	width: 20%;
+}
 .column-searcher .column-searcher-categories {
 	padding: 0 18px;
 	line-height: 22px;
