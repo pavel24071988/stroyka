@@ -94,4 +94,36 @@ $(document).ready(function() {
     
     // для админки напишем здесь
     $( "#switchon, #switchoff" ).datepicker();
+    var users = [],
+        $form = $('.sendEmails');
+    // делаем селект по городам и областям
+    $form.find('.areas').on('change', function(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/',
+            data: {ajax: true, regionID: $form.find('.areas').val(), method: 'getcitiesbyregion'}
+        }).done(function(data){
+            $form.find('.cities').html(data);
+        });
+    });
+    $form.find('.userName').on('click', function(){
+        var $this = $( this ),
+            linkToRepeat = false;
+        for(var i in users){
+            if($this.attr('data-userID') === users[i]) linkToRepeat = i;
+        }
+        if(linkToRepeat === false) users.push($this.attr('data-userID'));
+        else users.splice(linkToRepeat, 1);
+
+        $form.find('.userName').css({ 'color': '' });
+        $form.find('.individualUsers').html('');
+        for(var i in users){
+            $form.find('.userName[data-userid=\''+ users[i] +'\']').css({ 'color': 'red' });
+            $form.find('.individualUsers').append(
+                '<a href="#">'+ $form.find('.userName[data-userid=\''+ users[i] +'\']').text() +'</a><br/>'+
+                '<input type="hidden" name="individualUsers[]" value="'+ users[i] +'"/>'
+            );
+        }
+        return false;
+    });
 });

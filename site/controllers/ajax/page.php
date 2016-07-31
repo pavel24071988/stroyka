@@ -18,10 +18,13 @@ switch ($_POST['method']) {
 }
 
 function getCitiesByRegion(){
+    $regionIDs = is_array($_POST['regionID']) ? '\''. implode('\',\'', $_POST['regionID']) .'\'' : $_POST['regionID'];
+    $where = 'WHERE c."areaID" IN ('. $regionIDs .')';
+    if(preg_match('/\'0\'/', $regionIDs)) $where = '';
     $cityes = Application::$DB->query('
         SELECT *
           FROM cities c
-            WHERE c."areaID"='. $_POST['regionID'])->fetchAll();
+            '. $where)->fetchAll();
     $cityes_str = '';
     foreach($cityes as $city){
         $cityes_str .= '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';

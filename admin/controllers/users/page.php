@@ -14,6 +14,11 @@ if(!empty($_POST['sendmessages']) && !empty($_POST['subject']) && !empty($_POST[
     $wheres = ['u.email IS NOT NULL'];
     if(!empty($_POST['areas']) && $_POST['areas'][0] !== '0') $wheres[] = 'u."areaID" IN (\''. implode('\', \'', $_POST['areas']) .'\')';
     if(!empty($_POST['cities']) && $_POST['cities'][0] !== '0') $wheres[] = 'u."cityID" IN (\''. implode('\', \'', $_POST['cities']) .'\')';
+    
+    if(!empty($_POST['individualUsers'])){
+        $wheres = ['u.email IS NOT NULL'];
+        $wheres[] = 'u."id" IN (\''. implode('\', \'', $_POST['individualUsers']) .'\')';
+    }
     $users_to_emails = Application::$DB->query('
         SELECT *
           FROM users u
@@ -42,28 +47,33 @@ foreach($areas as $general_area){
 foreach($cities as $general_city){
     $cities_options .= '<option value="'. $general_city['id'] .'">'. $general_city['name'] .'</option>';
 }
+
+$sortBy = !empty($_GET['sortBy']) ? 'ORDER BY '. $_GET['sortBy'] .' ASC' : '';
 $users = $DB->query('
     SELECT u.*, a.name as areaname, c.name as cityname
       FROM users u
       LEFT JOIN areas a ON u."areaID" = a.id
       LEFT JOIN cities c ON u."cityID" = c.id
+        '. $sortBy .'
 ')->fetchAll();
 
 echo '<br/><br/>';
 echo 'Написать сообщения пользователям с разбивкой по регионам';
 ?>
-<form method="POST">
+<form method="POST" class="sendEmails">
     <labe>Тема письма:</label>
     <input type="text" size="100" name="subject"><br/>
     <labe>Текст письма:</label>
     <textarea name="text" rows="5" cols="75"></textarea><br/><br/>
+    <labe>Выбранные пользователи:</label>
+    <div class="individualUsers"></div><br/>
     <labe>Регионы:</label>
-    <select size="30" name="areas[]" multiple="multiple">
+    <select class="areas" size="30" name="areas[]" multiple="multiple">
         <option value="0">Все</option>
         <?= $areas_options; ?>
     </select>
     <labe>Города:</label>
-    <select size="30" name="cities[]" multiple="multiple">
+    <select class="cities" size="30" name="cities[]" multiple="multiple">
         <option value="0">Все</option>
         <?= $cities_options; ?>
     </select><br/><br/>
@@ -74,12 +84,12 @@ echo '<br/><br/>';
 echo '<table style="border: 1px solid black;">
     <tr style="border: 1px solid black;">
         <td style="width: 100px;">№</td>
-        <td style="width: 100px;">Имя</td>
-        <td style="width: 100px;">Фамилия</td>
+        <td style="width: 100px;"><a href="?sortBy=name">Имя</a></td>
+        <td style="width: 100px;"><a href="?sortBy=surname">Фамилия</a></td>
         <td style="width: 100px;">Почта</td>
         <td style="width: 100px;">Телефон</td>
         <td style="width: 100px;">Пароль</td>
-        <td style="width: 200px;">Дата регистрации</td>
+        <td style="width: 200px;"><a href="?sortBy=created">Дата регистрации</a></td>
         <td style="width: 100px;">Регион</td>
         <td style="width: 100px;">Город</td>
         <td>Удалить</td>
@@ -88,7 +98,7 @@ foreach($users as $user){
     echo '
     <tr style="border: 1px solid black;">
         <td style="border: 1px solid black;"><strong>'. $user['id'] .'</strong></td>
-        <td style="border: 1px solid black;">'. $user['name'] .'</td>
+        <td style="border: 1px solid black;"><a href="#" class="userName" data-userID="'. $user['id'] .'">'. $user['name'] .'</a></td>
         <td style="border: 1px solid black;">'. $user['surname'] .'</td>
         <td style="border: 1px solid black;">'. $user['email'] .'</td>
         <td style="border: 1px solid black;">'. $user['phone'] .'</td>
