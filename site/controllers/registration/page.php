@@ -72,10 +72,10 @@ if(!empty($_POST)){
 
         if($_POST['type_of_registration'] === '1')
             $sql = 'INSERT INTO users (name, surname, second_name, email, "cityID", "areaID", type_of_registration, type_of_kind, password, status, phone)
-                VALUES(\''. $name .'\', \''. $_POST['surname'] .'\', \''. $_POST['second_name'] .'\', \''. $email .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. ($_POST['password']) .'\', 0, \''. $_POST['phone'] .'\')';
+                VALUES(\''. strip_tags($name) .'\', \''. strip_tags($_POST['surname']) .'\', \''. strip_tags($_POST['second_name']) .'\', \''. strip_tags($email) .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. $_POST['type_of_kind'] .'\', \''. ($_POST['password']) .'\', 0, \''. strip_tags($_POST['phone']) .'\')';
         elseif($_POST['type_of_registration'] === '2')
             $sql = 'INSERT INTO users (name, email, "cityID", "areaID", type_of_registration, password, cpo, contact_person, adress_of_organization, phone, experience, status)
-                VALUES(\''. $name .'\', \''. $email .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. ($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. $_POST['contact_person'] .'\', \''. $_POST['adress_of_organization'] .'\', \''. $_POST['phone'] .'\', \''. $_POST['experience'] .'\', 0)';
+                VALUES(\''. strip_tags($name) .'\', \''. strip_tags($email) .'\', \''. $_POST['cityID'] .'\', \''. $_POST['areaID'] .'\', \''. $_POST['type_of_registration'] .'\', \''. ($_POST['password']) .'\', \''. $_POST['cpo'] .'\', \''. strip_tags($_POST['contact_person']) .'\', \''. strip_tags($_POST['adress_of_organization']) .'\', \''. strip_tags($_POST['phone']) .'\', \''. strip_tags($_POST['experience']) .'\', 0)';
         $registration_check = $DB->prepare($sql);
         if($registration_check->execute() === true){
             

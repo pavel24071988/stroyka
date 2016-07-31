@@ -52,20 +52,20 @@ if($applicationURL['2'] === 'add'){
         }else{
             $create_sql = $DB->prepare('
                 INSERT INTO objects (amount, cpo, "createrUserID", "dateFrom", "dateTo", description, house, name, recomendations, require, street, type_of_kind, phone, email, "areaID", "cityID")
-                  VALUES(\''. $_POST['amount'] .'\',
+                  VALUES(\''. strip_tags($_POST['amount']) .'\',
                          \''. $_POST['cpo'] .'\',
                          \''. $_SESSION['user']['id'] .'\',
                          \''. $_POST['dateFrom'] .'\',
                          \''. $_POST['dateTo'] .'\',
-                         \''. $_POST['description'] .'\',
-                         \''. $_POST['house'] .'\',
-                         \''. $_POST['name'] .'\',
-                         \''. $_POST['recomendations'] .'\',
-                         \''. $_POST['require'] .'\',
-                         \''. $_POST['street'] .'\',
-                         \''. $_POST['type_of_kind'] .'\',
-                         \''. $_POST['phone'] .'\',
-                         \''. $_POST['email'] .'\',
+                         \''. strip_tags($_POST['description']) .'\',
+                         \''. strip_tags($_POST['house']) .'\',
+                         \''. strip_tags($_POST['name']) .'\',
+                         \''. strip_tags($_POST['recomendations']) .'\',
+                         \''. strip_tags($_POST['require']) .'\',
+                         \''. strip_tags($_POST['street']) .'\',
+                         \''. strip_tags($_POST['type_of_kind']) .'\',
+                         \''. strip_tags($_POST['phone']) .'\',
+                         \''. strip_tags($_POST['email']) .'\',
                          \''. $_POST['areaID'] .'\',
                          \''. $_POST['cityID'] .'\')');
             if($create_sql->execute() === true){

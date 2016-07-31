@@ -12,7 +12,7 @@ if(isset($_POST['changeStatus'])){
     elseif($_POST['positive_negative'] === 'Хорошо') $_POST['positive_negative'] = 'on';
     $sql = $DB->prepare('
         INSERT INTO comments ("ownerUserID", "typeID", type, positive_description, negative_description, conclusion, positive_negative)
-          VALUES(\''. $_POST['ownerUserID'] .'\', \''. $_POST['typeID'] .'\', \''. $_POST['type'] .'\', \''. $_POST['positive_description'] .'\', \''. $_POST['negative_description'] .'\', \''. $_POST['conclusion'] .'\', \''. $_POST['positive_negative'] .'\')
+          VALUES(\''. $_POST['ownerUserID'] .'\', \''. $_POST['typeID'] .'\', \''. $_POST['type'] .'\', \''. strip_tags($_POST['positive_description']) .'\', \''. strip_tags($_POST['negative_description']) .'\', \''. strip_tags($_POST['conclusion']) .'\', \''. strip_tags($_POST['positive_negative']) .'\')
     ');
     $sql->execute();
 }elseif(!empty($_FILES['avatar']['tmp_name'])){
