@@ -115,13 +115,9 @@ if(!empty($_POST)){
             ')->fetch();
             unset($_SESSION['user']);
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
-<<<<<<< HEAD
-            $headers= "MIME-Version: 1.0\r\n";
+            $headers = "MIME-Version: 1.0\r\n";
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
             $headers .= "from: onobject <http://onobject.ru>\r\n";
-=======
-            $headers = "From: наобъете: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
->>>>>>> 598de3beab55343338088fe159059bf0f68ad09a
             $theme = "Регистрация на сайте стройка завершена.";
             $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте <a href=\"http://onobject.ru/\">наобъете</a> завершена.<br />
                      Ваш логин: ". strip_tags($name) ."<br />
