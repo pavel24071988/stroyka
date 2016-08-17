@@ -115,9 +115,14 @@ if(!empty($_POST)){
             ')->fetch();
             unset($_SESSION['user']);
             foreach($user as $key => $attribute) $_SESSION['user'][$key] = $attribute;
-            $headers = "From: Stroyka\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+            $headers= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= "from: onobject <http://onobject.ru>\r\n";
             $theme = "Регистрация на сайте стройка завершена.";
-            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте стройка завершена. Ваш пароль ". $_POST['password'] .".";
+            $text = "Здравствуйте ". $_SESSION['user']['name'] .". Регистрация на сайте <a href=\"http://onobject.ru/\">наобъете</a> завершена.<br />
+                     Ваш логин: ". strip_tags($name) ."<br />
+                     Ваш пароль: ". $_POST['password'] .".<br />
+                     <a href=\"http://onobject.ru/\">наобъекте</a>";
             mail($_SESSION['user']['email'] . ", pavel24071988@mail.ru", $theme, $text, $headers);
             echo '<div style="color: red; font-weight: bold;">Регистрация прошла успешно.</div>';
             echo '<meta http-equiv="refresh" content="1;URL=/users/'. $user['id'] .'/">';
