@@ -46,11 +46,9 @@ if(empty($_GET['update'])){
 
         if($_POST['id'] === 'new'){
             $sql = $DB->prepare('
-                INSERT INTO advertising (description, repeat, repeat_minutes, switchon, switchoff, type, img_banner_link)
+                INSERT INTO advertising (description, repeat, repeat_minutes, switchon, switchoff, type, imgbannerlink)
                   VALUES(\''. $_POST['description'] .'\', \''. $_POST['repeat'] .'\', \''. $_POST['repeat_minutes'] .'\', \''. $_POST['switchon'] .'\', \''. $_POST['switchoff'] .'\', \''. $_POST['type'] .'\', \''. $_POST['img_banner_link'] .'\')
             ');
-            var_dump('INSERT INTO advertising (description, repeat, repeat_minutes, switchon, switchoff, type, img_banner_link) VALUES(\''. $_POST['description'] .'\', \''. $_POST['repeat'] .'\', \''. $_POST['repeat_minutes'] .'\', \''. $_POST['switchon'] .'\', \''. $_POST['switchoff'] .'\', \''. $_POST['type'] .'\', \''. $_POST['img_banner_link'] .'\')');
-            exit;
             if($sql->execute()) $error[] = 'Баннер добавлен.';
             else  $error[] = 'Произошла ошибка добавления.';
             $advirtisingID = $DB->lastInsertId('advertising_id_seq');
